@@ -25,6 +25,7 @@
 			.questions{
 				list-style: none;
 				width: 50%;
+				margin: 0 0 20px 0;
 			}
 			.question{
 				margin: 0 0 10px 0;
@@ -40,7 +41,7 @@
 				font-family: monospace;
 			}
 			.question-container{
-				background-color: lightgrey;
+					background: 	rgb(0, 128, 255, .2);
 				padding: 5px;
 			}
 			.choice{
@@ -51,7 +52,7 @@
 				background-color: #fff;
 				cursor: pointer;
 			}
-			.cbtn, .label, .score, .add2Fav{
+			.cbtn, .label, .score, .btn{
 				margin-left: 10px;
 			}
 			.icon {
@@ -69,6 +70,12 @@
 				flex-flow: row;
 				flex-wrap: nowrap;
 			}
+			.header{
+				margin: 20px 0px 35px 0;
+			}
+			.btn{
+				height: 33px;
+			}
 		</style>
 	</head>
 	<body>
@@ -77,8 +84,6 @@
 				<img src="#" alt="Opinion Logo" />
 				<h1 class="">Opinion.io</h1>
 				<i>Online trusted opinion</i>
-			</div>
-			<div class="content">
 				<form>
 					<select id="category">
 						<option selected="selected">People</option>
@@ -93,11 +98,14 @@
 					
 					<input id="search" type="search" name="search" placeholder="Find a vote...">
 				</form>
+			</div>
+			<div class="content">
+				
 				
 				<ul class="questions">
 					<li class="question">
 						<div class="question-container">
-							<div class="question-label"> <p class="">Do you like Marryann?</p><a href="#" class="add2Fav">Add to favorite</a></div>
+							<div class="question-label"> <p class="">Do you like Marryann?</p><a href="#" class="btn btn-outline-info btn-sm">Follow</a></div>
 							<div class="choice"><img src="../../resources/open-iconic-master/svg/thumb-up.svg" class="icon iconic-sprite" style="/*display:none;*/" />
 								<!-- <svg viewBox="0 0 8 8" class="icon" x="0" y="0"><use xlink:href="../../resources/open-iconic-master/sprite sprite.svg#thumb-up" class="icon-thumb-up"></use></svg> -->
 								<span class="label">Yes</span><div class="score"><span class="badge badge-pill badge-info">0(0%)</span></div></div>
@@ -111,11 +119,12 @@
 									<a href="#">Twitter</a>
 									<a href="#">Instagram</a>
 								</div>
+								<div class="info"><i>Info:&nbsp;<a href="https://www.bbc.co.uk/news">BBC News</a></i></div>
 							</div>
 						</li>
 						<li class="question">
 							<div class="question-container">
-								<div class="question-label"> <p class="">Do you like Marryann?</p><a href="#" class="add2Fav">Add to favorite</a></div>
+								<div class="question-label"> <p class="">Do you like Marryann?</p><a href="#" class="btn btn-outline-info btn-sm">Follow</a></div>
 								<div class="choice"><img src="../../resources/open-iconic-master/svg/thumb-up.svg" class="icon iconic-sprite" style="/*display:none;*/" />
 									<!-- <svg viewBox="0 0 8 8" class="icon" x="0" y="0"><use xlink:href="../../resources/open-iconic-master/sprite sprite.svg#thumb-up" class="icon-thumb-up"></use></svg> -->
 									<span class="label">Yes</span><div class="score"><span class="badge badge-pill badge-info">0(0%)</span></div></div>
@@ -129,11 +138,12 @@
 										<a href="#">Twitter</a>
 										<a href="#">Instagram</a>
 									</div>
+									<div class="info"><i>Info:&nbsp;<a href="https://www.youtube.com/watch?v=gaDjON1s4AE">youtube.com/watch?v=gaDjON1s4AE</a></i></div>
 								</div>
 							</li>
 							<li class="question">
 								<div class="question-container">
-									<div class="question-label"> <p class="">Do you like Marryann?</p><a href="#" class="add2Fav">Add to favorite</a></div>
+									<div class="question-label"> <p class="">Do you like Marryann?</p><a href="#" class="btn btn-outline-info btn-sm">Follow</a></div>
 									<div class="choice"><img src="../../resources/open-iconic-master/svg/thumb-up.svg" class="icon iconic-sprite" style="/*display:none;*/" />
 										<!-- <svg viewBox="0 0 8 8" class="icon" x="0" y="0"><use xlink:href="../../resources/open-iconic-master/sprite sprite.svg#thumb-up" class="icon-thumb-up"></use></svg> -->
 										<span class="label">Yes</span><div class="score"><span class="badge badge-pill badge-info">0(0%)</span></div></div>
@@ -151,7 +161,7 @@
 								</li>
 								<li class="question">
 									<div class="question-container">
-										<div class="question-label"> <p class="">Do you like Marryann?</p><a href="#" class="add2Fav">Add to favorite</a></div>
+										<div class="question-label"> <p class="">Do you like Marryann?</p><a href="#" class="btn btn-outline-info btn-sm">Follow</a></div>
 										<div class="choice"><img src="../../resources/open-iconic-master/svg/thumb-up.svg" class="icon iconic-sprite" style="/*display:none;*/" />
 											<!-- <svg viewBox="0 0 8 8" class="icon" x="0" y="0"><use xlink:href="../../resources/open-iconic-master/sprite sprite.svg#thumb-up" class="icon-thumb-up"></use></svg> -->
 											<span class="label">Yes</span><div class="score"><span class="badge badge-pill badge-info">0(0%)</span></div></div>
@@ -169,7 +179,7 @@
 									</li>
 									<li class="question">
 										<div class="question-container">
-											<div class="question-label"> <p class="">Do you like Marryann?</p><a href="#" class="add2Fav">Add to favorite</a></div>
+											<div class="question-label"> <p class="">Do you like Marryann?</p><a href="#" class="btn btn-outline-info btn-sm">Follow</a></div>
 											<div class="choice"><img src="../../resources/open-iconic-master/svg/thumb-up.svg" class="icon iconic-sprite" style="/*display:none;*/" />
 												<!-- <svg viewBox="0 0 8 8" class="icon" x="0" y="0"><use xlink:href="../../resources/open-iconic-master/sprite sprite.svg#thumb-up" class="icon-thumb-up"></use></svg> -->
 												<span class="label">Yes</span><div class="score"><span class="badge badge-pill badge-info">0(0%)</span></div></div>
