@@ -1,0 +1,33 @@
+{
+    "info": {},
+    "error": {},
+    "result": [{
+            "id": 0123456,
+            "label": "Do you like Rihanna ?"
+            "vote": {
+                "type": "CBOX",
+                "values": {
+                    "yes": 50,
+                    "no": 36,
+                    "Not sure": 23
+                }
+            }
+        },
+
+        {
+            "id": 0123457,
+            "label": "Do you like Beyoncée ?"
+            "vote": {
+                "type": "CBOX",
+                "values": {
+                    "yes": 22,
+                    "no": 22,
+                    "Not sure": 22
+                }
+            }
+        },
+
+
+
+    ]
+}

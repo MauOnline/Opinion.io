@@ -10,6 +10,8 @@ OIOJS.voteengine = {
     },
 
     dataInit: function() {
+
+
         var totalValuesUpdated = false;
         var questionCount = $('.question-container').length;
 
@@ -62,5 +64,17 @@ OIOJS.voteengine = {
 }
 
 $(function() {
+
+    	//Load data
+    	$.ajax({
+    		url: 'opinion-test-data.json',
+    		method: 'GET',
+    		dataType: 'jsonp'
+
+    	}).done(function(resp){
+    		alert(resp);
+    	}).fail(function(xhr,status){
+    		console.log(status+ xhr);
+    	});
     OIOJS.voteengine.init();
 })
