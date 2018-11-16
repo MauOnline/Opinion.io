@@ -3,7 +3,7 @@
     "error": {},
     "result": [{
             "id": 0123456,
-            "label": "Do you like Rihanna ?"
+            "phrase": "Do you like Rihanna ?",
             "vote": {
                 "type": "CBOX",
                 "values": {
@@ -16,7 +16,7 @@
 
         {
             "id": 0123457,
-            "label": "Do you like Beyoncée ?"
+            "phrase": "Do you like Beyoncée ?",
             "vote": {
                 "type": "CBOX",
                 "values": {
@@ -26,8 +26,5 @@
                 }
             }
         },
-
-
-
     ]
 }

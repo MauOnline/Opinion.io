@@ -9,8 +9,91 @@ OIOJS.voteengine = {
         this.bindVote();
     },
 
+    renderPools: function(pools) {
+        $.each(pools, function(i, e) {
+
+
+
+            var poolElement = $('<li/>', {
+                class: "question"
+            });
+            var poolContainer = $('<div/>', {
+                class: "question-container"
+            });
+            var poolPhrase = $('<div/>', {
+                class: "question-label"
+            });
+            var poolPhraseP = $('<p/>', {
+                text: e.phrase
+            })
+            var poolPhraseA = $('<a/>', {
+                class: "btn btn-outline-info btn-sm",
+                href: "#",
+                text: "Follow"
+            });
+            var poolShare = $('<div/>', {
+                class: "share",
+                html: ""
+            });
+            var poolInfo = $('<div/>', {
+                class: "info"
+            });
+
+            poolPhrase.append(poolPhraseP);
+            poolPhrase.append(poolPhraseA);
+            poolContainer.append(poolPhrase);
+
+
+
+            $.each(e.pool.values, function(j, v) {
+
+                var poolChoice = $('<div/>', {
+                    class: "choice",
+                    "data-score": v.value
+                });
+
+                var poolChoiceVoteIcon = $('<img/>', {
+                    src: "../../resources/open-iconic-master/svg/thumb-up.svg",
+                    class: "icon"
+                });
+
+                var poolChoiceVoteLabel = $('<span/>', {
+                    class: "label",
+                    text: v.label
+                });
+
+                var poolChoiceVoteScore = $('<div/>', {
+                    class: "score",
+                    html: $('<span/>', {
+                        class: "badge badge-pill badge-info"
+                    })
+                });
+
+                poolChoice.append(poolChoiceVoteIcon);
+                poolChoice.append(poolChoiceVoteLabel);
+                poolChoice.append(poolChoiceVoteScore);
+
+                poolContainer.append(poolChoice);
+
+            });
+
+
+            poolContainer.append(poolShare);
+            poolContainer.append(poolInfo);
+
+            poolElement.append(poolContainer);
+
+            $('ul.questions').prepend(poolElement);
+
+        });
+    },
+
     dataInit: function() {
 
+
+        var sampledata = OIOJS.voteengine.loadPools();
+
+        OIOJS.voteengine.renderPools(sampledata.result);
 
         var totalValuesUpdated = false;
         var questionCount = $('.question-container').length;
@@ -54,7 +137,6 @@ OIOJS.voteengine = {
                 parent
             ], function(i, e) {
 
-                console.log(i);
                 var target = i == 0 ? 'score' : 'total';
                 var oldVal = $(e).data(target);
                 $(e).data(target, oldVal + 1); //update
@@ -64,21 +146,132 @@ OIOJS.voteengine = {
                 OIOJS.voteengine.calculateScore(e);
             })
         });
+    },
+
+    loadPools: function() {
+        //TODO: Replace with Ajax call later on
+        return {
+            "info": {},
+            "error": {},
+            "result": [{
+                    "id": "0123456",
+                    "phrase": "Do you like Rihanna ?",
+                    "pool": {
+                        "type": "CBOX",
+                        "values": [{
+                            label: "Yes",
+                            value: 50
+                        }, {
+                            label: "No",
+                            value: 36
+                        }, {
+                            label: "Not sure",
+                            value: 23
+                        }]
+                    }
+                },
+
+                {
+                    "id": "0123457",
+                    "phrase": "Do you like Beyoncée ?",
+                    "pool": {
+                        "type": "CBOX",
+                        "values": [{
+                            label: "Yes",
+                            value: 89
+                        }, {
+                            label: "No",
+                            value: 10
+                        }, {
+                            label: "Not sure",
+                            value: 0
+                        }]
+                    }
+                }, {
+                    "id": "0123457",
+                    "phrase": "Do you like Beyoncée ?",
+                    "pool": {
+                        "type": "CBOX",
+                        "values": [{
+                            label: "Yes",
+                            value: 89
+                        }, {
+                            label: "No",
+                            value: 10
+                        }, {
+                            label: "Not sure",
+                            value: 0
+                        }]
+                    }
+                }, {
+                    "id": "0123457",
+                    "phrase": "Do you like Beyoncée ?",
+                    "pool": {
+                        "type": "CBOX",
+                        "values": [{
+                            label: "Yes",
+                            value: 89
+                        }, {
+                            label: "No",
+                            value: 10
+                        }, {
+                            label: "Not sure",
+                            value: 0
+                        }]
+                    }
+                }, {
+                    "id": "0123457",
+                    "phrase": "Do you like Beyoncée ?",
+                    "pool": {
+                        "type": "CBOX",
+                        "values": [{
+                            label: "Yes",
+                            value: 89
+                        }, {
+                            label: "No",
+                            value: 10
+                        }, {
+                            label: "Not sure",
+                            value: 0
+                        }]
+                    }
+                }, {
+                    "id": "0123457",
+                    "phrase": "Do you like Beyoncée ?",
+                    "pool": {
+                        "type": "CBOX",
+                        "values": [{
+                            label: "Yes",
+                            value: 89
+                        }, {
+                            label: "No",
+                            value: 10
+                        }, {
+                            label: "Not sure",
+                            value: 0
+                        }]
+                    }
+                },
+            ]
+        };
+
     }
 }
 
 $(function() {
 
     //Load data
-    $.ajax({
-        url: './opinion-test-data.json',
-        method: 'GET',
-        dataType: 'jsonp'
+    // $.ajax({
+    //     url: './opinion-test-data.json',
+    //     method: 'GET',
+    //     dataType: 'jsonp'
 
-    }).done(function(resp) {
-        alert(resp);
-    }).fail(function(xhr, err) {
-        console.log(xhr.status + " : " + xhr.responseText + " : " + err);
-    });
+    // }).done(function(resp) {
+    //     alert(resp);
+    // }).fail(function(xhr, err) {
+    //     console.log(xhr.status + " : " + xhr.responseText + " : " + err);
+    // });
+
+
     OIOJS.voteengine.init();
 })
