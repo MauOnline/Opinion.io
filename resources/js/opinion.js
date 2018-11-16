@@ -48,12 +48,16 @@ OIOJS.voteengine = {
             //Update score and tolal
             var _that = this;
             var parent = $(_that).parent('.question-container');
-      
-            $.each({_that, parent}, function(i, e){
-            	var target = i === 0 ? 'score' : 'total';
-            	var oldVal =  $(e).data(target);
-            	// alert(oldVal);
-            	$(e).data(target, oldVal+1); //update
+
+            $.each([
+                _that,
+                parent
+            ], function(i, e) {
+
+                console.log(i);
+                var target = i == 0 ? 'score' : 'total';
+                var oldVal = $(e).data(target);
+                $(e).data(target, oldVal + 1); //update
             })
 
             $(parent).children('.choice').each(function(i, e) {
@@ -65,16 +69,16 @@ OIOJS.voteengine = {
 
 $(function() {
 
-    	//Load data
-    	$.ajax({
-    		url: 'opinion-test-data.json',
-    		method: 'GET',
-    		dataType: 'jsonp'
+    //Load data
+    $.ajax({
+        url: './opinion-test-data.json',
+        method: 'GET',
+        dataType: 'jsonp'
 
-    	}).done(function(resp){
-    		alert(resp);
-    	}).fail(function(xhr,status){
-    		console.log(status+ xhr);
-    	});
+    }).done(function(resp) {
+        alert(resp);
+    }).fail(function(xhr, err) {
+        console.log(xhr.status + " : " + xhr.responseText + " : " + err);
+    });
     OIOJS.voteengine.init();
 })
