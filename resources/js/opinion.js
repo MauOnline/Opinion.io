@@ -12,8 +12,6 @@ OIOJS.voteengine = {
     renderPools: function(pools) {
         $.each(pools, function(i, e) {
 
-
-
             var poolElement = $('<li/>', {
                 class: "question"
             });
@@ -42,8 +40,6 @@ OIOJS.voteengine = {
             poolPhrase.append(poolPhraseP);
             poolPhrase.append(poolPhraseA);
             poolContainer.append(poolPhrase);
-
-
 
             $.each(e.pool.values, function(j, v) {
 
@@ -88,12 +84,32 @@ OIOJS.voteengine = {
         });
     },
 
+    extractTags: function(pools) {
+        var res = [];
+        $.each(pools, function(i, e) {
+            if (e.tags === 'undefined') {
+                throw new Error("Tags not found");
+            }
+            var tags = e.tags.split(",");
+            for (var i = 0; i >= tags.length; i++) {
+                if (!res.includes(tags[i])) {
+                    res.push(tags[i]);
+                }
+            }
+
+        });
+
+        return res;
+    },
+
     dataInit: function() {
 
 
         var sampledata = OIOJS.voteengine.loadPools();
 
         OIOJS.voteengine.renderPools(sampledata.result);
+        var tags = OIOJS.voteengine.extractTags(sampledata.result);
+        alert(tags);
 
         var totalValuesUpdated = false;
         var questionCount = $('.question-container').length;
@@ -155,6 +171,8 @@ OIOJS.voteengine = {
             "error": {},
             "result": [{
                     "id": "0123456",
+                    "tags": "People",
+                    "lastUpdate": "17-11-2018",
                     "phrase": "Do you like Rihanna ?",
                     "pool": {
                         "type": "CBOX",
@@ -173,6 +191,8 @@ OIOJS.voteengine = {
 
                 {
                     "id": "0123457",
+                    "tags": "People",
+                    "lastUpdate": "17-11-2018",
                     "phrase": "Do you like Beyoncée ?",
                     "pool": {
                         "type": "CBOX",
@@ -189,6 +209,8 @@ OIOJS.voteengine = {
                     }
                 }, {
                     "id": "0123457",
+                    "tags": "People",
+                    "lastUpdate": "17-11-2018",
                     "phrase": "Do you like Beyoncée ?",
                     "pool": {
                         "type": "CBOX",
@@ -205,6 +227,8 @@ OIOJS.voteengine = {
                     }
                 }, {
                     "id": "0123457",
+                    "tags": "People",
+                    "lastUpdate": "17-11-2018",
                     "phrase": "Do you like Beyoncée ?",
                     "pool": {
                         "type": "CBOX",
@@ -221,6 +245,8 @@ OIOJS.voteengine = {
                     }
                 }, {
                     "id": "0123457",
+                    "tags": "Cinema",
+                    "lastUpdate": "17-11-2018",
                     "phrase": "Do you like Beyoncée ?",
                     "pool": {
                         "type": "CBOX",
@@ -237,6 +263,7 @@ OIOJS.voteengine = {
                     }
                 }, {
                     "id": "0123457",
+                    "tags": "cinema",
                     "phrase": "Do you like Beyoncée ?",
                     "pool": {
                         "type": "CBOX",
