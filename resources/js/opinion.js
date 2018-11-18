@@ -4,6 +4,7 @@ var OIOJS = OIOJS || {};
 
 OIOJS.voteengine = {
 
+    poolsPayload: null,
     init: function() {
         this.dataInit();
         this.bindVote();
@@ -37,10 +38,19 @@ OIOJS.voteengine = {
                 class: "info"
             });
 
-            poolPhrase.append(poolPhraseP);
             poolPhrase.append(poolPhraseA);
+            poolPhrase.append(poolPhraseP);
             poolContainer.append(poolPhrase);
 
+            var progressBar = $('<div/>', {
+                class: "progress"
+            });
+            var choices = [];
+            var progressBarItems = [];
+            var progressBarColors = ["success", "danger", "warning", "info", "primary", "secondary"];
+
+            var totalScore = 0.0;
+            e.pool.values.forEach(e => totalScore += e.value);
             $.each(e.pool.values, function(j, v) {
 
                 var poolChoice = $('<div/>', {
@@ -61,26 +71,42 @@ OIOJS.voteengine = {
                 var poolChoiceVoteScore = $('<div/>', {
                     class: "score",
                     html: $('<span/>', {
-                        class: "badge badge-pill badge-info"
+                        class: "badge badge-pill badge-" + progressBarColors[j]
                     })
                 });
 
                 poolChoice.append(poolChoiceVoteIcon);
                 poolChoice.append(poolChoiceVoteLabel);
                 poolChoice.append(poolChoiceVoteScore);
+                choices.push(poolChoice);
 
-                poolContainer.append(poolChoice);
-
+                if (v.value > 0) { //TODO: Review. Trying to fix the blank in the progress bar
+                    var widthVal = ((v.value * 100) / totalScore).toFixed(2);
+                    var progressBarItem = $('<div/>', {
+                        class: "progress-bar bg-" + progressBarColors[j],
+                        role: "progressbar",
+                        "aria-valuenow": "15",
+                        "aria-valuemin": "0",
+                        "aria-valuemax": "100",
+                        style: "width:" + widthVal + "%",
+                        html: $('<span/>', {
+                            class: "sr-only"
+                        })
+                    });
+                    progressBarItems.push(progressBarItem);
+                }
             });
 
+            progressBar.append(progressBarItems);
+            poolContainer.append(progressBar);
 
+            poolContainer.append(choices);
             poolContainer.append(poolShare);
             poolContainer.append(poolInfo);
 
             poolElement.append(poolContainer);
 
             $('ul.questions').prepend(poolElement);
-
         });
     },
 
@@ -90,26 +116,34 @@ OIOJS.voteengine = {
             if (e.tags === 'undefined') {
                 throw new Error("Tags not found");
             }
+
             var tags = e.tags.split(",");
-            for (var i = 0; i >= tags.length; i++) {
-                if (!res.includes(tags[i])) {
-                    res.push(tags[i]);
+            for (var j = 0; j < tags.length; j++) {
+                //Tags are being formatted to avoid duplicates base on case
+                var val = OIOJS.utils.formatTag(tags[j]);
+                if (!res.includes(val)) {
+                    res.push(val);
                 }
             }
-
         });
 
+        res.sort();
         return res;
     },
 
     dataInit: function() {
+        OIOJS.voteengine.loadPools();
+        var pools = OIOJS.voteengine.poolsPayload.result;
+        OIOJS.voteengine.renderPools(pools);
 
-
-        var sampledata = OIOJS.voteengine.loadPools();
-
-        OIOJS.voteengine.renderPools(sampledata.result);
-        var tags = OIOJS.voteengine.extractTags(sampledata.result);
-        alert(tags);
+        var tags = OIOJS.voteengine.extractTags(pools);
+        $.each(tags, function(i, e) {
+            $('#category').append(
+                $('<option/>', {
+                    text: e,
+                    value: e
+                }));
+        });
 
         var totalValuesUpdated = false;
         var questionCount = $('.question-container').length;
@@ -138,7 +172,7 @@ OIOJS.voteengine = {
             var scoreTotalVal = $(parent).data('total');
             var scoreVal = $(q).data('score');
             var scorePercentageVal = (scoreVal * 100) / scoreTotalVal;
-            $(q).find('.score .badge-info').text(scoreVal + '(' + scorePercentageVal.toFixed(2) + '%)');
+            $(q).find('.score .badge').text(scoreVal + '(' + scorePercentageVal.toFixed(2) + '%)');
         }
     },
 
@@ -166,14 +200,15 @@ OIOJS.voteengine = {
 
     loadPools: function() {
         //TODO: Replace with Ajax call later on
-        return {
+        this.poolsPayload = {
             "info": {},
             "error": {},
             "result": [{
                     "id": "0123456",
-                    "tags": "People",
+                    "owner": "Gabon Media Press",
+                    "tags": "PeoplE,Music,Entertainment",
                     "lastUpdate": "17-11-2018",
-                    "phrase": "Do you like Rihanna ?",
+                    "phrase": "Who is the best person to replace Ali Bongo?",
                     "pool": {
                         "type": "CBOX",
                         "values": [{
@@ -191,7 +226,45 @@ OIOJS.voteengine = {
 
                 {
                     "id": "0123457",
-                    "tags": "People",
+                    "owner": "BBC Business",
+                    "tags": "Environment",
+                    "lastUpdate": "17-11-2018",
+                    "phrase": "Do you think 2019 will be a good year for global finance?",
+                    "pool": {
+                        "type": "CBOX",
+                        "values": [{
+                            label: "Yes",
+                            value: 89
+                        }, {
+                            label: "No",
+                            value: 10
+                        }, {
+                            label: "Not sure",
+                            value: 0
+                        }]
+                    }
+                }, {
+                    "id": "01234578",
+                    "owner": "01Net TV",
+                    "tags": "PeOple",
+                    "lastUpdate": "17-11-2018",
+                    "phrase": "What do you think of the new Freebox V7?",
+                    "pool": {
+                        "type": "CBOX",
+                        "values": [{
+                            label: "Yes",
+                            value: 89
+                        }, {
+                            label: "No",
+                            value: 10
+                        }, {
+                            label: "Not sure",
+                            value: 0
+                        }]
+                    }
+                }, {
+                    "id": "0123459",
+                    "tags": "Politic",
                     "lastUpdate": "17-11-2018",
                     "phrase": "Do you like Beyoncée ?",
                     "pool": {
@@ -208,43 +281,7 @@ OIOJS.voteengine = {
                         }]
                     }
                 }, {
-                    "id": "0123457",
-                    "tags": "People",
-                    "lastUpdate": "17-11-2018",
-                    "phrase": "Do you like Beyoncée ?",
-                    "pool": {
-                        "type": "CBOX",
-                        "values": [{
-                            label: "Yes",
-                            value: 89
-                        }, {
-                            label: "No",
-                            value: 10
-                        }, {
-                            label: "Not sure",
-                            value: 0
-                        }]
-                    }
-                }, {
-                    "id": "0123457",
-                    "tags": "People",
-                    "lastUpdate": "17-11-2018",
-                    "phrase": "Do you like Beyoncée ?",
-                    "pool": {
-                        "type": "CBOX",
-                        "values": [{
-                            label: "Yes",
-                            value: 89
-                        }, {
-                            label: "No",
-                            value: 10
-                        }, {
-                            label: "Not sure",
-                            value: 0
-                        }]
-                    }
-                }, {
-                    "id": "0123457",
+                    "id": "0123450",
                     "tags": "Cinema",
                     "lastUpdate": "17-11-2018",
                     "phrase": "Do you like Beyoncée ?",
@@ -258,24 +295,27 @@ OIOJS.voteengine = {
                             value: 10
                         }, {
                             label: "Not sure",
-                            value: 0
+                            value: 5
+                        }, {
+                            label: "I like her before",
+                            value: 10
+                        }, {
+                            label: "Only if she change her style",
+                            value: 30
                         }]
                     }
                 }, {
-                    "id": "0123457",
-                    "tags": "cinema",
-                    "phrase": "Do you like Beyoncée ?",
+                    "id": "012345",
+                    "tags": "cinema,People",
+                    "phrase": "Is Idriss Elba the sexiest man on Earth?",
                     "pool": {
                         "type": "CBOX",
                         "values": [{
-                            label: "Yes",
-                            value: 89
+                            label: "Yes, he is",
+                            value: 50
                         }, {
-                            label: "No",
-                            value: 10
-                        }, {
-                            label: "Not sure",
-                            value: 0
+                            label: "No, I think many other men are more sexy",
+                            value: 45
                         }]
                     }
                 },
@@ -283,7 +323,18 @@ OIOJS.voteengine = {
         };
 
     }
-}
+};
+
+OIOJS.utils = {
+
+    capitalizeFirstLetter: function(inputString) {
+        return inputString.charAt(0).toUpperCase() + inputString.slice(1);
+    },
+
+    formatTag: function(inputString) {
+        return this.capitalizeFirstLetter(inputString.toLowerCase());
+    }
+};
 
 $(function() {
 
@@ -301,4 +352,4 @@ $(function() {
 
 
     OIOJS.voteengine.init();
-})
+});
