@@ -41,7 +41,7 @@
 			}
 			.question-label p{
 				font-size: 1.2em;
-				font-weight: 500;
+				font-weight: 400;
 				/*font-family: monospace;*/
 			}
 			.question-container{
@@ -85,6 +85,14 @@
 			}
 			#result{
 				margin: 55px 0px 0 55px;
+			}
+			.hide{
+				display: none;
+			}
+			.search{
+				font-style: italic;
+				font-weight: 500;
+				color: blue;
 			}
 		</style>
 	</head>
@@ -136,8 +144,8 @@
 					
 				</div>
 				<div id="result" class="">
+					<span class="noResult hide"><p>No result found</p></span>
 				<ul class="questions"></ul>
-				
 			</div>
 		</div>
 		<footer>

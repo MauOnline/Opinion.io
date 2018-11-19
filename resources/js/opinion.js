@@ -5,112 +5,146 @@ var OIOJS = OIOJS || {};
 OIOJS.voteengine = {
 
     poolsPayload: null,
+    searchTerm: null,
     init: function() {
-        this.dataInit();
+        this.doDataInit();
         this.bindVote();
+        this.bindSearch();
     },
 
-    renderPools: function(pools) {
-        $.each(pools, function(i, e) {
+    doFilterPolls: function(inputString) {
 
-            var poolElement = $('<li/>', {
-                class: "question"
-            });
-            var poolContainer = $('<div/>', {
-                class: "question-container"
-            });
-            var poolPhrase = $('<div/>', {
-                class: "question-label"
-            });
-            var poolPhraseP = $('<p/>', {
-                text: e.phrase
-            })
-            var poolPhraseA = $('<a/>', {
-                class: "btn btn-outline-info btn-sm",
-                href: "#",
-                text: "Follow"
-            });
-            var poolShare = $('<div/>', {
-                class: "share",
-                html: ""
-            });
-            var poolInfo = $('<div/>', {
-                class: "info"
-            });
-
-            poolPhrase.append(poolPhraseA);
-            poolPhrase.append(poolPhraseP);
-            poolContainer.append(poolPhrase);
-
-            var progressBar = $('<div/>', {
-                class: "progress"
-            });
-            var choices = [];
-            var progressBarItems = [];
-            var progressBarColors = ["success", "danger", "warning", "info", "primary", "secondary"];
-
-            var totalScore = 0.0;
-            e.pool.values.forEach(e => totalScore += e.value);
-            $.each(e.pool.values, function(j, v) {
-
-                var poolChoice = $('<div/>', {
-                    class: "choice",
-                    "data-score": v.value
-                });
-
-                var poolChoiceVoteIcon = $('<img/>', {
-                    src: "../../resources/open-iconic-master/svg/thumb-up.svg",
-                    class: "icon"
-                });
-
-                var poolChoiceVoteLabel = $('<span/>', {
-                    class: "label",
-                    text: v.label
-                });
-
-                var poolChoiceVoteScore = $('<div/>', {
-                    class: "score",
-                    html: $('<span/>', {
-                        class: "badge badge-pill badge-" + progressBarColors[j]
-                    })
-                });
-
-                poolChoice.append(poolChoiceVoteIcon);
-                poolChoice.append(poolChoiceVoteLabel);
-                poolChoice.append(poolChoiceVoteScore);
-                choices.push(poolChoice);
-
-                if (v.value > 0) { //TODO: Review. Trying to fix the blank in the progress bar
-                    var widthVal = ((v.value * 100) / totalScore).toFixed(2);
-                    var progressBarItem = $('<div/>', {
-                        class: "progress-bar bg-" + progressBarColors[j],
-                        role: "progressbar",
-                        "aria-valuenow": "15",
-                        "aria-valuemin": "0",
-                        "aria-valuemax": "100",
-                        style: "width:" + widthVal + "%",
-                        html: $('<span/>', {
-                            class: "sr-only"
-                        })
-                    });
-                    progressBarItems.push(progressBarItem);
+        var filteredPools = [];
+        if (OIOJS.voteengine.poolsPayload != null && OIOJS.voteengine.poolsPayload !== "undefined") {
+            $.each(OIOJS.voteengine.poolsPayload.result, function(i, e) {
+                var searchRegEx = new RegExp(inputString, "gi");
+                if (e.phrase.match(searchRegEx)) {
+                    // e.phrase = e.phrase.replace(searchRegEx, '<i class="search">' + inputString + '</i>');
+                    filteredPools.push(e);
                 }
             });
+        };
 
-            progressBar.append(progressBarItems);
-            poolContainer.append(progressBar);
-
-            poolContainer.append(choices);
-            poolContainer.append(poolShare);
-            poolContainer.append(poolInfo);
-
-            poolElement.append(poolContainer);
-
-            $('ul.questions').prepend(poolElement);
-        });
+        filteredPools.length > 0 ? OIOJS.voteengine.doRenderPolls(filteredPools) : OIOJS.voteengine.doHandleNoResult();
+        // return filteredPools;
     },
 
-    extractTags: function(pools) {
+    doHandleNoResult: function() {
+        $('#result .questions').html("");
+        OIOJS.voteengine.searchTerm = null;
+        $('.noResult').show();
+    },
+
+    doRenderPolls: function(pools) {
+        if (pools.length > 0) {
+            $('.noResult').hide();
+            $('#result .questions').html("");
+            $.each(pools, function(i, e) {
+
+                var poolElement = $('<li/>', {
+                    class: "question"
+                });
+                var poolContainer = $('<div/>', {
+                    class: "question-container"
+                });
+                var poolPhrase = $('<div/>', {
+                    class: "question-label"
+                });
+
+
+                var poolPhraseP = $('<p/>', {
+                    html: function() {
+                        return OIOJS.voteengine.searchTerm != null ? e.phrase.replace(new RegExp(OIOJS.voteengine.searchTerm, "gi"), '<i class=search>' + OIOJS.voteengine.searchTerm + '</i>') :
+                            e.phrase;
+                    }
+                });
+                var poolPhraseA = $('<a/>', {
+                    class: "btn btn-outline-info btn-sm",
+                    href: "#",
+                    text: "Follow"
+                });
+                var poolShare = $('<div/>', {
+                    class: "share",
+                    html: ""
+                });
+                var poolInfo = $('<div/>', {
+                    class: "info"
+                });
+
+                poolPhrase.append(poolPhraseA);
+                poolPhrase.append(poolPhraseP);
+                poolContainer.append(poolPhrase);
+
+                var progressBar = $('<div/>', {
+                    class: "progress"
+                });
+                var choices = [];
+                var progressBarItems = [];
+                var progressBarColors = ["success", "danger", "warning", "info", "primary", "secondary"];
+
+                var totalScore = 0.0;
+                e.pool.values.forEach(e => totalScore += e.value);
+                $.each(e.pool.values, function(j, v) {
+
+                    var poolChoice = $('<div/>', {
+                        class: "choice",
+                        "data-score": v.value
+                    });
+
+                    var poolChoiceVoteIcon = $('<img/>', {
+                        src: "../../resources/open-iconic-master/svg/thumb-up.svg",
+                        class: "icon"
+                    });
+
+                    var poolChoiceVoteLabel = $('<span/>', {
+                        class: "label",
+                        text: v.label
+                    });
+
+                    var poolChoiceVoteScore = $('<div/>', {
+                        class: "score",
+                        html: $('<span/>', {
+                            class: "badge badge-pill badge-" + progressBarColors[j]
+                        })
+                    });
+
+                    poolChoice.append(poolChoiceVoteIcon);
+                    poolChoice.append(poolChoiceVoteLabel);
+                    poolChoice.append(poolChoiceVoteScore);
+                    choices.push(poolChoice);
+
+                    if (v.value > 0) { //TODO: Review. Trying to fix the blank in the progress bar
+                        var widthVal = ((v.value * 100) / totalScore).toFixed(2);
+                        var progressBarItem = $('<div/>', {
+                            class: "progress-bar bg-" + progressBarColors[j],
+                            role: "progressbar",
+                            "aria-valuenow": "15",
+                            "aria-valuemin": "0",
+                            "aria-valuemax": "100",
+                            style: "width:" + widthVal + "%",
+                            html: $('<span/>', {
+                                class: "sr-only"
+                            })
+                        });
+                        progressBarItems.push(progressBarItem);
+                    }
+                });
+
+                progressBar.append(progressBarItems);
+                poolContainer.append(progressBar);
+
+                poolContainer.append(choices);
+                poolContainer.append(poolShare);
+                poolContainer.append(poolInfo);
+
+                poolElement.append(poolContainer);
+
+                $('ul.questions').prepend(poolElement);
+            });
+        }
+    },
+
+    doExtractTags: function(pools) {
         var res = [];
         $.each(pools, function(i, e) {
             if (e.tags === 'undefined') {
@@ -131,12 +165,12 @@ OIOJS.voteengine = {
         return res;
     },
 
-    dataInit: function() {
+    doDataInit: function() {
         OIOJS.voteengine.loadPools();
         var pools = OIOJS.voteengine.poolsPayload.result;
-        OIOJS.voteengine.renderPools(pools);
+        pools.length > 0 ? OIOJS.voteengine.doRenderPolls(pools) : $('.noResult').show();
 
-        var tags = OIOJS.voteengine.extractTags(pools);
+        var tags = OIOJS.voteengine.doExtractTags(pools);
         $.each(tags, function(i, e) {
             $('#category').append(
                 $('<option/>', {
@@ -161,12 +195,12 @@ OIOJS.voteengine = {
         //Update score values on after total values have been updated
         if (totalValuesUpdated) {
             $('.choice').each(function(i, e) {
-                OIOJS.voteengine.calculateScore(e);
+                OIOJS.voteengine.doCalculateScore(e);
             });
         }
     },
 
-    calculateScore: function(q) {
+    doCalculateScore: function(q) {
         if (q !== 'undefined') {
             var parent = $(q).parent('.question-container');
             var scoreTotalVal = $(parent).data('total');
@@ -174,6 +208,20 @@ OIOJS.voteengine = {
             var scorePercentageVal = (scoreVal * 100) / scoreTotalVal;
             $(q).find('.score .badge').text(scoreVal + '(' + scorePercentageVal.toFixed(2) + '%)');
         }
+    },
+
+    bindSearch: function() {
+        $('#searchbar input').on('keyup click', function(e) {
+            var val = $(this).val().trim();
+            if (val.length > 1) {
+                // console.log(val);
+                OIOJS.voteengine.searchTerm = val;
+                OIOJS.voteengine.doFilterPolls(val);
+            } else if (val.length == 0) {
+                OIOJS.voteengine.searchTerm = null;
+                OIOJS.voteengine.doDataInit();
+            }
+        });
     },
 
     bindVote: function() {
@@ -193,7 +241,7 @@ OIOJS.voteengine = {
             })
 
             $(parent).children('.choice').each(function(i, e) {
-                OIOJS.voteengine.calculateScore(e);
+                OIOJS.voteengine.doCalculateScore(e);
             })
         });
     },
