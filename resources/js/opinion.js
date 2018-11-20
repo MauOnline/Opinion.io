@@ -254,7 +254,7 @@ OIOJS.voteengine = {
     },
 
     bindSearch: function() {
-        $('#searchbar input').on('keyup click', function(e) {
+        $('.searchEngine input').on('keyup click', function(e) {
             var _that = this;
             if ((OIOJS.voteengine.searchTerm = $(_that).val().trim()).length > 1) {
                 OIOJS.voteengine.doFilterPolls();
