@@ -6,39 +6,45 @@ OIOJS.voteengine = {
 
     poolsPayload: null,
     searchTerm: null,
+    tagFacets: [],
+    publisherFacets:[],
     init: function() {
         this.doDataInit();
         this.bindVote();
         this.bindSearch();
     },
 
-    doFilterPolls: function(inputString) {
+    doValidateSearchTerm: function() {
+        return OIOJS.voteengine.searchTerm != null &&
+            OIOJS.voteengine.searchTerm !== 'undefined' &&
+            OIOJS.voteengine.searchTerm.length > 1;
+    },
 
+    doFilterPolls: function() {
         var filteredPools = [];
         if (OIOJS.voteengine.poolsPayload != null && OIOJS.voteengine.poolsPayload !== "undefined") {
             $.each(OIOJS.voteengine.poolsPayload.result, function(i, e) {
-                var searchRegEx = new RegExp(inputString, "gi");
-                if (e.phrase.match(searchRegEx)) {
-                    // e.phrase = e.phrase.replace(searchRegEx, '<i class="search">' + inputString + '</i>');
+                if (e.phrase.match(new RegExp(OIOJS.voteengine.searchTerm, "gi"))) {
                     filteredPools.push(e);
                 }
             });
         };
 
-        filteredPools.length > 0 ? OIOJS.voteengine.doRenderPolls(filteredPools) : OIOJS.voteengine.doHandleNoResult();
+        filteredPools.length > 0 ?
+            OIOJS.voteengine.doRenderPolls(filteredPools) :
+            OIOJS.voteengine.doHandleNoResult();
         // return filteredPools;
     },
 
     doHandleNoResult: function() {
-        $('#result .questions').html("");
-        OIOJS.voteengine.searchTerm = null;
+        $('#result .questions').hide();
         $('.noResult').show();
+        OIOJS.voteengine.searchTerm = null;
     },
 
     doRenderPolls: function(pools) {
         if (pools.length > 0) {
-            $('.noResult').hide();
-            $('#result .questions').html("");
+            OIOJS.voteengine.doCleanupView();
             $.each(pools, function(i, e) {
 
                 var poolElement = $('<li/>', {
@@ -54,7 +60,8 @@ OIOJS.voteengine = {
 
                 var poolPhraseP = $('<p/>', {
                     html: function() {
-                        return OIOJS.voteengine.searchTerm != null ? e.phrase.replace(new RegExp(OIOJS.voteengine.searchTerm, "gi"), '<i class=search>' + OIOJS.voteengine.searchTerm + '</i>') :
+                        return OIOJS.voteengine.doValidateSearchTerm() ?
+                            e.phrase.replace(new RegExp(OIOJS.voteengine.searchTerm, "gi"), '<i class="search">' + OIOJS.voteengine.searchTerm + '</i>') :
                             e.phrase;
                     }
                 });
@@ -113,7 +120,7 @@ OIOJS.voteengine = {
                     poolChoice.append(poolChoiceVoteScore);
                     choices.push(poolChoice);
 
-                    if (v.value > 0) { //TODO: Review. Trying to fix the blank in the progress bar
+                    if (v.value > 0) {
                         var widthVal = ((v.value * 100) / totalScore).toFixed(2);
                         var progressBarItem = $('<div/>', {
                             class: "progress-bar bg-" + progressBarColors[j],
@@ -139,14 +146,63 @@ OIOJS.voteengine = {
 
                 poolElement.append(poolContainer);
 
-                $('ul.questions').prepend(poolElement);
+                $('ul.questions').append(poolElement);
             });
+
+            //update pool values
+            var totalValuesUpdated = false;
+            $('.question-container').each(function(i, e) {
+                var scoreTotal = function() {
+                    var temp = 0;
+                    $(e).children('.choice').each(function(i, c) {
+                        temp += $(c).data('score')
+                    });
+                    return temp;
+                }
+
+                $(e).data('total', scoreTotal());
+                totalValuesUpdated = $('.question-container').length === i + 1;
+            });
+
+            if (totalValuesUpdated) {
+                $('.choice').each(function(i, e) {
+                    OIOJS.voteengine.doCalculateScore(e);
+                });
+            }
+
+            $('ul.questions').show();
         }
     },
 
-    doExtractTags: function(pools) {
+    doRenderFacets: function() {
+        OIOJS.voteengine.doExtractTags();
+        //TODO: OIOJS.voteengine.doExtractPublisher();
+
+        var createItems = function() {
+            var col4 = $('<div/>', {
+            	class:'col-lg-4'
+            });
+            $.each(OIOJS.voteengine.tagFacets, function(i, e) {
+                var item = $('<a/>', {
+                    class: 'dropdown-item',
+                    href: '#',
+                    html: e
+                });
+                col4.append(item);
+            });
+            return col4;
+        };
+
+        console.log(createItems());
+
+    },
+    doExtractPublisher: function(pools) {
+        //TODO
+    },
+
+    doExtractTags: function() {
         var res = [];
-        $.each(pools, function(i, e) {
+        $.each(OIOJS.voteengine.poolsPayload.result, function(i, e) {
             if (e.tags === 'undefined') {
                 throw new Error("Tags not found");
             }
@@ -160,44 +216,31 @@ OIOJS.voteengine = {
                 }
             }
         });
-
         res.sort();
-        return res;
+        OIOJS.voteengine.tagFacets.push(res);
+    },
+
+    doCleanupView: function() {
+        $('.noResult').hide();
+        $('#result ul.questions').empty();
     },
 
     doDataInit: function() {
+        //Executed when the view is loaded
+
+        //Init pools
         OIOJS.voteengine.loadPools();
+
         var pools = OIOJS.voteengine.poolsPayload.result;
-        pools.length > 0 ? OIOJS.voteengine.doRenderPolls(pools) : $('.noResult').show();
 
-        var tags = OIOJS.voteengine.doExtractTags(pools);
-        $.each(tags, function(i, e) {
-            $('#category').append(
-                $('<option/>', {
-                    text: e,
-                    value: e
-                }));
-        });
+        OIOJS.voteengine.searchTerm = $('#searchbar input').val();
+        // console.log(OIOJS.voteengine.searchTerm);
+        OIOJS.voteengine.doValidateSearchTerm() === true ?
+            OIOJS.voteengine.doFilterPolls() :
+            OIOJS.voteengine.doRenderPolls(pools);
 
-        var totalValuesUpdated = false;
-        var questionCount = $('.question-container').length;
-
-        //Update total values
-        $('.question-container').each(function(i, e) {
-            var scoreTotal = 0;
-            $(e).children('.choice').each(function(i, e) {
-                scoreTotal += $(e).data('score');
-            });
-            $(e).data('total', scoreTotal);
-            totalValuesUpdated = questionCount === i + 1;
-        });
-
-        //Update score values on after total values have been updated
-        if (totalValuesUpdated) {
-            $('.choice').each(function(i, e) {
-                OIOJS.voteengine.doCalculateScore(e);
-            });
-        }
+        //update facets
+        OIOJS.voteengine.doRenderFacets();
     },
 
     doCalculateScore: function(q) {
@@ -212,12 +255,10 @@ OIOJS.voteengine = {
 
     bindSearch: function() {
         $('#searchbar input').on('keyup click', function(e) {
-            var val = $(this).val().trim();
-            if (val.length > 1) {
-                // console.log(val);
-                OIOJS.voteengine.searchTerm = val;
-                OIOJS.voteengine.doFilterPolls(val);
-            } else if (val.length == 0) {
+            var _that = this;
+            if ((OIOJS.voteengine.searchTerm = $(_that).val().trim()).length > 1) {
+                OIOJS.voteengine.doFilterPolls();
+            } else {
                 OIOJS.voteengine.searchTerm = null;
                 OIOJS.voteengine.doDataInit();
             }
@@ -225,7 +266,7 @@ OIOJS.voteengine = {
     },
 
     bindVote: function() {
-        $('.choice').on('click', function() {
+        $(document).on('click', '.choice', function() {
             //Update score and tolal
             var _that = this;
             var parent = $(_that).parent('.question-container');
