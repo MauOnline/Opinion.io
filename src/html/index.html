@@ -94,6 +94,10 @@
 				font-weight: 500;
 				color: blue;
 			}
+			.menu-container{
+				max-height: 300px;
+				overflow-y: scroll;
+			}
 		</style>
 	</head>
 	<body>
@@ -107,7 +111,7 @@
 			</div>
 			<div class="main-content">
 				<div class="row">
-					<div class="col-lg-7 offset-1">
+					<div class="col-7 offset-1">
 						<div class="input-group searchEngine">
 							<input type="text" class="form-control" aria-label="Search review...">
 							<div class="input-group-append">
@@ -116,80 +120,21 @@
 								<!-- <span class="sr-only">Toggle Dropdown</span> -->
 								</button>
 								<div class="dropdown-menu dropdown-menu-right">
-									<div class="row">
-										<div class="col-lg-6">
+									<div class="row no-gutters menu-container">
+										
+										<div id="tagfacets" class="col-6">
 											
-											<a class="dropdown-item" href="#"><b>Tag(s)</b></a>
+											<a class="dropdown-item" href="#"><b>Tags</b></a>
 											<div role="separator" class="dropdown-divider"></div>
-											<div class="row">
-												<div class="col-lg-4">
-													<a class="dropdown-item" href="#">Politic</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-												</div>
-												<div class="col-lg-4">
-													
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-												</div>
-												<div class="col-lg-4">
-													
-													<a class="dropdown-item" href="#">Entertainment</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-												</div>
-											</div>
+											<div class="row no-gutters"></div>
 										</div>
 										
-										<div class="col-lg-6">
-											<a class="dropdown-item" href="#"><b>Publisher(s)</b></a>
+										<div id="publisherfacets" class="col-6">
+											<a class="dropdown-item" href="#"><b>Publishers</b></a>
 											<div role="separator" class="dropdown-divider"></div>
-											<div class="row">
-												<div class="col-lg-4">
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-												</div>
-												<div class="col-lg-4">
-													
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-												</div>
-												<div class="col-lg-4">
-													
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-													<a class="dropdown-item" href="#">tag 1</a>
-												</div>
-
-											</div>
+											<div class="row no-gutters"></div>
 										</div>
+										
 									</div>
 								</div>
 							</div>

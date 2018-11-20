@@ -6,8 +6,8 @@ OIOJS.voteengine = {
 
     poolsPayload: null,
     searchTerm: null,
-    tagFacets: [],
-    publisherFacets:[],
+    tagFacets: null,
+    publisherFacets: null,
     init: function() {
         this.doDataInit();
         this.bindVote();
@@ -175,33 +175,65 @@ OIOJS.voteengine = {
     },
 
     doRenderFacets: function() {
-        OIOJS.voteengine.doExtractTags();
-        //TODO: OIOJS.voteengine.doExtractPublisher();
+        var generateColumnItems = function(itemList, domTarget) {
+            domTarget.empty();
+            var col_lg_4 = null;
 
-        var createItems = function() {
-            var col4 = $('<div/>', {
-            	class:'col-lg-4'
-            });
-            $.each(OIOJS.voteengine.tagFacets, function(i, e) {
+            $.each(itemList, function(i, e) {
+                if (col_lg_4 === null) {
+                    col_lg_4 = $('<div/>', {
+                        class: 'col'
+                    });
+                };
+
+                if ((itemList.length - 1 === i) || (i % 8 === 0)) {
+                    //If length value is reached or it has pass 8 items, the column is appended and 
+                    // a new column is created
+                    if (col_lg_4.children('a').length > 0) {
+                        domTarget.append(col_lg_4);
+                    }
+
+                    col_lg_4 = $('<div/>', {
+                        class: 'col',
+                    });
+                    if (i > 8) {
+                        col_lg_4.append($('<div/>', {
+                            class: 'dropdown-divider',
+                            role: 'separator'
+                        }));
+                    }
+                };
+
                 var item = $('<a/>', {
                     class: 'dropdown-item',
                     href: '#',
                     html: e
                 });
-                col4.append(item);
+                col_lg_4.append(item);
             });
-            return col4;
         };
 
-        console.log(createItems());
+        //Tags
+        if (OIOJS.voteengine.doExtractTags()) {
+            generateColumnItems(OIOJS.voteengine.tagFacets, $('#tagfacets .row'));
+        };
 
+        //Publishers
+        if (OIOJS.voteengine.doExtractPublishers()) {
+            generateColumnItems(OIOJS.voteengine.publisherFacets, $('#publisherfacets .row'));
+        };
     },
-    doExtractPublisher: function(pools) {
-        //TODO
+
+    doExtractPublishers: function(pools) {
+        OIOJS.voteengine.publisherFacets = [];
+        OIOJS.voteengine.publisherFacets.push("publisher 1", "publisher 1", "publisher 1", "publisher 1", "publisher 1", "publisher 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1");
+        OIOJS.voteengine.publisherFacets.push("publis", "publis", "publisher 1", "publis", "publis", "sample", "sample", "sample", "sampl", "sample", "sample", "sample");
+        OIOJS.voteengine.publisherFacets.push("publis", "publis", "publisher 1", "publis", "publis", "sample", "sample", "sample", "sampl", "sample", "sample", "sample");
+        return OIOJS.voteengine.publisherFacets.length > 0;
     },
 
     doExtractTags: function() {
-        var res = [];
+        var temp = [];
         $.each(OIOJS.voteengine.poolsPayload.result, function(i, e) {
             if (e.tags === 'undefined') {
                 throw new Error("Tags not found");
@@ -211,13 +243,16 @@ OIOJS.voteengine = {
             for (var j = 0; j < tags.length; j++) {
                 //Tags are being formatted to avoid duplicates base on case
                 var val = OIOJS.utils.formatTag(tags[j]);
-                if (!res.includes(val)) {
-                    res.push(val);
-                }
+                if (!temp.includes(val)) {
+                    temp.push(val);
+                };
             }
         });
-        res.sort();
-        OIOJS.voteengine.tagFacets.push(res);
+        temp.sort();
+        OIOJS.voteengine.tagFacets = temp;
+        OIOJS.voteengine.tagFacets.push("sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1");
+        // OIOJS.voteengine.tagFacets.push(temp);
+        return OIOJS.voteengine.tagFacets.length > 0;
     },
 
     doCleanupView: function() {
@@ -293,122 +328,119 @@ OIOJS.voteengine = {
             "info": {},
             "error": {},
             "result": [{
-                    "id": "0123456",
-                    "owner": "Gabon Media Press",
-                    "tags": "PeoplE,Music,Entertainment",
-                    "lastUpdate": "17-11-2018",
-                    "phrase": "Who is the best person to replace Ali Bongo?",
-                    "pool": {
-                        "type": "CBOX",
-                        "values": [{
-                            label: "Yes",
-                            value: 50
-                        }, {
-                            label: "No",
-                            value: 36
-                        }, {
-                            label: "Not sure",
-                            value: 23
-                        }]
-                    }
-                },
-
-                {
-                    "id": "0123457",
-                    "owner": "BBC Business",
-                    "tags": "Environment",
-                    "lastUpdate": "17-11-2018",
-                    "phrase": "Do you think 2019 will be a good year for global finance?",
-                    "pool": {
-                        "type": "CBOX",
-                        "values": [{
-                            label: "Yes",
-                            value: 89
-                        }, {
-                            label: "No",
-                            value: 10
-                        }, {
-                            label: "Not sure",
-                            value: 0
-                        }]
-                    }
-                }, {
-                    "id": "01234578",
-                    "owner": "01Net TV",
-                    "tags": "PeOple",
-                    "lastUpdate": "17-11-2018",
-                    "phrase": "What do you think of the new Freebox V7?",
-                    "pool": {
-                        "type": "CBOX",
-                        "values": [{
-                            label: "Yes",
-                            value: 89
-                        }, {
-                            label: "No",
-                            value: 10
-                        }, {
-                            label: "Not sure",
-                            value: 0
-                        }]
-                    }
-                }, {
-                    "id": "0123459",
-                    "tags": "Politic",
-                    "lastUpdate": "17-11-2018",
-                    "phrase": "Do you like Beyoncée ?",
-                    "pool": {
-                        "type": "CBOX",
-                        "values": [{
-                            label: "Yes",
-                            value: 89
-                        }, {
-                            label: "No",
-                            value: 10
-                        }, {
-                            label: "Not sure",
-                            value: 0
-                        }]
-                    }
-                }, {
-                    "id": "0123450",
-                    "tags": "Cinema",
-                    "lastUpdate": "17-11-2018",
-                    "phrase": "Do you like Beyoncée ?",
-                    "pool": {
-                        "type": "CBOX",
-                        "values": [{
-                            label: "Yes",
-                            value: 89
-                        }, {
-                            label: "No",
-                            value: 10
-                        }, {
-                            label: "Not sure",
-                            value: 5
-                        }, {
-                            label: "I like her before",
-                            value: 10
-                        }, {
-                            label: "Only if she change her style",
-                            value: 30
-                        }]
-                    }
-                }, {
-                    "id": "012345",
-                    "tags": "cinema,People",
-                    "phrase": "Is Idriss Elba the sexiest man on Earth?",
-                    "pool": {
-                        "type": "CBOX",
-                        "values": [{
-                            label: "Yes, he is",
-                            value: 50
-                        }, {
-                            label: "No, I think many other men are more sexy",
-                            value: 45
-                        }]
-                    }
-                },
-            ]
+                "id": "0123456",
+                "owner": "Gabon Media Press",
+                "tags": "PeoplE,Music,Entertainment",
+                "lastUpdate": "17-11-2018",
+                "phrase": "Who is the best person to replace Ali Bongo?",
+                "pool": {
+                    "type": "CBOX",
+                    "values": [{
+                        label: "Yes",
+                        value: 50
+                    }, {
+                        label: "No",
+                        value: 36
+                    }, {
+                        label: "Not sure",
+                        value: 23
+                    }]
+                }
+            }, {
+                "id": "0123457",
+                "owner": "BBC Business",
+                "tags": "Environment",
+                "lastUpdate": "17-11-2018",
+                "phrase": "Do you think 2019 will be a good year for global finance?",
+                "pool": {
+                    "type": "CBOX",
+                    "values": [{
+                        label: "Yes",
+                        value: 89
+                    }, {
+                        label: "No",
+                        value: 10
+                    }, {
+                        label: "Not sure",
+                        value: 0
+                    }]
+                }
+            }, {
+                "id": "01234578",
+                "owner": "01Net TV",
+                "tags": "PeOple",
+                "lastUpdate": "17-11-2018",
+                "phrase": "What do you think of the new Freebox V7?",
+                "pool": {
+                    "type": "CBOX",
+                    "values": [{
+                        label: "Yes",
+                        value: 89
+                    }, {
+                        label: "No",
+                        value: 10
+                    }, {
+                        label: "Not sure",
+                        value: 0
+                    }]
+                }
+            }, {
+                "id": "0123459",
+                "tags": "Politic",
+                "lastUpdate": "17-11-2018",
+                "phrase": "Do you like Beyoncée ?",
+                "pool": {
+                    "type": "CBOX",
+                    "values": [{
+                        label: "Yes",
+                        value: 89
+                    }, {
+                        label: "No",
+                        value: 10
+                    }, {
+                        label: "Not sure",
+                        value: 0
+                    }]
+                }
+            }, {
+                "id": "0123450",
+                "tags": "Cinema",
+                "lastUpdate": "17-11-2018",
+                "phrase": "Do you like Beyoncée ?",
+                "pool": {
+                    "type": "CBOX",
+                    "values": [{
+                        label: "Yes",
+                        value: 89
+                    }, {
+                        label: "No",
+                        value: 10
+                    }, {
+                        label: "Not sure",
+                        value: 5
+                    }, {
+                        label: "I like her before",
+                        value: 10
+                    }, {
+                        label: "Only if she change her style",
+                        value: 30
+                    }]
+                }
+            }, {
+                "id": "012345",
+                "tags": "cinema,People",
+                "phrase": "Is Idriss Elba the sexiest man on Earth?",
+                "pool": {
+                    "type": "CBOX",
+                    "values": [{
+                        label: "Yes, he is",
+                        value: 50
+                    }, {
+                        label: "No, I think many other men are more sexy",
+                        value: 45
+                    }]
+                }
+            }, ]
         };
 
     }
