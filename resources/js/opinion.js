@@ -288,7 +288,10 @@ OIOJS.voteengine = {
         }
     },
 
+
+
     bindSearch: function() {
+        //Phrase search
         $('.searchEngine input').on('keyup click', function(e) {
             var _that = this;
             if ((OIOJS.voteengine.searchTerm = $(_that).val().trim()).length > 1) {
@@ -297,6 +300,13 @@ OIOJS.voteengine = {
                 OIOJS.voteengine.searchTerm = null;
                 OIOJS.voteengine.doDataInit();
             }
+        });
+
+        //Facet search
+        $('#tagfacets .dropdown-item ,#publisherfacets .dropdown-item ').on('click', function(e) {
+            e.preventDefault();
+            alert("done !");
+
         });
     },
 
