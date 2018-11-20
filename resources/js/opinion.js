@@ -291,6 +291,15 @@ OIOJS.voteengine = {
 
 
     bindSearch: function() {
+
+
+        $('.searchEngine .dropdown-menu, .dropdown-item ').on('keydown click',function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
+
+
         //Phrase search
         $('.searchEngine input').on('keyup click', function(e) {
             var _that = this;
@@ -300,13 +309,6 @@ OIOJS.voteengine = {
                 OIOJS.voteengine.searchTerm = null;
                 OIOJS.voteengine.doDataInit();
             }
-        });
-
-        //Facet search
-        $('#tagfacets .dropdown-item ,#publisherfacets .dropdown-item ').on('click', function(e) {
-            e.preventDefault();
-            alert("done !");
-
         });
     },
 
