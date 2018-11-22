@@ -299,7 +299,6 @@ OIOJS.voteengine = {
             console.log(pools);
         };
 
-
         $('.searchEngine .dropdown-menu, .dropdown-item ').on('keydown click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -307,7 +306,6 @@ OIOJS.voteengine = {
             fetchPolls(["01NET TV", "People"]);
             // return false;
         });
-
 
         //Phrase search
         $('.searchEngine input').on('keyup click', function(e) {
