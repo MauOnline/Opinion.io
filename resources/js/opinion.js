@@ -6,8 +6,7 @@ OIOJS.voteengine = {
 
     poolsPayload: null,
     searchTerm: null,
-    tagFacets: null,
-    publisherFacets: null,
+    tagPublisherFacets: [],
     init: function() {
         this.doDataInit();
         this.bindVote();
@@ -292,11 +291,21 @@ OIOJS.voteengine = {
 
     bindSearch: function() {
 
+        var fetchPolls = function(tagsPublishersList) {
+            var pools = OIOJS.voteengine.poolsPayload.result.filter(function(e) {
+                return OIOJS.utils.arrayIntersection(e.tags.split(","), tagsPublishersList).length > 0 ||
+                    (e.owner !== null && typeof e.owner !== 'undefined' && OIOJS.utils.includesCaseInsensitive(tagsPublishersList, e.owner));
+            });
+            console.log(pools);
+        };
 
-        $('.searchEngine .dropdown-menu, .dropdown-item ').on('keydown click',function(e) {
+
+        $('.searchEngine .dropdown-menu, .dropdown-item ').on('keydown click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            return false;
+
+            fetchPolls(["01NET TV", "People"]);
+            // return false;
         });
 
 
@@ -466,7 +475,16 @@ OIOJS.utils = {
 
     formatTag: function(inputString) {
         return this.capitalizeFirstLetter(inputString.toLowerCase());
+    },
+
+    arrayIntersection: function(arrA, arrB) {
+        return arrA.map(e => e.toLowerCase()).filter(e => arrB.map(e => e.toLowerCase()).includes(e));
+    },
+
+    includesCaseInsensitive: function(myArray, myString) {
+        return myArray.map(e => e.toLowerCase()).includes(myString.toLowerCase());
     }
+
 };
 
 $(function() {
