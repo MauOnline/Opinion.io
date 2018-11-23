@@ -6,7 +6,9 @@ OIOJS.voteengine = {
 
     poolsPayload: null,
     searchTerm: null,
-    tagPublisherFacets: [],
+    searchFacets: null,
+    tagFacets: null,
+    publisherFacets: null,
     init: function() {
         this.doDataInit();
         this.bindVote();
@@ -19,19 +21,39 @@ OIOJS.voteengine = {
             OIOJS.voteengine.searchTerm.length > 1;
     },
 
-    doFilterPolls: function() {
-        var filteredPools = [];
+    doFilterPolls: function(isFacet) {
+        var filteredPools = []
         if (OIOJS.voteengine.poolsPayload != null && OIOJS.voteengine.poolsPayload !== "undefined") {
-            $.each(OIOJS.voteengine.poolsPayload.result, function(i, e) {
-                if (e.phrase.match(new RegExp(OIOJS.voteengine.searchTerm, "gi"))) {
-                    filteredPools.push(e);
-                }
-            });
+            if (isFacet) {
+
+                //Facets search
+                if (OIOJS.voteengine.searchFacets != null && OIOJS.voteengine.searchFacets.length > 0) {
+
+                    filteredPools = OIOJS.voteengine.poolsPayload.result.filter(function(e) {
+                        return OIOJS.utils.arrayIntersection(e.tags.split(","), OIOJS.voteengine.searchFacets).length > 0 ||
+                            (e.publisher !== null && typeof e.publisher !== 'undefined' && OIOJS.utils.includesCaseInsensitive(OIOJS.voteengine.searchFacets, e.publisher));
+                    });
+                    //flush selection
+                    OIOJS.voteengine.searchFacets = null;
+                };
+            } else {
+
+                //Searchterm
+                $.each(OIOJS.voteengine.poolsPayload.result, function(i, e) {
+                    if (e.description.match(new RegExp(OIOJS.voteengine.searchTerm, "gi"))) {
+                        filteredPools.push(e);
+                    }
+                });
+
+                //flush search term
+                OIOJS.voteengine.searchTerm = null;
+            };
         };
 
+        console.log(filteredPools);
+        //Rendering
         filteredPools.length > 0 ?
-            OIOJS.voteengine.doRenderPolls(filteredPools) :
-            OIOJS.voteengine.doHandleNoResult();
+            OIOJS.voteengine.doRenderPolls(filteredPools) : OIOJS.voteengine.doHandleNoResult();
         // return filteredPools;
     },
 
@@ -60,8 +82,8 @@ OIOJS.voteengine = {
                 var poolPhraseP = $('<p/>', {
                     html: function() {
                         return OIOJS.voteengine.doValidateSearchTerm() ?
-                            e.phrase.replace(new RegExp(OIOJS.voteengine.searchTerm, "gi"), '<i class="search">' + OIOJS.voteengine.searchTerm + '</i>') :
-                            e.phrase;
+                            e.description.replace(new RegExp(OIOJS.voteengine.searchTerm, "gi"), '<i class="search">' + OIOJS.voteengine.searchTerm + '</i>') :
+                            e.description;
                     }
                 });
                 var poolPhraseA = $('<a/>', {
@@ -88,8 +110,7 @@ OIOJS.voteengine = {
                 var progressBarItems = [];
                 var progressBarColors = ["success", "danger", "warning", "info", "primary", "secondary"];
 
-                var totalScore = 0.0;
-                e.pool.values.forEach(e => totalScore += e.value);
+                var totalScore = e.pool.values.reduce(((acc, v) => acc + v.value), 0);
                 $.each(e.pool.values, function(j, v) {
 
                     var poolChoice = $('<div/>', {
@@ -168,7 +189,6 @@ OIOJS.voteengine = {
                     OIOJS.voteengine.doCalculateScore(e);
                 });
             }
-
             $('ul.questions').show();
         }
     },
@@ -206,7 +226,8 @@ OIOJS.voteengine = {
                 var item = $('<a/>', {
                     class: 'dropdown-item',
                     href: '#',
-                    html: e
+                    html: e,
+                    "data-value": e
                 });
                 col_lg_4.append(item);
             });
@@ -260,17 +281,15 @@ OIOJS.voteengine = {
     },
 
     doDataInit: function() {
-        //Executed when the view is loaded
-
         //Init pools
-        OIOJS.voteengine.loadPools();
+        this.poolsPayload = OIOJS.mocks.getPolls();
 
         var pools = OIOJS.voteengine.poolsPayload.result;
 
         OIOJS.voteengine.searchTerm = $('#searchbar input').val();
         // console.log(OIOJS.voteengine.searchTerm);
         OIOJS.voteengine.doValidateSearchTerm() === true ?
-            OIOJS.voteengine.doFilterPolls() :
+            OIOJS.voteengine.doFilterPolls(false) :
             OIOJS.voteengine.doRenderPolls(pools);
 
         //update facets
@@ -287,36 +306,51 @@ OIOJS.voteengine = {
         }
     },
 
-
-
     bindSearch: function() {
-
-        var fetchPolls = function(tagsPublishersList) {
-            var pools = OIOJS.voteengine.poolsPayload.result.filter(function(e) {
-                return OIOJS.utils.arrayIntersection(e.tags.split(","), tagsPublishersList).length > 0 ||
-                    (e.owner !== null && typeof e.owner !== 'undefined' && OIOJS.utils.includesCaseInsensitive(tagsPublishersList, e.owner));
-            });
-            console.log(pools);
-        };
-
-        $('.searchEngine .dropdown-menu, .dropdown-item ').on('keydown click', function(e) {
+        //Facets search
+        $('.searchEngine .dropdown-menu, .dropdown-item ').on('keyup click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
-            fetchPolls(["01NET TV", "People"]);
+            var _that = this;
+
+            if (OIOJS.voteengine.searchFacets == null) {
+                //facets search init
+                OIOJS.voteengine.searchFacets = [];
+            };
+
+            var facetVal = $(_that).data("value");
+            if (facetVal != null && facetVal.length > 0 && !OIOJS.utils.includesCaseInsensitive(OIOJS.voteengine.searchFacets, facetVal)) {
+                OIOJS.voteengine.searchFacets.push(facetVal);
+            }
+            console.log(OIOJS.voteengine.searchFacets);
             // return false;
         });
 
-        //Phrase search
+
+        $('.search-action').on('click', function(e) {
+            //Init
+            if ((OIOJS.voteengine.searchTerm == null ||
+                    OIOJS.voteengine.searchTerm.length == 0) && (OIOJS.voteengine.searchFacets == null ||
+                    OIOJS.voteengine.searchFacets.length == 0) && $('.searchEngine input').val().trim().length == 0) {
+
+                OIOJS.voteengine.doDataInit();
+            } else {
+
+                OIOJS.voteengine.doFilterPolls(true);
+            }
+        });
+
+        //Search term
         $('.searchEngine input').on('keyup click', function(e) {
             var _that = this;
             if ((OIOJS.voteengine.searchTerm = $(_that).val().trim()).length > 1) {
-                OIOJS.voteengine.doFilterPolls();
-            } else {
-                OIOJS.voteengine.searchTerm = null;
-                OIOJS.voteengine.doDataInit();
+                //not facet search
+                OIOJS.voteengine.doFilterPolls(false);
             }
         });
+
+
     },
 
     bindVote: function() {
@@ -340,129 +374,6 @@ OIOJS.voteengine = {
             })
         });
     },
-
-    loadPools: function() {
-        //TODO: Replace with Ajax call later on
-        this.poolsPayload = {
-            "info": {},
-            "error": {},
-            "result": [{
-                "id": "0123456",
-                "owner": "Gabon Media Press",
-                "tags": "PeoplE,Music,Entertainment",
-                "lastUpdate": "17-11-2018",
-                "phrase": "Who is the best person to replace Ali Bongo?",
-                "pool": {
-                    "type": "CBOX",
-                    "values": [{
-                        label: "Yes",
-                        value: 50
-                    }, {
-                        label: "No",
-                        value: 36
-                    }, {
-                        label: "Not sure",
-                        value: 23
-                    }]
-                }
-            }, {
-                "id": "0123457",
-                "owner": "BBC Business",
-                "tags": "Environment",
-                "lastUpdate": "17-11-2018",
-                "phrase": "Do you think 2019 will be a good year for global finance?",
-                "pool": {
-                    "type": "CBOX",
-                    "values": [{
-                        label: "Yes",
-                        value: 89
-                    }, {
-                        label: "No",
-                        value: 10
-                    }, {
-                        label: "Not sure",
-                        value: 0
-                    }]
-                }
-            }, {
-                "id": "01234578",
-                "owner": "01Net TV",
-                "tags": "PeOple",
-                "lastUpdate": "17-11-2018",
-                "phrase": "What do you think of the new Freebox V7?",
-                "pool": {
-                    "type": "CBOX",
-                    "values": [{
-                        label: "Yes",
-                        value: 89
-                    }, {
-                        label: "No",
-                        value: 10
-                    }, {
-                        label: "Not sure",
-                        value: 0
-                    }]
-                }
-            }, {
-                "id": "0123459",
-                "tags": "Politic",
-                "lastUpdate": "17-11-2018",
-                "phrase": "Do you like Beyoncée ?",
-                "pool": {
-                    "type": "CBOX",
-                    "values": [{
-                        label: "Yes",
-                        value: 89
-                    }, {
-                        label: "No",
-                        value: 10
-                    }, {
-                        label: "Not sure",
-                        value: 0
-                    }]
-                }
-            }, {
-                "id": "0123450",
-                "tags": "Cinema",
-                "lastUpdate": "17-11-2018",
-                "phrase": "Do you like Beyoncée ?",
-                "pool": {
-                    "type": "CBOX",
-                    "values": [{
-                        label: "Yes",
-                        value: 89
-                    }, {
-                        label: "No",
-                        value: 10
-                    }, {
-                        label: "Not sure",
-                        value: 5
-                    }, {
-                        label: "I like her before",
-                        value: 10
-                    }, {
-                        label: "Only if she change her style",
-                        value: 30
-                    }]
-                }
-            }, {
-                "id": "012345",
-                "tags": "cinema,People",
-                "phrase": "Is Idriss Elba the sexiest man on Earth?",
-                "pool": {
-                    "type": "CBOX",
-                    "values": [{
-                        label: "Yes, he is",
-                        value: 50
-                    }, {
-                        label: "No, I think many other men are more sexy",
-                        value: 45
-                    }]
-                }
-            }, ]
-        };
-
-    }
 };
 
 OIOJS.utils = {
@@ -482,10 +393,10 @@ OIOJS.utils = {
     includesCaseInsensitive: function(myArray, myString) {
         return myArray.map(e => e.toLowerCase()).includes(myString.toLowerCase());
     }
-
 };
 
 $(function() {
+    OIOJS.voteengine.init();
 
     //Load data
     // $.ajax({
@@ -500,5 +411,4 @@ $(function() {
     // });
 
 
-    OIOJS.voteengine.init();
 });
