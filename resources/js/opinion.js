@@ -194,36 +194,42 @@ OIOJS.voteengine = {
         var generateColumnItems = function(itemList, domTarget) {
 
             //Emptying the container
-            // domTarget.empty();
-            //create items
-            // var items = itemList.map(i => $('<a/>', {
-            //     class: 'dropdown-item',
-            //     href: '#',
-            //     html: i,
-            //     "data-value": i
-            // }));
-            // //create columns of 8 items
-            // var columnCount = Math.floor(items.length / 8) + items.length % 8;
-            // var columns = [];
-            // for (var j = 0; j < columnCount; j++) {
-            //     columns.push($('<div/>', {
-            //         class: 'col'
-            //     }));
-            // }
+            domTarget.empty();
+            // create items
+            var items = itemList.map(i => $('<a/>', {
+                class: 'dropdown-item',
+                href: '#',
+                html: i,
+                "data-value": i
+            }));
+            //create columns of 8 items
+            var columnCount = items.length > 8 ? Math.floor(items.length / 8) + (items.length % 8) : 1;
+            var columns = [];
+            for (var j = 0; j < columnCount; j++) {
+                columns.push($('<div/>', {
+                    class: 'col'
+                }));
+            };
 
-            // console.log(columns);
+            for (var k = 0; k < columnCount; k++) {
+                for (var l = 0; l < items.length; l++) {
+                    if (l >= 8 && l % 8 == 0) {
+                        columns[k].append($('<div/>', {
+                            class: 'dropdown-divider',
+                            role: 'separator'
+                        }));
+                    };
+                    columns[k].append(items[l]);
 
-            // var k = 0;
-            // while (k <= columnCount) {
-            //     for (var l = 0; l < items.length; l++) {
-            //         if (k % 8 == 0) {
-            //             k++;
-            //         }
-            //         columns[k].append(items[l]);
-            //     }
-            // }
+                }
+            };
 
-            // console.log(items);
+            $.each(columns, function(i, col) {
+                if ($(col).children('a').length > 0) {
+                    domTarget.append(col);
+                }
+            });
+
 
             // console.log(itemList);
             // $.each(itemList, function(i, e) {
@@ -276,9 +282,9 @@ OIOJS.voteengine = {
 
     doExtractPublishers: function(pools) {
         OIOJS.voteengine.publisherFacets = [];
-        // OIOJS.voteengine.publisherFacets.push("publisher 1", "publisher 1", "publisher 1", "publisher 1", "publisher 1", "publisher 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1");
-        // OIOJS.voteengine.publisherFacets.push("publis", "publis", "publisher 1", "publis", "publis", "sample", "sample", "sample", "sampl", "sample", "sample", "sample");
-        // OIOJS.voteengine.publisherFacets.push("publis", "publis", "publisher 1", "publis", "publis", "sample", "sample", "sample", "sampl", "sample", "sample", "sample");
+        OIOJS.voteengine.publisherFacets.push("publisher 1", "publisher 1", "publisher 1", "publisher 1", "publisher 1", "publisher 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1");
+        OIOJS.voteengine.publisherFacets.push("publis", "publis", "publisher 1", "publis", "publis", "sample", "sample", "sample", "sampl", "sample", "sample", "sample");
+        OIOJS.voteengine.publisherFacets.push("publis", "publis", "publisher 1", "publis", "publis", "sample", "sample", "sample", "sampl", "sample", "sample", "sample");
         return OIOJS.voteengine.publisherFacets.length > 0;
     },
 
@@ -296,8 +302,8 @@ OIOJS.voteengine = {
         temp.sort();
         // console.log(temp);
         OIOJS.voteengine.tagFacets = temp;
-        // OIOJS.voteengine.tagFacets.push("sample 1");
-        // OIOJS.voteengine.tagFacets.push("sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1");
+        OIOJS.voteengine.tagFacets.push("sample 1", "sample 1");
+        OIOJS.voteengine.tagFacets.push("sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1");
         // OIOJS.voteengine.tagFacets.push(temp);
         return OIOJS.voteengine.tagFacets.length > 0;
     },
