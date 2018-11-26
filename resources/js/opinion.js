@@ -192,43 +192,74 @@ OIOJS.voteengine = {
 
     doRenderFacets: function() {
         var generateColumnItems = function(itemList, domTarget) {
-            domTarget.empty();
-            var col_lg_4 = null;
+
+            //Emptying the container
+            // domTarget.empty();
+            //create items
+            // var items = itemList.map(i => $('<a/>', {
+            //     class: 'dropdown-item',
+            //     href: '#',
+            //     html: i,
+            //     "data-value": i
+            // }));
+            // //create columns of 8 items
+            // var columnCount = Math.floor(items.length / 8) + items.length % 8;
+            // var columns = [];
+            // for (var j = 0; j < columnCount; j++) {
+            //     columns.push($('<div/>', {
+            //         class: 'col'
+            //     }));
+            // }
+
+            // console.log(columns);
+
+            // var k = 0;
+            // while (k <= columnCount) {
+            //     for (var l = 0; l < items.length; l++) {
+            //         if (k % 8 == 0) {
+            //             k++;
+            //         }
+            //         columns[k].append(items[l]);
+            //     }
+            // }
+
+            // console.log(items);
+
             // console.log(itemList);
-            $.each(itemList, function(i, e) {
-                if (col_lg_4 === null) {
-                    col_lg_4 = $('<div/>', {
-                        class: 'col'
-                    });
-                };
+            // $.each(itemList, function(i, e) {
+            //     if (col_lg_4 === null) {
+            //         col_lg_4 = $('<div/>', {
+            //             class: 'col'
+            //         });
+            //     };
 
-                if ((itemList.length === i+1) || (i % 8 === 0)) {
-                    //If length value is reached or it has pass 8 items, the column is appended and 
-                    // a new column is created
-                    if (col_lg_4.children('a').length > 0) {
-                        domTarget.append(col_lg_4);
-                    }
+            //     if ((itemList.length === i + 1) || (i % 8 === 0)) {
+            //         //If length value is reached or it has pass 8 items, the column is appended and 
+            //         // a new column is created
+            //         if (col_lg_4.children('a').length > 0) {
+            //             domTarget.append(col_lg_4);
+            //         }
 
-                    col_lg_4 = $('<div/>', {
-                        class: 'col',
-                    });
-                    if (i > 8) {
-                        col_lg_4.append($('<div/>', {
-                            class: 'dropdown-divider',
-                            role: 'separator'
-                        }));
-                    }
-                };
-                var item = $('<a/>', {
-                    class: 'dropdown-item',
-                    href: '#',
-                    html: e,
-                    "data-value": e
-                });
-                console.log(item);
-                col_lg_4.append(item);
+            //         col_lg_4 = $('<div/>', {
+            //             class: 'col',
+            //         });
+            //         if (i > 8) {
+            //             col_lg_4.append($('<div/>', {
+            //                 class: 'dropdown-divider',
+            //                 role: 'separator'
+            //             }));
+            //         }
+            //     };
+            //     var item = $('<a/>', {
+            //         class: 'dropdown-item',
+            //         href: '#',
+            //         html: e,
+            //         "data-value": e
+            //     });
+            //     console.log(item);
+            //     col_lg_4.append(item);
 
-            });
+            // });
         };
 
         //Tags
