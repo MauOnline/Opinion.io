@@ -2,6 +2,7 @@
 
 var OIOJS = OIOJS || {};
 
+const FILTER_COLS_TRESHOLD = 7;
 OIOJS.voteengine = {
 
     poolsPayload: null,
@@ -199,73 +200,35 @@ OIOJS.voteengine = {
             var items = itemList.map(i => $('<a/>', {
                 class: 'dropdown-item',
                 href: '#',
-                html: i,
+                html: OIOJS.utils.formatTag(i),
                 "data-value": i
             }));
             //create columns of 8 items
-            var columnCount = items.length > 8 ? Math.floor(items.length / 8) + (items.length % 8) : 1;
-            var columns = [];
-            for (var j = 0; j < columnCount; j++) {
-                columns.push($('<div/>', {
-                    class: 'col'
-                }));
-            };
-
-            for (var k = 0; k < columnCount; k++) {
-                for (var l = 0; l < items.length; l++) {
-                    if (l >= 8 && l % 8 == 0) {
-                        columns[k].append($('<div/>', {
-                            class: 'dropdown-divider',
-                            role: 'separator'
-                        }));
-                    };
-                    columns[k].append(items[l]);
-
+            var itemsBuckets = []
+            var startPos = 0;
+            for (var i = 0; i < items.length; i++) {
+                if (i > 0 && i % FILTER_COLS_TRESHOLD == 0) {
+                    itemsBuckets.push(items.slice(startPos, i));
+                    startPos = i;
+                } else if (i == items.length - 1) {
+                    itemsBuckets.push(items.slice(startPos));
                 }
-            };
+            }
 
-            $.each(columns, function(i, col) {
+            $.each(itemsBuckets, function(i, bucket) {
+
+                var col = $('<div/>', {
+                    class: 'col'
+                });
+                col.append(bucket).append($('<div/>', {
+                    class: 'dropdown-divider',
+                    role: 'separator'
+                }));
                 if ($(col).children('a').length > 0) {
                     domTarget.append(col);
                 }
             });
 
-
-            // console.log(itemList);
-            // $.each(itemList, function(i, e) {
-            //     if (col_lg_4 === null) {
-            //         col_lg_4 = $('<div/>', {
-            //             class: 'col'
-            //         });
-            //     };
-
-            //     if ((itemList.length === i + 1) || (i % 8 === 0)) {
-            //         //If length value is reached or it has pass 8 items, the column is appended and 
-            //         // a new column is created
-            //         if (col_lg_4.children('a').length > 0) {
-            //             domTarget.append(col_lg_4);
-            //         }
-
-            //         col_lg_4 = $('<div/>', {
-            //             class: 'col',
-            //         });
-            //         if (i > 8) {
-            //             col_lg_4.append($('<div/>', {
-            //                 class: 'dropdown-divider',
-            //                 role: 'separator'
-            //             }));
-            //         }
-            //     };
-            //     var item = $('<a/>', {
-            //         class: 'dropdown-item',
-            //         href: '#',
-            //         html: e,
-            //         "data-value": e
-            //     });
-            //     console.log(item);
-            //     col_lg_4.append(item);
-
-            // });
         };
 
         //Tags
