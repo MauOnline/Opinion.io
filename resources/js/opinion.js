@@ -76,18 +76,16 @@ OIOJS.voteengine = {
                     class: "question-label"
                 });
 
-
                 var poolPhraseP = $('<p/>', {
                     html: function() {
                         return OIOJS.voteengine.doValidateSearchTerm() ?
-                            e.description.replace(new RegExp(OIOJS.voteengine.searchTerm, "gi"), '<i class="search">' + OIOJS.voteengine.searchTerm + '</i>') :
-                            e.description;
+                            "&nbsp;"+e.description.replace(new RegExp(OIOJS.voteengine.searchTerm, "gi"), '<i class="search">' + OIOJS.voteengine.searchTerm + '</i>') :
+                            "&nbsp;"+e.description;
                     }
                 });
-                var poolPhraseA = $('<a/>', {
-                    class: "btn btn-outline-info btn-sm",
-                    href: "#",
-                    text: "Follow"
+                var poolPhraseA = $('<i/>', {
+                    class: "fa fa-star fa-lg",
+                    style: "color:yellow"
                 });
                 var poolShare = $('<div/>', {
                     class: "share",
@@ -97,7 +95,8 @@ OIOJS.voteengine = {
                     class: "info"
                 });
 
-                poolPhrase.append(poolPhraseA);
+                // poolPhrase.append(poolPhraseA);
+                poolPhraseP.prepend(poolPhraseA);
                 poolPhrase.append(poolPhraseP);
                 poolContainer.append(poolPhrase);
 
@@ -116,14 +115,15 @@ OIOJS.voteengine = {
                         "data-score": v.value
                     });
 
-                    var poolChoiceVoteIcon = $('<img/>', {
-                        src: "../../resources/open-iconic-master/svg/thumb-up.svg",
-                        class: "icon"
+                    var poolChoiceVoteIcon = $('<i/>', {
+                        class: "fa fa-thumbs-up fa-lg",
+                        "aria-hidden": "true",
+                        style:"color:blue"
                     });
 
                     var poolChoiceVoteLabel = $('<span/>', {
                         class: "label",
-                        text: v.label
+                        html: "&nbsp;" + v.label
                     });
 
                     var poolChoiceVoteScore = $('<div/>', {
@@ -133,7 +133,8 @@ OIOJS.voteengine = {
                         })
                     });
 
-                    poolChoice.append(poolChoiceVoteIcon);
+                    // poolChoice.append(poolChoiceVoteIcon);
+                    poolChoiceVoteLabel.prepend(poolChoiceVoteIcon);
                     poolChoice.append(poolChoiceVoteLabel);
                     poolChoice.append(poolChoiceVoteScore);
                     choices.push(poolChoice);
@@ -304,12 +305,8 @@ OIOJS.voteengine = {
 
     setSearchTerm: function(searchTermParam) {
         OIOJS.voteengine.searchFacets = null;
-        if (searchTermParam != null && searchTermParam.length > 1) {
-            OIOJS.voteengine.searchTerm = searchTermParam;
-            console.log(OIOJS.voteengine.searchTerm);
-            return true;
-        };
-        return false;
+        OIOJS.voteengine.searchTerm = searchTermParam;
+        console.log(OIOJS.voteengine.searchTerm);
     },
 
     setSearchFacets: function(searchFacetsParam) {

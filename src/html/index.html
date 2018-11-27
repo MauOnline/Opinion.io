@@ -8,16 +8,9 @@
 		<meta content="Maryann, Lucien, contributors" name=author>
 		<title>Opinion.io</title>
 		
-		<script src="../../resources/SVGInjector-master/dist/svg-injector.min.js"></script>
-		<script>
-		// Elements to inject
-		var mySVGsToInject = document.querySelectorAll('.iconic-sprite');
-		// Do the injection
-		SVGInjector(mySVGsToInject);
-		</script>
 		<!-- 3rd part stylesheets libs -->
 		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-		<link href="../../resources/open-iconic-master/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+		<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 		<!-- Project scripts -->
 		<!-- Project stylesheets -->
 		<style type="text/css">
@@ -122,6 +115,9 @@
 				margin: 0 !important;
 				padding: 0 !important;
 			}
+			.progress{
+				margin: 5px 0 5px 0;
+			}
 		</style>
 	</head>
 	<body>
@@ -139,24 +135,24 @@
 						<div class="input-group searchEngine">
 							<input type="text" class="form-control" aria-label="Search review..."/>
 							<!-- <div class="row selectedFacets no-gutters">
-								<ul>
-									<li class=""><a href="#">choice 1&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 4&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 4&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 1&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-								 	<li class="badge-pill badge-secondary">choice 2&nbsp;<a href="#">x</a></li>
-									<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
-									<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
-								</ul>
+									<ul>
+											<li class=""><a href="#">choice 1&nbsp;</a>;</li>
+											<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+											<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+											<li class=""><a href="#">choice 4&nbsp;</a>;</li>
+											<li class=""><a href="#">choice 4&nbsp;</a>;</li>
+											<li class=""><a href="#">choice 1&nbsp;</a>;</li>
+											<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+											<li class="badge-pill badge-secondary">choice 2&nbsp;<a href="#">x</a></li>
+											<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
+											<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
+									</ul>
 							</div> -->
 							<div class="input-group-append">
 								<button type="button" class="btn btn-outline-secondary search-action">Search</button>
 								<button id="search-more" type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
 								<!-- <span class="sr-only">Toggle Dropdown</span> -->
-								More 
+								More
 								</button>
 								<div class="dropdown-menu dropdown-menu-right">
 									<div class="row no-gutters menu-container">
