@@ -5,7 +5,7 @@ var OIOJS = OIOJS || {};
 const FILTER_COLS_TRESHOLD = 7;
 OIOJS.voteengine = {
 
-    poolsPayload: null,
+    pollsPayload: null,
     searchTerm: null,
     searchFacets: null,
     tagFacets: null,
@@ -30,12 +30,12 @@ OIOJS.voteengine = {
     },
 
     doFilterPolls: function() {
-        var filteredPools = []
-        if (OIOJS.voteengine.poolsPayload != null && OIOJS.voteengine.poolsPayload !== "undefined") {
+        var filteredPolls = []
+        if (OIOJS.voteengine.pollsPayload != null && OIOJS.voteengine.pollsPayload !== "undefined") {
             if (OIOJS.voteengine.isFacetSearch()) {
 
                 //Facets search
-                filteredPools = OIOJS.voteengine.poolsPayload.result.filter(function(e) {
+                filteredPolls = OIOJS.voteengine.pollsPayload.result.filter(function(e) {
                     return OIOJS.utils.arrayIntersection(e.tags.split(","), OIOJS.voteengine.searchFacets).length > 0 ||
                         (e.publisher !== null && typeof e.publisher !== 'undefined' &&
                             OIOJS.utils.includesCaseInsensitive(OIOJS.voteengine.searchFacets, e.publisher));
@@ -44,14 +44,14 @@ OIOJS.voteengine = {
             } else {
 
                 //Searchterm
-                filteredPools = OIOJS.voteengine.poolsPayload.result.filter(p => p.description.match(new RegExp(OIOJS.voteengine.searchTerm, "gi")));
+                filteredPolls = OIOJS.voteengine.pollsPayload.result.filter(p => p.description.match(new RegExp(OIOJS.voteengine.searchTerm, "gi")));
             };
         };
 
-        console.log(filteredPools);
+        // console.log(filteredPolls);
         //Rendering
-        filteredPools.length > 0 ?
-            OIOJS.voteengine.doRenderPolls(filteredPools) : OIOJS.voteengine.doHandleNoResult();
+        filteredPolls.length > 0 ?
+            OIOJS.voteengine.doRenderPolls(filteredPolls) : OIOJS.voteengine.doHandleNoResult();
         // return filteredPools;
     },
 
@@ -253,7 +253,7 @@ OIOJS.voteengine = {
     },
 
     doExtractTags: function() {
-        var temp = OIOJS.voteengine.poolsPayload.result.filter(e => e.tags != null || typeof e.tags === 'undefined').reduce(function(acc, e) {
+        var temp = OIOJS.voteengine.pollsPayload.result.filter(e => e.tags != null || typeof e.tags === 'undefined').reduce(function(acc, e) {
             e.tags.split(",").forEach(function(i) {
                 // console.log(i);
                 if (OIOJS.utils.includesCaseInsensitive(acc, i) === false) {
@@ -279,9 +279,9 @@ OIOJS.voteengine = {
 
     doDataInit: function() {
         //Init pools
-        this.poolsPayload = OIOJS.mocks.getPolls();
+        this.pollsPayload = OIOJS.mocks.getPolls();
 
-        var pools = OIOJS.voteengine.poolsPayload.result;
+        var pools = OIOJS.voteengine.pollsPayload.result;
 
         OIOJS.voteengine.searchTerm = $('#searchbar input').val();
         // console.log(OIOJS.voteengine.searchTerm);
