@@ -79,8 +79,8 @@ OIOJS.voteengine = {
                 var poolPhraseP = $('<p/>', {
                     html: function() {
                         return OIOJS.voteengine.doValidateSearchTerm() ?
-                            "&nbsp;"+e.description.replace(new RegExp(OIOJS.voteengine.searchTerm, "gi"), '<i class="search">' + OIOJS.voteengine.searchTerm + '</i>') :
-                            "&nbsp;"+e.description;
+                            "&nbsp;" + e.description.replace(new RegExp(OIOJS.voteengine.searchTerm, "gi"), '<i class="search">' + OIOJS.voteengine.searchTerm + '</i>') :
+                            "&nbsp;" + e.description;
                     }
                 });
                 var poolPhraseA = $('<i/>', {
@@ -118,7 +118,7 @@ OIOJS.voteengine = {
                     var poolChoiceVoteIcon = $('<i/>', {
                         class: "fa fa-thumbs-up fa-lg",
                         "aria-hidden": "true",
-                        style:"color:blue"
+                        style: "color:#007bff"
                     });
 
                     var poolChoiceVoteLabel = $('<span/>', {
