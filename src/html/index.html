@@ -38,7 +38,7 @@
 				/*font-family: monospace;*/
 			}
 			.question-container{
-				background: rgb(0, 128, 255, .2);
+				background: #f8f9fa; /*rgb(0, 128, 255, .2);*/
 				padding: 5px;
 			}
 			.choice{
@@ -118,15 +118,36 @@
 			.progress{
 				margin: 5px 0 5px 0;
 			}
+			.header .user{
+				display: inline-flex;
+				flex-direction: row;
+				flex-wrap: nowrap;
+				align-content: space-between;
+				margin: 25px 0 0 0;
+				height: 35px;
+				
+			}
+			.header .user .btn {
+				border: 1px solid lightgray;
+				margin: 0 10px 0 0;
+				color: gray !important;
+			}
+			
 		</style>
 	</head>
 	<body>
 		<div class="container">
-			<div class="header badge-pill badge-primary">
+			<div class="header badge-pill badge-light row">
 				
-				<div class="title">
+				<div class="title col">
 					<h1 class="">Opinion.io</h1>
 					<i>Online trusted opinion</i>
+				</div>
+				<div class="user col">
+					<button type="button" class="signIn btn btn-light btn-sm">Sign in</button>
+					<button type="button" class="signOut btn btn-light btn-sm">Sign out</button>
+					<button type="button" class="userProfile btn btn-light btn-sm rounded-circle"><i class="fa fa-user fa-2x" aria-hidden="true"></i></button>
+				
 				</div>
 			</div>
 			<div class="main-content">
@@ -135,18 +156,18 @@
 						<div class="input-group searchEngine">
 							<input type="text" class="form-control" aria-label="Search review..."/>
 							<!-- <div class="row selectedFacets no-gutters">
-									<ul>
-											<li class=""><a href="#">choice 1&nbsp;</a>;</li>
-											<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-											<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-											<li class=""><a href="#">choice 4&nbsp;</a>;</li>
-											<li class=""><a href="#">choice 4&nbsp;</a>;</li>
-											<li class=""><a href="#">choice 1&nbsp;</a>;</li>
-											<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-											<li class="badge-pill badge-secondary">choice 2&nbsp;<a href="#">x</a></li>
-											<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
-											<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
-									</ul>
+											<ul>
+															<li class=""><a href="#">choice 1&nbsp;</a>;</li>
+															<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+															<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+															<li class=""><a href="#">choice 4&nbsp;</a>;</li>
+															<li class=""><a href="#">choice 4&nbsp;</a>;</li>
+															<li class=""><a href="#">choice 1&nbsp;</a>;</li>
+															<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+															<li class="badge-pill badge-secondary">choice 2&nbsp;<a href="#">x</a></li>
+															<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
+															<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
+											</ul>
 							</div> -->
 							<div class="input-group-append">
 								<button type="button" class="btn btn-outline-secondary search-action">Search</button>

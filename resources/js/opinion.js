@@ -4,6 +4,7 @@ var OIOJS = OIOJS || {};
 
 const FILTER_COLS_TRESHOLD = 7;
 OIOJS.voteengine = {
+    //Manage the vote engine and search engine
 
     pollsPayload: null,
     searchTerm: null,
@@ -374,6 +375,53 @@ OIOJS.voteengine = {
             })
         });
     },
+};
+
+OIOJS.userFramework = {
+    //Manage all user context related functionalies
+    doSignIn: function() {
+        return null;
+    },
+
+    doSignUp: function() {
+        return null;
+    },
+
+    doSignOut: function() {
+
+    },
+
+    doAddFavorite: function(favoriteItem, type) {
+        //@favoriteItem: The item being added as favortie
+        //@type: the Item type. Possible values are: tg[tag], pbs[Publisher] or pl[poll]
+        if (typeof favoriteItem !== 'undefined' && typeof type !== 'undefined') {
+
+            switch (type) {
+                case "tg":
+                    break;
+                case "pbs":
+                    break;
+                case "pl":
+                    break;
+                default:
+                    // console.log("Unknown type "+type);
+                    throw new Error("Unknown type " + type)
+
+            }
+        }
+    },
+
+    bindAddFavorite: function() {
+
+        $('.unfetched').on('click', function(e) {
+            e.preventDefault();
+            var _that = this;
+            OIOJS.userFramework.doAddFavorite(_that, '');
+
+        });
+
+    },
+
 };
 
 OIOJS.utils = {
