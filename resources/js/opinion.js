@@ -64,14 +64,14 @@ OIOJS.voteengine = {
 
     doRenderPolls: function(pools) {
         if (pools.length > 0) {
-            OIOJS.voteengine.doCleanupView();
+            // OIOJS.voteengine.doCleanupView();
             $.each(pools, function(i, e) {
 
                 var poolElement = $('<li/>', {
                     class: "question"
                 });
                 var poolContainer = $('<div/>', {
-                    class: "question-container"
+                    class: "question-container border-bottom"
                 });
                 var poolPhrase = $('<div/>', {
                     class: "question-label"
@@ -161,7 +161,7 @@ OIOJS.voteengine = {
                 poolContainer.append(progressBar);
 
                 poolContainer.append(choices);
-                poolContainer.append(poolShare);
+                // poolContainer.append(poolShare);
                 poolContainer.append(poolInfo);
 
                 poolElement.append(poolContainer);
@@ -379,6 +379,11 @@ OIOJS.voteengine = {
 
 OIOJS.userFramework = {
     //Manage all user context related functionalies
+    init: function() {
+        this.bindSignIn();
+        this.bindSignUp();
+        // this.bindSignId();
+    },
     doSignIn: function() {
         return null;
     },
@@ -422,6 +427,30 @@ OIOJS.userFramework = {
 
     },
 
+    bindSignIn: function() {
+
+
+
+
+    },
+
+    bindSignUp: function() {
+
+        $('.signUp').on('click', function() {
+            $('#signInModal .signUpForm').show();
+            $('#signInModal .signInForm').hide();
+        });
+
+        $('.signUpCancel').on('click', function() {
+            $('#signInModal .signUpForm').hide();
+            $('#signInModal .signInForm').show();
+        });
+
+
+
+
+    }
+
 };
 
 OIOJS.utils = {
@@ -445,6 +474,7 @@ OIOJS.utils = {
 
 $(function() {
     OIOJS.voteengine.init();
+    OIOJS.userFramework.init();
 
     //Load data
     // $.ajax({
