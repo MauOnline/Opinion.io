@@ -71,7 +71,7 @@ OIOJS.voteengine = {
                     class: "question"
                 });
                 var poolContainer = $('<div/>', {
-                    class: "question-container border-bottom"
+                    class: "question-container border-bottom border-left"
                 });
                 var poolPhrase = $('<div/>', {
                     class: "question-label"
@@ -119,7 +119,7 @@ OIOJS.voteengine = {
                     var poolChoiceVoteIcon = $('<i/>', {
                         class: "fa fa-thumbs-up fa-lg",
                         "aria-hidden": "true",
-                        style: "color:#007bff"
+                        style: "color:lightgrey"
                     });
 
                     var poolChoiceVoteLabel = $('<span/>', {
@@ -372,9 +372,26 @@ OIOJS.voteengine = {
 
             $(parent).children('.choice').each(function(i, e) {
                 OIOJS.voteengine.doCalculateScore(e);
-            })
+            });
+
         });
-    },
+
+        $(document).on('mouseover', '.choice', function() {
+            var _that = this;
+            if (typeof $(_that).find('.fa-thumbs-up').data("selected") === 'undefined') {
+                $(_that).find('.fa-thumbs-up').addClass("thumbsUpHover");
+
+            }
+        });
+
+        $(document).on('mouseout', '.choice', function() {
+            var _that = this;
+            if (typeof $(_that).find('.fa-thumbs-up').data("selected") === 'undefined') {
+                $(_that).find('.fa-thumbs-up').removeClass("thumbsUpHover");
+            }
+
+        });
+    }
 };
 
 OIOJS.userFramework = {
