@@ -8,3 +8,5 @@ TODO
 - Limit publisher name (username) characters (how many?)
 - Username can not have special characters, only alpha numaric values
 - Check the quick result bar is displaying the right proportions
+- Add My favorites in tags filter section
+- Add My polls in Publishers section

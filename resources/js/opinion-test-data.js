@@ -4,6 +4,33 @@ var OIOJS = OIOJS || {};
 
 OIOJS.mocks = {
 
+    doLogin: function() {
+        return {
+            "metadata": {
+                "location": null,
+            },
+            "account": {
+                "firstname": "Azouwa",
+                "surname": "Ogowé",
+                "username": "Jonnhi 007",
+                "email": "01nettv@mail.com"
+            },
+            "preferences": {
+                "defaultPollType": null,
+                "defaultPollTimer": null,
+                "thumbnail": "https://someling.com/images.jpeg"
+            },
+            "favorites": {
+                "tags": null,
+                "publishers": null,
+                "polls": ["0123450", "0123456"]
+            },
+            "polls": ["0123459", "0123456"],
+            "votes": []
+        };
+
+    },
+
     getPolls: function() {
         return {
             "info": {},

@@ -63,6 +63,8 @@ OIOJS.voteengine = {
     },
 
     doRenderPolls: function(pools) {
+        var user = OIOJS.userFramework.getUser();
+
         if (pools.length > 0) {
             // OIOJS.voteengine.doCleanupView();
             $.each(pools, function(i, e) {
@@ -84,9 +86,12 @@ OIOJS.voteengine = {
                             "&nbsp;" + e.description;
                     }
                 });
+
+                var isFollowedPoll = typeof user !== 'undefined' && user.favorites.polls.includes(e.id);
+
                 var poolPhraseA = $('<i/>', {
-                    class: "fa fa-star fa-lg",
-                    style: "color:yellow"
+                    class: "fa fa-bell",
+                    style: isFollowedPoll ? "color:red !Important" : "color:lightgrey"
                 });
                 var poolShare = $('<div/>', {
                     class: "share",
@@ -398,11 +403,37 @@ OIOJS.userFramework = {
     //Manage all user context related functionalies
     init: function() {
         this.bindSignIn();
+        this.bindSignOut();
         this.bindSignUp();
-        // this.bindSignId();
+        this.bindAddFavorite();
+        this.doRenderUserDetails();
+
+    },
+    getUser: function() {
+        return JSON.parse(sessionStorage.getItem("user"));
+    },
+    doRenderUserDetails: function() {
+
+        var user = null;
+        if ((user = JSON.parse(sessionStorage.getItem("user"))) !== null) {
+            //If sign in succeeded
+            // console.log(user.account);
+            $('.user .userProfile .userName').text(user.account.username);
+            $('.user .userProfile').show();
+            $('.user .signIn').hide();
+            $('.user .signOut').show();
+        } else {
+
+            $('.user .userProfile .userName').empty();
+            $('.user .userProfile').hide();
+            $('.user .signIn').show();
+            $('.user .signOut').hide();
+        };
     },
     doSignIn: function() {
-        return null;
+        sessionStorage.setItem("user", JSON.stringify(OIOJS.mocks.doLogin()));
+        OIOJS.userFramework.doRenderUserDetails();
+        window.location.reload();
     },
 
     doSignUp: function() {
@@ -410,7 +441,9 @@ OIOJS.userFramework = {
     },
 
     doSignOut: function() {
-
+        sessionStorage.removeItem("user");
+        OIOJS.userFramework.doRenderUserDetails();
+        window.location.reload();
     },
 
     doAddFavorite: function(favoriteItem, type) {
@@ -435,18 +468,40 @@ OIOJS.userFramework = {
 
     bindAddFavorite: function() {
 
-        $('.unfetched').on('click', function(e) {
+        $(document).on('.unfetched', 'click', function(e) {
             e.preventDefault();
             var _that = this;
             OIOJS.userFramework.doAddFavorite(_that, '');
 
         });
 
+        $(document).on('.fa-bell', 'click', function() {
+            e.preventDefault();
+            var _that = this;
+            console.log("Follow poll");
+            OIOJS.userFramework.doAddFavorite(_that, '');
+        });
+
     },
 
     bindSignIn: function() {
+        //TODO:Fetch form inputs,  apply first validation and trigger signIn request
+        $('#signInModal .validate').on('click', function() {
+            // console.log("done !");
+            $('#signInModal').modal('hide');
+            OIOJS.userFramework.doSignIn();
 
 
+        });
+    },
+
+    bindSignOut: function() {
+        //TODO:trigger signOut request
+        $('.user .signOut').on('click', function() {
+            // console.log("done !");
+            OIOJS.userFramework.doSignOut();
+
+        });
 
 
     },
@@ -490,8 +545,9 @@ OIOJS.utils = {
 };
 
 $(function() {
-    OIOJS.voteengine.init();
+    // !Important: init user framework before vote engine
     OIOJS.userFramework.init();
+    OIOJS.voteengine.init();
 
     //Load data
     // $.ajax({

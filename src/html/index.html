@@ -71,6 +71,19 @@
 			.header{
 				margin: 20px 0px 35px 0;
 			}
+			.footer{
+				display: inline-flex;
+				flex-wrap: nowrap;
+				flex-direction: row;
+				justify-content: flex-end;
+				width: 100%;
+				/*height: auto;*/
+				/*overflow-x: hidden;*/
+			}
+			.footer a{
+				margin: 0 20px 0 0;
+				color: darkgrey !important;
+			}
 			
 			.title{
 				display: flex;
@@ -145,12 +158,25 @@
 				padding: 5px 5px 5px 5px;
 				margin: 10px 0 0 0;
 			}
-
-			.fa-thumbs-up{
-				color: rgba(211, 211, 211, 0.3) !important;
+			.fa-thumbs-up, .fa-bell{
+				color: rgba(211, 211, 211, 0.5) !important;
+			}
+			.fa.fa-bell:hover{
+				color: red !important;
+				cursor: pointer;
 			}
 			.thumbsUpHover{
 				color: #007bff !important;
+			}
+			.searchEngine input{
+				border: none !important;
+			}
+			.searchEngine .input-group-append button{
+				border-color: lightgrey !important;
+				border-top: none;
+				border-bottom: none;
+				border-right: none;
+				border-radius: 0;
 			}
 			
 		</style>
@@ -166,34 +192,34 @@
 				<div class="user col">
 					<button type="button" class="signIn btn btn-light btn-sm" data-toggle="modal" data-target="#signInModal">
 					Sign in</button>
+					<button type="button" class="userProfile btn btn-light btn-sm rounded border-0 hide"><span class="userName"></span>&nbsp;<i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i></button>
 					<button type="button" class="signOut btn btn-light btn-sm hide">Sign out</button>
-					<button type="button" class="userProfile btn btn-light btn-sm rounded border-0"><i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i>&nbsp;01Net TV</button>
 					
 				</div>
 			</div>
 			<div class="main-content">
 				<div class="row">
 					<div class="col-7 offset-1">
-						<div class="input-group searchEngine">
+						<div class="input-group shadow mb-5 rounded-0 searchEngine">
 							<input type="text" class="form-control" aria-label="Search review..."/>
 							<!-- <div class="row selectedFacets no-gutters hide">
-		<ul>
-					<li class=""><a href="#">choice 1&nbsp;</a>;</li>
-					<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-					<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-					<li class=""><a href="#">choice 4&nbsp;</a>;</li>
-					<li class=""><a href="#">choice 4&nbsp;</a>;</li>
-					<li class=""><a href="#">choice 1&nbsp;</a>;</li>
-					<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-					<li class="badge-pill badge-secondary">choice 2&nbsp;<a href="#">x</a></li>
-					<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
-					<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
-			</ul>
+								<ul>
+									<li class=""><a href="#">choice 1&nbsp;</a>;</li>
+									<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+									<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+									<li class=""><a href="#">choice 4&nbsp;</a>;</li>
+									<li class=""><a href="#">choice 4&nbsp;</a>;</li>
+									<li class=""><a href="#">choice 1&nbsp;</a>;</li>
+									<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+									<li class="badge-pill badge-secondary">choice 2&nbsp;<a href="#">x</a></li>
+									<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
+									<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
+								</ul>
 							</div> -->
 							<div class="input-group-append">
-								<button type="button" class="btn btn-outline-secondary search-action">Search</button>
-								<button id="search-more" type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-								<span class="sr-only">Polls filters</span>Filters</button>
+								<button type="button" class="btn btn-light rounded-0 search-action">Search</button>
+								<button id="search-more" type="button" class="btn btn-light dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"><span class="sr-only">Polls filters</span>Filters</button>
+								<button class="btn btn-light" data-toggle="modal" data-target="#newPoll"><b>New</b></button>
 								<div class="dropdown-menu dropdown-menu-right">
 									<div class="row no-gutters menu-container">
 										
@@ -215,9 +241,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col">
-						<button class="btn btn-light" data-toggle="modal" data-target="#newPoll">New</button>
-					</div>
+			
 					
 				</div>
 				<div id="result" class="">
@@ -225,19 +249,16 @@
 					<ul class="questions">
 						
 						<li class="question">
-							<div class="question-container border-bottom border-left"><div class="question-label"><p><i class="fa fa-star fa-lg" style="color:yellow"></i>&nbsp;Sample poll phrase</p></div><div class="progress"><div class="progress-bar bg-success" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width:45.87%"><span class="sr-only"></span></div><div class="progress-bar bg-danger" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width:33.03%"><span class="sr-only"></span></div><div class="progress-bar bg-warning" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width:21.10%"><span class="sr-only"></span></div></div><div class="choice" data-score="50"><span class="label"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true" ></i>&nbsp;Yes</span><div class="score"><span class="badge badge-pill badge-success">50(45.87%)</span></div></div><div class="choice" data-score="36"><span class="label"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>&nbsp;No</span><div class="score"><span class="badge badge-pill badge-danger">36(33.03%)</span></div></div><div class="choice" data-score="23"><span class="label"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>&nbsp;Not sure</span><div class="score"><span class="badge badge-pill badge-warning">23(21.10%)</span></div></div><div class="info"></div>
+							<div class="question-container border-bottom border-left"><div class="question-label"><p><i class="fa fa-bell"></i>&nbsp;Sample poll phrase</p></div><div class="progress"><div class="progress-bar bg-success" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width:45.87%"><span class="sr-only"></span></div><div class="progress-bar bg-danger" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width:33.03%"><span class="sr-only"></span></div><div class="progress-bar bg-warning" role="progressbar" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100" style="width:21.10%"><span class="sr-only"></span></div></div><div class="choice" data-score="50"><span class="label"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true" ></i>&nbsp;Yes</span><div class="score"><span class="badge badge-pill badge-success">50(45.87%)</span></div></div><div class="choice" data-score="36"><span class="label"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>&nbsp;No</span><div class="score"><span class="badge badge-pill badge-danger">36(33.03%)</span></div></div><div class="choice" data-score="23"><span class="label"><i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>&nbsp;Not sure</span><div class="score"><span class="badge badge-pill badge-warning">23(21.10%)</span></div></div><div class="info"></div>
 							
-						
+							
 							<div class="sources border-top border-left border-white">
 								<small id="sourcesLabel" class="text-muted">Sources:</small>
-
 								<a href="#">Link 1</a>
 								<a href="#">Link 2</a>
 								<a href="#">Media 1</a>
 								<a href="#">Youtube link</a>
-
 							</div>
-
 							<div class="share border-top border-left border-white">
 								<a class="btn btn-social-icon btn-facebook rounded-circle">
 									<span class="fa fa-facebook"></span>
@@ -259,7 +280,7 @@
 								</a>
 								<button class="btn btn-secondary btn-sm">Embeded</button>
 							</div>
-						
+							
 							<div class="extendedDetails border-top border-left border-white">
 								<div class=""><b>01Net TV</b></div>
 								<div class=""> -2j 5h 10min 001s</div>
@@ -269,9 +290,6 @@
 					</ul>
 				</div>
 			</div>
-			<footer>
-				Footer content
-			</footer>
 		</div>
 		<!-- Modals -->
 		<div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -330,8 +348,8 @@
 								<small id="emailHelp" class="form-text text-muted">Please re-enter password</small>
 							</div>
 							<!-- <div class="form-group form-check">
-																																				<input type="checkbox" class="form-check-input" id="exampleCheck1">
-																																				<label class="form-check-label" for="exampleCheck1">Remember me</label>
+									<input type="checkbox" class="form-check-input" id="exampleCheck1">
+								<label class="form-check-label" for="exampleCheck1">Remember me</label>
 							</div> -->
 							<!-- <button type="submit" class="btn btn-primary">Submit</button> -->
 							<a class="signUpCancel btn" role="button" href="javascript:void(0);">Cancel</a>
@@ -389,7 +407,11 @@
 				</div>
 			</div>
 		</div>
-		
+		<div class="footer bg-light">
+			<a href="#">Privacy</a>
+			<a href="#">Terms</a>
+			<a href="#">Contact</a>
+		</div>
 		<!-- 3rd part scripts libs-->
 		<script
 		src="https://code.jquery.com/jquery-3.3.1.min.js"
