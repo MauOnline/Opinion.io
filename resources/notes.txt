@@ -10,3 +10,4 @@ TODO
 - Check the quick result bar is displaying the right proportions
 - Add My favorites in tags filter section
 - Add My polls in Publishers section
+- Tags format does not accept space character

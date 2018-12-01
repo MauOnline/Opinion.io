@@ -87,7 +87,7 @@ OIOJS.voteengine = {
                     }
                 });
 
-                var isFollowedPoll = typeof user !== 'undefined' && user.favorites.polls.includes(e.id);
+                var isFollowedPoll = user != null && user.favorites.polls.includes(e.id);
 
                 var poolPhraseA = $('<i/>', {
                     class: "fa fa-bell",
@@ -199,7 +199,18 @@ OIOJS.voteengine = {
     },
 
     doRenderFacets: function() {
-        var generateColumnItems = function(itemList, domTarget) {
+
+        var isFollowedTags = function(item) {
+            var user = OIOJS.userFramework.getUser();
+            // console.log(item);
+            if (user !== null && user.favorites.tags !== null && user.favorites.publishers !== null) {
+                return OIOJS.utils.includesCaseInsensitive(user.favorites.tags, item) ||
+                    OIOJS.utils.includesCaseInsensitive(user.favorites.publishers, item);
+            }
+            return false;
+        };
+
+        var generateColumnItems = function(itemList, domTarget, isTag) {
 
             //Emptying the container
             domTarget.empty();
@@ -207,8 +218,14 @@ OIOJS.voteengine = {
             var items = itemList.map(i => $('<a/>', {
                 class: 'dropdown-item',
                 href: '#',
-                html: OIOJS.utils.formatTag(i),
-                "data-value": i
+                html: function() {
+                    var name = isTag ? OIOJS.utils.formatTag(i) : OIOJS.utils.formatTag(i.name);
+                    var code = isTag ? OIOJS.utils.formatTag(i) : i.code;
+                    // console.log(isFollowedTags(code));
+                    var colorVal = isFollowedTags(code) ? "red" : "lightgrey";
+                    return "<i class='fa fa-bell' style='color:" + colorVal + " !Important'></i>" + name;
+                },
+                "data-code": isTag ? i : i.code
             }));
             //create columns of 8 items
             var itemsBuckets = []
@@ -235,26 +252,22 @@ OIOJS.voteengine = {
                     domTarget.append(col);
                 }
             });
-
         };
 
         //Tags
         if (OIOJS.voteengine.doExtractTags()) {
             // console.log(OIOJS.voteengine.tagFacets);
-            generateColumnItems(OIOJS.voteengine.tagFacets, $('#tagfacets .row'));
+            generateColumnItems(OIOJS.voteengine.tagFacets, $('#tagfacets .row'), true);
         };
 
         //Publishers
         if (OIOJS.voteengine.doExtractPublishers()) {
-            generateColumnItems(OIOJS.voteengine.publisherFacets, $('#publisherfacets .row'));
+            generateColumnItems(OIOJS.voteengine.publisherFacets, $('#publisherfacets .row'), false);
         };
     },
 
-    doExtractPublishers: function(pools) {
-        OIOJS.voteengine.publisherFacets = [];
-        OIOJS.voteengine.publisherFacets.push("publisher 1", "publisher 1", "publisher 1", "publisher 1", "publisher 1", "publisher 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1");
-        OIOJS.voteengine.publisherFacets.push("publis", "publis", "publisher 1", "publis", "publis", "sample", "sample", "sample", "sampl", "sample", "sample", "sample");
-        OIOJS.voteengine.publisherFacets.push("publis", "publis", "publisher 1", "publis", "publis", "sample", "sample", "sample", "sampl", "sample", "sample", "sample");
+    doExtractPublishers: function() {
+        OIOJS.voteengine.publisherFacets = OIOJS.voteengine.pollsPayload.result.map(p => p.publisher);
         return OIOJS.voteengine.publisherFacets.length > 0;
     },
 

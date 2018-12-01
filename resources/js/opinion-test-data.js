@@ -10,6 +10,7 @@ OIOJS.mocks = {
                 "location": null,
             },
             "account": {
+                "id": "0004",
                 "firstname": "Azouwa",
                 "surname": "Ogowé",
                 "username": "Jonnhi 007",
@@ -21,8 +22,8 @@ OIOJS.mocks = {
                 "thumbnail": "https://someling.com/images.jpeg"
             },
             "favorites": {
-                "tags": null,
-                "publishers": null,
+                "tags": ["cinema", "politic"],
+                "publishers": ["0003", "00001"],
                 "polls": ["0123450", "0123456"]
             },
             "polls": ["0123459", "0123456"],
@@ -37,7 +38,10 @@ OIOJS.mocks = {
             "error": {},
             "result": [{
                 "id": "0123456",
-                "publisher": "Gabon Media Press",
+                "publisher": {
+                    "code": "0003",
+                    "name": "GabonMP"
+                },
                 "tags": "PeoplE,Music,Entertainment",
                 "lastUpdate": "17-11-2018",
                 "description": "Who is the best person to replace Ali Bongo?",
@@ -56,7 +60,10 @@ OIOJS.mocks = {
                 }
             }, {
                 "id": "0123457",
-                "publisher": "BBC Business",
+                "publisher": {
+                    "code": "00001",
+                    "name": "BBC Business"
+                },
                 "tags": "Environment",
                 "lastUpdate": "17-11-2018",
                 "description": "Do you think 2019 will be a good year for global finance?",
@@ -75,7 +82,10 @@ OIOJS.mocks = {
                 }
             }, {
                 "id": "01234578",
-                "publisher": "01Net TV",
+                "publisher": {
+                    "code": "00002",
+                    "name": "01Net TV"
+                },
                 "tags": "PeOple",
                 "lastUpdate": "17-11-2018",
                 "description": "What do you think of the new Freebox V7?",
@@ -94,6 +104,10 @@ OIOJS.mocks = {
                 }
             }, {
                 "id": "0123459",
+                "publisher": {
+                    "code": "00004",
+                    "name": "Morpheus"
+                },
                 "tags": "Politic",
                 "lastUpdate": "17-11-2018",
                 "description": "Do you like Beyoncée ?",
@@ -112,6 +126,10 @@ OIOJS.mocks = {
                 }
             }, {
                 "id": "0123450",
+                "publisher": {
+                    "code": "00001",
+                    "name": "BBC B"
+                },
                 "tags": "Cinema",
                 "lastUpdate": "17-11-2018",
                 "description": "Do you like Beyoncée ?",
@@ -136,6 +154,105 @@ OIOJS.mocks = {
                 }
             }, {
                 "id": "012345",
+                "publisher": {
+                    "code": "000012",
+                    "name": "Julien L."
+                },
+                "tags": "cinema,People",
+                "description": "Is Idriss Elba the sexiest man on Earth?",
+                "pool": {
+                    "type": "CBOX",
+                    "values": [{
+                        "label": "Yes, he is",
+                        "value": 50
+                    }, {
+                        "label": "No, I think many other men are more sexy",
+                        "value": 45
+                    }]
+                }
+            },
+            {
+                "id": "012345",
+                "publisher": {
+                    "code": "00011",
+                    "name": "Rama Nahme"
+                },
+                "tags": "cinema,People",
+                "description": "Is Idriss Elba the sexiest man on Earth?",
+                "pool": {
+                    "type": "CBOX",
+                    "values": [{
+                        "label": "Yes, he is",
+                        "value": 50
+                    }, {
+                        "label": "No, I think many other men are more sexy",
+                        "value": 45
+                    }]
+                }
+            },
+            {
+                "id": "012345",
+                "publisher": {
+                    "code": "00010",
+                    "name": "Henry Gibbs"
+                },
+                "tags": "cinema,People",
+                "description": "Is Idriss Elba the sexiest man on Earth?",
+                "pool": {
+                    "type": "CBOX",
+                    "values": [{
+                        "label": "Yes, he is",
+                        "value": 50
+                    }, {
+                        "label": "No, I think many other men are more sexy",
+                        "value": 45
+                    }]
+                }
+            },
+            {
+                "id": "012345",
+                "publisher": {
+                    "code": "00009",
+                    "name": "Cécile C."
+                },
+                "tags": "cinema,People",
+                "description": "Is Idriss Elba the sexiest man on Earth?",
+                "pool": {
+                    "type": "CBOX",
+                    "values": [{
+                        "label": "Yes, he is",
+                        "value": 50
+                    }, {
+                        "label": "No, I think many other men are more sexy",
+                        "value": 45
+                    }]
+                }
+            },
+            {
+                "id": "012345",
+                "publisher": {
+                    "code": "00008",
+                    "name": "Eric M."
+                },
+                "tags": "cinema,People",
+                "description": "Is Idriss Elba the sexiest man on Earth?",
+                "pool": {
+                    "type": "CBOX",
+                    "values": [{
+                        "label": "Yes, he is",
+                        "value": 50
+                    }, {
+                        "label": "No, I think many other men are more sexy",
+                        "value": 45
+                    }]
+                }
+            },
+            {
+                "id": "012345",
+                "publisher": {
+                    "code": "00007",
+                    "name": "Vladimir"
+                },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
                 "pool": {
