@@ -532,9 +532,6 @@ OIOJS.userFramework = {
             $('#signInModal .signInForm').show();
         });
 
-
-
-
     }
 
 };
@@ -574,6 +571,40 @@ $(function() {
     // }).fail(function(xhr, err) {
     //     console.log(xhr.status + " : " + xhr.responseText + " : " + err);
     // });
+
+    //Enable tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+
+    //Select poll's end date
+    $('#endDate').datetimepicker();
+
+    //Select proposition's color
+    $('input.picker').colorPicker({
+        //color preview
+        preview: true,
+        setValue: function(color, txt) {
+            // $('#newPoll').append(this);
+            console.log("test");
+        }
+    });
+
+    //Timer check
+    // $('input#endDate').prop('disabled', false);
+    // $('input#timerCheck').prop('checked', true);
+    // $('input#timerCheck').click();
+
+    // $(document).on('change', 'input#timerCheck', function() {
+    //     var _that = this;
+    //     console.log("done !");
+    //     $('input#endDate').prop('disabled', $(_that).prop("checked"));
+
+    // });
+
+    var toggleDate = function(){
+        alert("test");
+    };
+
+
 
 
 });
