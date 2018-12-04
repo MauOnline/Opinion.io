@@ -106,6 +106,7 @@ OIOJS.voteengine = {
                 poolPhrase.append(poolPhraseP);
                 poolContainer.append(poolPhrase);
 
+
                 var progressBar = $('<div/>', {
                     class: "progress"
                 });
@@ -225,7 +226,7 @@ OIOJS.voteengine = {
                     var colorVal = isFollowedTags(code) ? "red" : "lightgrey";
                     return "<i class='fa fa-bell' style='color:" + colorVal + " !Important'></i>" + name;
                 },
-                "data-code": isTag ? i : i.code
+                "data-value": isTag ? i : i.code
             }));
             //create columns of 8 items
             var itemsBuckets = []

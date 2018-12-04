@@ -203,18 +203,18 @@
 						<div class="input-group shadow mb-5 rounded-0 searchEngine">
 							<input type="text" class="form-control" aria-label="Search review..."/>
 							<!-- <div class="row selectedFacets no-gutters hide">
-								<ul>
-									<li class=""><a href="#">choice 1&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 4&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 4&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 1&nbsp;</a>;</li>
-									<li class=""><a href="#">choice 2&nbsp;</a>;</li>
-									<li class="badge-pill badge-secondary">choice 2&nbsp;<a href="#">x</a></li>
-									<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
-									<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
-								</ul>
+																			<ul>
+																															<li class=""><a href="#">choice 1&nbsp;</a>;</li>
+																															<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+																															<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+																															<li class=""><a href="#">choice 4&nbsp;</a>;</li>
+																															<li class=""><a href="#">choice 4&nbsp;</a>;</li>
+																															<li class=""><a href="#">choice 1&nbsp;</a>;</li>
+																															<li class=""><a href="#">choice 2&nbsp;</a>;</li>
+																															<li class="badge-pill badge-secondary">choice 2&nbsp;<a href="#">x</a></li>
+																															<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
+																															<li class="badge-pill badge-secondary">choice 4&nbsp;<a href="#">x</a></li>
+																			</ul>
 							</div> -->
 							<div class="input-group-append">
 								<button type="button" class="btn btn-light rounded-0 search-action">Search</button>
@@ -241,7 +241,7 @@
 							</div>
 						</div>
 					</div>
-			
+					
 					
 				</div>
 				<div id="result" class="">
@@ -292,6 +292,7 @@
 			</div>
 		</div>
 		<!-- Modals -->
+		<!-- Sign in form-->
 		<div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -326,6 +327,7 @@
 							
 							<!-- <button type="submit" class="btn btn-primary">Submit</button> -->
 						</form>
+						<!-- Sign up form -->
 						<form class="signUpForm hide">
 							<div class="form-group">
 								<!-- <label for="exampleInputEmail1">Email address</label> -->
@@ -348,8 +350,8 @@
 								<small id="emailHelp" class="form-text text-muted">Please re-enter password</small>
 							</div>
 							<!-- <div class="form-group form-check">
-									<input type="checkbox" class="form-check-input" id="exampleCheck1">
-								<label class="form-check-label" for="exampleCheck1">Remember me</label>
+																				<input type="checkbox" class="form-check-input" id="exampleCheck1">
+																			<label class="form-check-label" for="exampleCheck1">Remember me</label>
 							</div> -->
 							<!-- <button type="submit" class="btn btn-primary">Submit</button> -->
 							<a class="signUpCancel btn" role="button" href="javascript:void(0);">Cancel</a>
@@ -363,11 +365,12 @@
 				</div>
 			</div>
 		</div>
+		<!-- New poll form -->
 		<div class="modal fade" id="newPoll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="">Create new poll</h5>
+						<h5 class="modal-title" id="">New poll</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 						</button>
@@ -376,33 +379,78 @@
 						
 						<form class="signInForm">
 							<div class="form-group">
-								<!-- <label for="exampleInputEmail1">Email address</label> -->
-								<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
 								<!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+								<label for="exampleFormControlSelect1">Poll type</label>
+								<select class="custom-select custom-select-lg mb-3" id="exampleFormControlSelect1">
+									<option value="P">Propositions</option>
+									<option value="E">Emoticones</option>
+								</select>
 							</div>
 							<div class="form-group">
-								<!-- <label for="exampleInputPassword1">Password</label> -->
-								<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+								<label for="exampleFormControlSelect1">Question</label>
+								<input type="text" class="form-control" placeholder="(ex. What is the largest continent ?)" aria-label="Question" aria-describedby="basic-addon1">
 							</div>
-							<div class="form-group form-check">
-								<input type="checkbox" class="form-check-input" id="exampleCheck1">
-								<label class="form-check-label" for="exampleCheck1">Remember me</label>
+							<div class="form-group">
+								<label for="exampleFormControlSelect1">Propositions</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="basic-addon1">1</span>
+									</div>
+									<input type="text" class="form-control" placeholder="(ex. America)" aria-label="Proposition" aria-describedby="basic-addon1">
+								</div>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="basic-addon1">2</span>
+									</div>
+									<input type="text" class="form-control" placeholder="(ex. Asia)" aria-label="Proposition" aria-describedby="basic-addon1">
+								</div>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="basic-addon1">3</span>
+									</div>
+									<input type="text" class="form-control" placeholder="(ex. Africa)" aria-label="Proposition" aria-describedby="basic-addon1">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="exampleFormControlSelect1">Sources</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="basic-addon1">1</span>
+									</div>
+									<input type="text" class="form-control" placeholder="Source link" aria-label="Source" aria-describedby="basic-addon1">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="exampleFormControlSelect1">Add timer</label>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+									<label class="form-check-label" for="exampleRadios1">
+										Yes
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" checked>
+									<label class="form-check-label" for="exampleRadios2">
+										No
+									</label>
+								</div>
+							</div>
+							<div class="container">
+								<div class="row">
+									<div class="col-8 col-md-4">
+										<label class="text-muted">Timer</label>
+										<input data-provide="datepicker">
+									</div>
+								</div>
 							</div>
 							
-							<a class="btn btn-md btn-social btn-facebook">
-								<i class="fa fa-facebook fa-fw"></i> Sign in with Facebook
-							</a>
-							
-							<a class="signUp btn" role="button" href="javascript:void(0);">Sign up</a>
-							
-							<!-- <button type="submit" class="btn btn-primary">Submit</button> -->
 						</form>
 						
 					</div>
 					<div class="modal-footer">
 						<small id="emailHelp" class="form-text text-muted">* All field are mandatory</small>
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-						<button type="button" class="validate btn btn-light">Validate</button>
+						<button type="button" class="validate btn btn-light">Create</button>
 					</div>
 				</div>
 			</div>
@@ -422,5 +470,10 @@
 		
 		<script src="../../resources/js/opinion-test-data.js"></script>
 		<script src="../../resources/js/opinion.js"></script>
+
+		<script type="text/javascript">
+			
+			$('.datepicker').datepicker();
+		</script>
 	</body>
 </html>
