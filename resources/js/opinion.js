@@ -3,7 +3,7 @@
 var OIOJS = OIOJS || {};
 
 const FILTER_COLS_TRESHOLD = 7;
-OIOJS.voteengine = {
+OIOJS.pollFramework = {
     //Manage the vote engine and search engine
 
     pollsPayload: null,
@@ -15,58 +15,59 @@ OIOJS.voteengine = {
         this.doDataInit();
         this.bindVote();
         this.bindSearch();
+        this.bindNewPollForm();
     },
 
     isFacetSearch: function() {
-        return OIOJS.voteengine.searchFacets != null &&
-            OIOJS.voteengine.searchFacets.length > 0 &&
-            (OIOJS.voteengine.searchTerm == null ||
-                OIOJS.voteengine.searchTerm.length == 0);
+        return OIOJS.pollFramework.searchFacets != null &&
+            OIOJS.pollFramework.searchFacets.length > 0 &&
+            (OIOJS.pollFramework.searchTerm == null ||
+                OIOJS.pollFramework.searchTerm.length == 0);
     },
 
     doValidateSearchTerm: function() {
-        return OIOJS.voteengine.searchTerm != null &&
-            OIOJS.voteengine.searchTerm !== 'undefined' &&
-            OIOJS.voteengine.searchTerm.length > 1;
+        return OIOJS.pollFramework.searchTerm != null &&
+            OIOJS.pollFramework.searchTerm !== 'undefined' &&
+            OIOJS.pollFramework.searchTerm.length > 1;
     },
 
     doFilterPolls: function() {
         var filteredPolls = []
-        if (OIOJS.voteengine.pollsPayload != null && OIOJS.voteengine.pollsPayload !== "undefined") {
-            if (OIOJS.voteengine.isFacetSearch()) {
+        if (OIOJS.pollFramework.pollsPayload != null && OIOJS.pollFramework.pollsPayload !== "undefined") {
+            if (OIOJS.pollFramework.isFacetSearch()) {
 
                 //Facets search
-                filteredPolls = OIOJS.voteengine.pollsPayload.result.filter(function(e) {
-                    return OIOJS.utils.arrayIntersection(e.tags.split(","), OIOJS.voteengine.searchFacets).length > 0 ||
+                filteredPolls = OIOJS.pollFramework.pollsPayload.result.filter(function(e) {
+                    return OIOJS.utils.arrayIntersection(e.tags.split(","), OIOJS.pollFramework.searchFacets).length > 0 ||
                         (e.publisher !== null && typeof e.publisher !== 'undefined' &&
-                            OIOJS.utils.includesCaseInsensitive(OIOJS.voteengine.searchFacets, e.publisher));
+                            OIOJS.utils.includesCaseInsensitive(OIOJS.pollFramework.searchFacets, e.publisher.code));
                 });
 
             } else {
 
                 //Searchterm
-                filteredPolls = OIOJS.voteengine.pollsPayload.result.filter(p => p.description.match(new RegExp(OIOJS.voteengine.searchTerm, "gi")));
+                filteredPolls = OIOJS.pollFramework.pollsPayload.result.filter(p => p.description.match(new RegExp(OIOJS.pollFramework.searchTerm, "gi")));
             };
         };
 
         // console.log(filteredPolls);
         //Rendering
         filteredPolls.length > 0 ?
-            OIOJS.voteengine.doRenderPolls(filteredPolls) : OIOJS.voteengine.doHandleNoResult();
+            OIOJS.pollFramework.doRenderPolls(filteredPolls) : OIOJS.pollFramework.doHandleNoResult();
         // return filteredPools;
     },
 
     doHandleNoResult: function() {
         $('#result .questions').hide();
         $('.noResult').show();
-        OIOJS.voteengine.searchTerm = null;
+        OIOJS.pollFramework.searchTerm = null;
     },
 
     doRenderPolls: function(pools) {
         var user = OIOJS.userFramework.getUser();
 
         if (pools.length > 0) {
-            // OIOJS.voteengine.doCleanupView();
+            OIOJS.pollFramework.doCleanupView();
             $.each(pools, function(i, e) {
 
                 var poolElement = $('<li/>', {
@@ -81,8 +82,8 @@ OIOJS.voteengine = {
 
                 var poolPhraseP = $('<p/>', {
                     html: function() {
-                        return OIOJS.voteengine.doValidateSearchTerm() ?
-                            "&nbsp;" + e.description.replace(new RegExp(OIOJS.voteengine.searchTerm, "gi"), '<i class="search">' + OIOJS.voteengine.searchTerm + '</i>') :
+                        return OIOJS.pollFramework.doValidateSearchTerm() ?
+                            "&nbsp;" + e.description.replace(new RegExp(OIOJS.pollFramework.searchTerm, "gi"), '<i class="search">' + OIOJS.pollFramework.searchTerm + '</i>') :
                             "&nbsp;" + e.description;
                     }
                 });
@@ -172,7 +173,7 @@ OIOJS.voteengine = {
 
                 poolElement.append(poolContainer);
 
-                $('ul.questions').append(poolElement);
+                $('ul.questions[class!="detailView"]').append(poolElement);
             });
 
             //update pool values
@@ -192,7 +193,7 @@ OIOJS.voteengine = {
 
             if (totalValuesUpdated) {
                 $('.choice').each(function(i, e) {
-                    OIOJS.voteengine.doCalculateScore(e);
+                    OIOJS.pollFramework.doCalculateScore(e);
                 });
             }
             $('ul.questions').show();
@@ -256,24 +257,24 @@ OIOJS.voteengine = {
         };
 
         //Tags
-        if (OIOJS.voteengine.doExtractTags()) {
-            // console.log(OIOJS.voteengine.tagFacets);
-            generateColumnItems(OIOJS.voteengine.tagFacets, $('#tagfacets .row'), true);
+        if (OIOJS.pollFramework.doExtractTags()) {
+            // console.log(OIOJS.pollFramework.tagFacets);
+            generateColumnItems(OIOJS.pollFramework.tagFacets, $('#tagfacets .row'), true);
         };
 
         //Publishers
-        if (OIOJS.voteengine.doExtractPublishers()) {
-            generateColumnItems(OIOJS.voteengine.publisherFacets, $('#publisherfacets .row'), false);
+        if (OIOJS.pollFramework.doExtractPublishers()) {
+            generateColumnItems(OIOJS.pollFramework.publisherFacets, $('#publisherfacets .row'), false);
         };
     },
 
     doExtractPublishers: function() {
-        OIOJS.voteengine.publisherFacets = OIOJS.voteengine.pollsPayload.result.map(p => p.publisher);
-        return OIOJS.voteengine.publisherFacets.length > 0;
+        OIOJS.pollFramework.publisherFacets = OIOJS.pollFramework.pollsPayload.result.map(p => p.publisher);
+        return OIOJS.pollFramework.publisherFacets.length > 0;
     },
 
     doExtractTags: function() {
-        var temp = OIOJS.voteengine.pollsPayload.result.filter(e => e.tags != null || typeof e.tags === 'undefined').reduce(function(acc, e) {
+        var temp = OIOJS.pollFramework.pollsPayload.result.filter(e => e.tags != null || typeof e.tags === 'undefined').reduce(function(acc, e) {
             e.tags.split(",").forEach(function(i) {
                 // console.log(i);
                 if (OIOJS.utils.includesCaseInsensitive(acc, i) === false) {
@@ -285,32 +286,32 @@ OIOJS.voteengine = {
 
         temp.sort();
         // console.log(temp);
-        OIOJS.voteengine.tagFacets = temp;
-        OIOJS.voteengine.tagFacets.push("sample 1", "sample 1");
-        OIOJS.voteengine.tagFacets.push("sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1");
-        // OIOJS.voteengine.tagFacets.push(temp);
-        return OIOJS.voteengine.tagFacets.length > 0;
+        OIOJS.pollFramework.tagFacets = temp;
+        OIOJS.pollFramework.tagFacets.push("sample 1", "sample 1");
+        OIOJS.pollFramework.tagFacets.push("sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1", "sample 1");
+        // OIOJS.pollFramework.tagFacets.push(temp);
+        return OIOJS.pollFramework.tagFacets.length > 0;
     },
 
     doCleanupView: function() {
         $('.noResult').hide();
-        $('#result ul.questions').empty();
+        $('#result ul.questions[class!="detailView"]').empty();
     },
 
     doDataInit: function() {
         //Init pools
         this.pollsPayload = OIOJS.mocks.getPolls();
 
-        var pools = OIOJS.voteengine.pollsPayload.result;
+        var pools = OIOJS.pollFramework.pollsPayload.result;
 
-        OIOJS.voteengine.searchTerm = $('#searchbar input').val();
-        // console.log(OIOJS.voteengine.searchTerm);
-        OIOJS.voteengine.doValidateSearchTerm() === true ?
-            OIOJS.voteengine.doFilterPolls() :
-            OIOJS.voteengine.doRenderPolls(pools);
+        OIOJS.pollFramework.searchTerm = $('#searchbar input').val();
+        // console.log(OIOJS.pollFramework.searchTerm);
+        OIOJS.pollFramework.doValidateSearchTerm() === true ?
+            OIOJS.pollFramework.doFilterPolls() :
+            OIOJS.pollFramework.doRenderPolls(pools);
 
         //update facets
-        OIOJS.voteengine.doRenderFacets();
+        OIOJS.pollFramework.doRenderFacets();
     },
 
     doCalculateScore: function(q) {
@@ -324,30 +325,30 @@ OIOJS.voteengine = {
     },
 
     setSearchTerm: function(searchTermParam) {
-        OIOJS.voteengine.searchFacets = null;
-        OIOJS.voteengine.searchTerm = searchTermParam;
-        console.log(OIOJS.voteengine.searchTerm);
+        OIOJS.pollFramework.searchFacets = null;
+        OIOJS.pollFramework.searchTerm = searchTermParam;
+        console.log(OIOJS.pollFramework.searchTerm);
     },
 
     setSearchFacets: function(searchFacetsParam) {
-        OIOJS.voteengine.searchTerm = null;
+        OIOJS.pollFramework.searchTerm = null;
         var isSet = false;
 
-        if (OIOJS.voteengine.searchFacets == null) {
-            OIOJS.voteengine.searchFacets = [];
+        if (OIOJS.pollFramework.searchFacets == null) {
+            OIOJS.pollFramework.searchFacets = [];
         }
 
         if (typeof searchFacetsParam === "string") {
-            if (OIOJS.utils.includesCaseInsensitive(OIOJS.voteengine.searchFacets, searchFacetsParam) === false) {
-                OIOJS.voteengine.searchFacets.push(searchFacetsParam);
+            if (OIOJS.utils.includesCaseInsensitive(OIOJS.pollFramework.searchFacets, searchFacetsParam) === false) {
+                OIOJS.pollFramework.searchFacets.push(searchFacetsParam);
 
             }
         } else if (typeof searchTermParam === "array") {
-            OIOJS.voteengine.searchFacets = setSearchFacetsParam;
+            OIOJS.pollFramework.searchFacets = setSearchFacetsParam;
         }
-        console.log(OIOJS.voteengine.searchFacets)
-        if ((isSet = OIOJS.voteengine.searchFacets != null && OIOJS.voteengine.searchFacets.length > 0) === true) {
-            $('.searchEngine input').val(OIOJS.voteengine.searchFacets.reduce((acc, f) => acc = acc + ";" + f));
+        console.log(OIOJS.pollFramework.searchFacets)
+        if ((isSet = OIOJS.pollFramework.searchFacets != null && OIOJS.pollFramework.searchFacets.length > 0) === true) {
+            $('.searchEngine input').val(OIOJS.pollFramework.searchFacets.reduce((acc, f) => acc = acc + ";" + f));
         }
         return isSet;
     },
@@ -358,18 +359,18 @@ OIOJS.voteengine = {
             e.preventDefault();
             e.stopPropagation();
             var _that = this;
-            OIOJS.voteengine.setSearchFacets($(_that).data("value"));
+            OIOJS.pollFramework.setSearchFacets($(_that).data("value"));
             // return false;
         });
 
         //Capture Search term
         $('.searchEngine input').on('keyup click', function(e) {
             var _that = this;
-            OIOJS.voteengine.setSearchTerm($(_that).val().trim());
+            OIOJS.pollFramework.setSearchTerm($(_that).val().trim());
         });
 
         $('.search-action').on('click', function(e) {
-            OIOJS.voteengine.doFilterPolls();
+            OIOJS.pollFramework.doFilterPolls();
         });
     },
 
@@ -390,7 +391,7 @@ OIOJS.voteengine = {
             })
 
             $(parent).children('.choice').each(function(i, e) {
-                OIOJS.voteengine.doCalculateScore(e);
+                OIOJS.pollFramework.doCalculateScore(e);
             });
 
         });
@@ -407,6 +408,61 @@ OIOJS.voteengine = {
             var _that = this;
             if (typeof $(_that).find('.fa-thumbs-up').data("selected") === 'undefined') {
                 $(_that).find('.fa-thumbs-up').removeClass("thumbsUpHover");
+            }
+        });
+
+        //Init default propositions color
+        $('input[class~="picker"]').each(function(i, e) {
+            var _that = $(this);
+            var col;
+            if ((col = _that.data('color')) !== undefined && col.indexOf('#') == 0) {
+                // console.log(col);
+                _that.css({
+                    backgroundColor: col
+                })
+                _that.data('color', col);
+            }
+        });
+    },
+
+    bindNewPollForm: function() {
+
+        //Enable tooltips
+        $('[data-toggle="tooltip"]:disabled').tooltip();
+
+        //Select poll's end date
+        $('#endDate').datetimepicker();
+
+        //Select proposition's color
+        $('input.picker').colorPicker({
+            preview: false,
+            setValue: function(color, txt) {}
+        });
+
+        $(document).on('click keydown keyup', 'input.picker', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).val(null);
+            return false;
+        });
+
+        //Timer check
+        $(document).on('change', 'input#timerCheck', function() {
+            $('input#endDate').prop('disabled', !$(this).prop("checked"));
+        });
+
+        //Select poll type
+        $(document).on('change', '#pollTypeSelect', function() {
+            var _that = $(this);
+            switch (_that.val()) {
+                case "PR0":
+                    $('[class="form-group"][id="propositions"]').fadeIn();
+                    break;
+                case "EM0":
+                    $('[class="form-group"][id="propositions"]').fadeOut();
+                    break;
+                default:
+                    return false;
             }
 
         });
@@ -536,6 +592,7 @@ OIOJS.userFramework = {
 
 };
 
+
 OIOJS.utils = {
 
     capitalizeFirstLetter: function(inputString) {
@@ -558,7 +615,7 @@ OIOJS.utils = {
 $(function() {
     // !Important: init user framework before vote engine
     OIOJS.userFramework.init();
-    OIOJS.voteengine.init();
+    OIOJS.pollFramework.init();
 
     //Load data
     // $.ajax({
@@ -571,40 +628,6 @@ $(function() {
     // }).fail(function(xhr, err) {
     //     console.log(xhr.status + " : " + xhr.responseText + " : " + err);
     // });
-
-    //Enable tooltips
-    $('[data-toggle="tooltip"]').tooltip();
-
-    //Select poll's end date
-    $('#endDate').datetimepicker();
-
-    //Select proposition's color
-    $('input.picker').colorPicker({
-        //color preview
-        preview: true,
-        setValue: function(color, txt) {
-            // $('#newPoll').append(this);
-            console.log("test");
-        }
-    });
-
-    //Timer check
-    // $('input#endDate').prop('disabled', false);
-    // $('input#timerCheck').prop('checked', true);
-    // $('input#timerCheck').click();
-
-    // $(document).on('change', 'input#timerCheck', function() {
-    //     var _that = this;
-    //     console.log("done !");
-    //     $('input#endDate').prop('disabled', $(_that).prop("checked"));
-
-    // });
-
-    var toggleDate = function(){
-        alert("test");
-    };
-
-
 
 
 });

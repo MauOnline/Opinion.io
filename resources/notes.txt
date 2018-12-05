@@ -11,3 +11,4 @@ TODO
 - Add My favorites in tags filter section
 - Add My polls in Publishers section
 - Tags format does not accept space character
+- The Cancel button on the new poll form will clear the form. Only external click or click on the cross will close the modal without clearing the content
