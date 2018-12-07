@@ -63,139 +63,152 @@ OIOJS.pollFramework = {
         OIOJS.pollFramework.searchTerm = null;
     },
 
-    doRenderPolls: function(pools) {
+    doRenderPolls: function(polls) {
         var user = OIOJS.userFramework.getUser();
 
-        if (pools.length > 0) {
-            OIOJS.pollFramework.doCleanupView();
-            $.each(pools, function(i, e) {
-
-                var poolElement = $('<li/>', {
-                    class: "question"
-                });
-                var poolContainer = $('<div/>', {
-                    class: "question-container border-bottom border-left"
-                });
-                var poolPhrase = $('<div/>', {
-                    class: "question-label"
-                });
-
-                var poolPhraseP = $('<p/>', {
-                    html: function() {
-                        return OIOJS.pollFramework.doValidateSearchTerm() ?
-                            "&nbsp;" + e.description.replace(new RegExp(OIOJS.pollFramework.searchTerm, "gi"), '<i class="search">' + OIOJS.pollFramework.searchTerm + '</i>') :
-                            "&nbsp;" + e.description;
-                    }
-                });
-
-                var isFollowedPoll = user != null && user.favorites.polls.includes(e.id);
-
-                var poolPhraseA = $('<i/>', {
-                    class: "fa fa-bell",
-                    style: isFollowedPoll ? "color:red !Important" : "color:lightgrey"
-                });
-                var poolShare = $('<div/>', {
-                    class: "share",
-                    html: ""
-                });
-                var poolInfo = $('<div/>', {
-                    class: "info"
-                });
-
-                // poolPhrase.append(poolPhraseA);
-                poolPhraseP.prepend(poolPhraseA);
-                poolPhrase.append(poolPhraseP);
-                poolContainer.append(poolPhrase);
+        if (polls.length > 0) {
 
 
-                var progressBar = $('<div/>', {
-                    class: "progress"
-                });
-                var choices = [];
-                var progressBarItems = [];
-                var progressBarColors = ["success", "danger", "warning", "info", "primary", "secondary"];
 
-                var totalScore = e.pool.values.reduce(((acc, v) => acc + v.value), 0);
-                $.each(e.pool.values, function(j, v) {
+            // OIOJS.pollFramework.doCleanupView();
+            // $.each(polls, function(i, e) {
 
-                    var poolChoice = $('<div/>', {
-                        class: "choice",
-                        "data-score": v.value
-                    });
+            //     var poolElement = $('<li/>', {
+            //         class: "question"
+            //     });
+            //     var poolContainer = $('<div/>', {
+            //         class: "question-container border-bottom border-left"
+            //     });
+            //     var poolPhrase = $('<div/>', {
+            //         class: "question-label"
+            //     });
 
-                    var poolChoiceVoteIcon = $('<i/>', {
-                        class: "fa fa-thumbs-up fa-lg",
-                        "aria-hidden": "true",
-                        style: "color:lightgrey"
-                    });
+            //     var poolPhraseP = $('<p/>', {
+            //         html: function() {
+            //             return OIOJS.pollFramework.doValidateSearchTerm() ?
+            //                 "&nbsp;" + e.description.replace(new RegExp(OIOJS.pollFramework.searchTerm, "gi"), '<i class="search">' + OIOJS.pollFramework.searchTerm + '</i>') :
+            //                 "&nbsp;" + e.description;
+            //         }
+            //     });
 
-                    var poolChoiceVoteLabel = $('<span/>', {
-                        class: "label",
-                        html: "&nbsp;" + v.label
-                    });
+            //     var isFollowedPoll = user != null && user.favorites.polls.includes(e.id);
 
-                    var poolChoiceVoteScore = $('<div/>', {
-                        class: "score",
-                        html: $('<span/>', {
-                            class: "badge badge-pill badge-" + progressBarColors[j]
-                        })
-                    });
+            //     var poolPhraseA = $('<i/>', {
+            //         class: "fa fa-bell",
+            //         style: isFollowedPoll ? "color:red !Important" : "color:lightgrey"
+            //     });
+            //     var poolShare = $('<div/>', {
+            //         class: "share",
+            //         html: ""
+            //     });
+            //     var poolInfo = $('<div/>', {
+            //         class: "info"
+            //     });
 
-                    // poolChoice.append(poolChoiceVoteIcon);
-                    poolChoiceVoteLabel.prepend(poolChoiceVoteIcon);
-                    poolChoice.append(poolChoiceVoteLabel);
-                    poolChoice.append(poolChoiceVoteScore);
-                    choices.push(poolChoice);
+            //     // poolPhrase.append(poolPhraseA);
+            //     poolPhraseP.prepend(poolPhraseA);
+            //     poolPhrase.append(poolPhraseP);
+            //     poolContainer.append(poolPhrase);
 
-                    if (v.value > 0) {
-                        var widthVal = ((v.value * 100) / totalScore).toFixed(2);
-                        var progressBarItem = $('<div/>', {
-                            class: "progress-bar bg-" + progressBarColors[j],
-                            role: "progressbar",
-                            "aria-valuenow": "15",
-                            "aria-valuemin": "0",
-                            "aria-valuemax": "100",
-                            style: "width:" + widthVal + "%",
-                            html: $('<span/>', {
-                                class: "sr-only"
-                            })
-                        });
-                        progressBarItems.push(progressBarItem);
-                    }
-                });
 
-                progressBar.append(progressBarItems);
-                poolContainer.append(progressBar);
+            //     var progressBar = $('<div/>', {
+            //         class: "progress"
+            //     });
+            //     var choices = [];
+            //     var progressBarItems = [];
+            //     var progressBarColors = ["success", "danger", "warning", "info", "primary", "secondary"];
 
-                poolContainer.append(choices);
-                // poolContainer.append(poolShare);
-                poolContainer.append(poolInfo);
+            //     var totalScore = e.pool.values.reduce(((acc, v) => acc + v.value), 0);
+            //     $.each(e.pool.values, function(j, v) {
 
-                poolElement.append(poolContainer);
+            //         var poolChoice = $('<div/>', {
+            //             class: "choice",
+            //             "data-score": v.value
+            //         });
 
-                $('ul.questions[class!="detailView"]').append(poolElement);
-            });
+            //         var poolChoiceVoteIcon = $('<i/>', {
+            //             class: "fa fa-thumbs-up fa-lg",
+            //             "aria-hidden": "true",
+            //             style: "color:lightgrey"
+            //         });
 
-            //update pool values
-            var totalValuesUpdated = false;
-            $('.question-container').each(function(i, e) {
-                var scoreTotal = function() {
-                    var temp = 0;
-                    $(e).children('.choice').each(function(i, c) {
-                        temp += $(c).data('score')
-                    });
-                    return temp;
-                }
+            //         var poolChoiceVoteLabel = $('<span/>', {
+            //             class: "label",
+            //             html: "&nbsp;" + v.label
+            //         });
 
-                $(e).data('total', scoreTotal());
-                totalValuesUpdated = $('.question-container').length === i + 1;
-            });
+            //         var poolChoiceVoteScore = $('<div/>', {
+            //             class: "score",
+            //             html: $('<span/>', {
+            //                 class: "badge badge-pill badge-" + progressBarColors[j]
+            //             })
+            //         });
 
-            if (totalValuesUpdated) {
-                $('.choice').each(function(i, e) {
-                    OIOJS.pollFramework.doCalculateScore(e);
-                });
-            }
+            //         // poolChoice.append(poolChoiceVoteIcon);
+            //         poolChoiceVoteLabel.prepend(poolChoiceVoteIcon);
+            //         poolChoice.append(poolChoiceVoteLabel);
+            //         poolChoice.append(poolChoiceVoteScore);
+            //         choices.push(poolChoice);
+
+            //         if (v.value > 0) {
+            //             var widthVal = ((v.value * 100) / totalScore).toFixed(2);
+            //             var progressBarItem = $('<div/>', {
+            //                 class: "progress-bar bg-" + progressBarColors[j],
+            //                 role: "progressbar",
+            //                 "aria-valuenow": "15",
+            //                 "aria-valuemin": "0",
+            //                 "aria-valuemax": "100",
+            //                 style: "width:" + widthVal + "%",
+            //                 html: $('<span/>', {
+            //                     class: "sr-only"
+            //                 })
+            //             });
+            //             progressBarItems.push(progressBarItem);
+            //         }
+            //     });
+
+            //     progressBar.append(progressBarItems);
+            //     poolContainer.append(progressBar);
+
+            //     poolContainer.append(choices);
+            //     // poolContainer.append(poolShare);
+            //     poolContainer.append(poolInfo);
+
+            //     poolElement.append(poolContainer);
+
+            //     $('ul.questions[class!="detailView"]').append(poolElement);
+            // });
+
+            // //update pool values
+            // var totalValuesUpdated = false;
+            // $('.question-container').each(function(i, e) {
+            //     var scoreTotal = function() {
+            //         var temp = 0;
+            //         $(e).children('.choice').each(function(i, c) {
+            //             temp += $(c).data('score')
+            //         });
+            //         return temp;
+            //     }
+
+            //     $(e).data('total', scoreTotal());
+            //     totalValuesUpdated = $('.question-container').length === i + 1;
+            // });
+
+            // if (totalValuesUpdated) {
+            //     $('.choice').each(function(i, e) {
+            //         OIOJS.pollFramework.doCalculateScore(e);
+            //     });
+            // }
+
+
+            //Poll result template
+            console.log(polls);
+            var pollItemTemplateDef = document.getElementById("pollItemTemplate").innerHTML;
+            var pollItemTemplateCompiled = Handlebars.compile(pollItemTemplateDef);
+            var pollItemTemplateHTML = pollItemTemplateCompiled(polls);
+            $('ul.questions').append(pollItemTemplateHTML);
+            // console.log(pollItemTemplateHTML);
+
             $('ul.questions').show();
         }
     },
@@ -609,11 +622,48 @@ OIOJS.utils = {
 
     includesCaseInsensitive: function(myArray, myString) {
         return myArray.map(e => e.toLowerCase()).includes(myString.toLowerCase());
+    },
+
+    registerTemplateHelpers: function() {
+
+        Handlebars.registerHelper('drawOverviewChart', function(poll) {
+
+             var progressBarColors = ["#28a745", "#dc3545", "#ffc107", "blue", "grey", "yellow"];
+
+            var newCanvas = $('<canvas/>', {
+                class: "shadow mb-1",
+
+            })[0];
+            // console.log(options);
+            var c = newCanvas.getContext('2d');
+
+            var xOffset = 0;
+            var yOffset = 0;
+            var cw = newCanvas.width;
+            var ch = newCanvas.height;
+            var width = 0;
+            var totalScore = poll.values.reduce(((acc, v) => acc + v.value), 0);
+
+            $(poll.values).each(function(i, v) {
+
+                width = Math.floor((((v.value * 100) / totalScore).toFixed(2))  * cw * .01);
+                // console.log(width);
+                c.fillStyle = progressBarColors[i];
+                c.fillRect(Math.floor(xOffset), yOffset, width, ch);
+                xOffset += width;
+                console.log(xOffset);
+
+            });
+
+            // console.log(newCanvas.outerHTML);
+            return newCanvas.toDataURL();
+        });
     }
 };
 
 $(function() {
-    // !Important: init user framework before vote engine
+    //Order is !Important: init user framework before vote engine
+    OIOJS.utils.registerTemplateHelpers();
     OIOJS.userFramework.init();
     OIOJS.pollFramework.init();
 
@@ -722,6 +772,52 @@ $(function() {
         },
         options: {}
     });
+
+
+
+    //Poll result overview chart
+
+    // var newCanvas = $('<canvas/>', {
+    //     class: "shadow mb-2"
+    // })[0];
+    // $('.pollResultOverViewChart-test').append(newCanvas);
+    // // console.log($('.pollResultOverViewChart'));
+
+    // newCanvas.style.width = "100%";
+    // newCanvas.style.height = "20px";
+    // var c = newCanvas.getContext('2d');
+
+    // var xOffset = 0;
+    // var yOffset = 0;
+    // var cw = newCanvas.width;
+    // var ch = newCanvas.height;
+    // var width = 0;
+
+    // width = 45.87 * cw * .01;
+    // c.fillStyle = "#28a745";
+    // c.fillRect(Math.floor(xOffset), yOffset, Math.floor(width), ch);
+    // // c.fillStyle = "#fff";
+    // // c.font = "sans-serif";
+    // // c.fillText("Canvas Rocks!", xOffset + 2, yOffset);
+    // // con.strokeText("Canvas Rocks!", 5, 130);
+    // xOffset += width;
+
+    // width = 33.03 * cw * .01;
+    // c.fillStyle = "#dc3545";
+    // c.fillRect(Math.floor(xOffset), yOffset, Math.floor(width), ch);
+    // // c.fillStyle = "#fff";
+    // // c.font = "sans-serif";
+    // // c.fillText("Canvas Rocks!", xOffset + 2, yOffset);
+    // xOffset += width;
+
+    // width = 21.10 * cw * .01;
+    // c.fillStyle = "#ffc107";
+    // c.fillRect(Math.floor(xOffset), yOffset, Math.floor(width), ch);
+    // c.fillStyle = "#fff";
+    // c.font = "sans-serif";
+    // c.fillText("Canvas Rocks!", xOffset + 2, yOffset);
+
+
 
 
 });
