@@ -491,8 +491,6 @@ OIOJS.utils = {
 
     registerTemplateHelpers: function() {
 
-        var progressBarColors = ["#28a745", "#dc3545", "#ffc107", "blue", "grey", "yellow"];
-
         //Draw chart for result overview
         Handlebars.registerHelper('drawOverviewChart', function(poll) {
 
@@ -509,11 +507,13 @@ OIOJS.utils = {
             var width = 0;
             var totalScore = poll.propositions.reduce(((acc, v) => acc + v.score), 0);
 
-            $(poll.values).each(function(i, v) {
+
+            $(poll.propositions).each(function(i, v) {
 
                 width = Math.floor((((v.score * 100) / totalScore).toFixed(2)) * cw * .01);
                 // console.log(width);
-                c.fillStyle = progressBarColors[i];
+                // console.log(xOffset);
+                c.fillStyle = v.color;
                 c.fillRect(Math.floor(xOffset), yOffset, width, ch);
 
                 // c.font = '16px';
@@ -522,8 +522,8 @@ OIOJS.utils = {
                 xOffset += width;
             });
 
-            // console.log(newCanvas.toDataURL('image/png', 1.0));
-            return newCanvas.toDataURL('image/png', 1.0);
+            // console.log(newCanvas.toDataURL());
+            return newCanvas.toDataURL();
         });
 
 
@@ -551,8 +551,8 @@ OIOJS.utils = {
                 });
 
                 var badge = $('<span/>', {
-                    class: "score badge badge-pill",
-                    style: "background-color: red",
+                    class: "score badge badge-pill badge-sm",
+                    style: "background-color:"+p.color,
                     text: p.score + "(" + scorePercentageVal + "%)"
                 });
 

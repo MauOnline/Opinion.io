@@ -49,13 +49,16 @@ OIOJS.mocks = {
                     "type": "CBOX",
                     "propositions": [{
                         "label": "Yes",
-                        "score": 50
+                        "score": 50,
+                        "color": "#28a745"
                     }, {
                         "label": "No",
-                        "score": 36
+                        "score": 36,
+                        "color": "#dc3545"
                     }, {
                         "label": "Not sure",
-                        "score": 23
+                        "score": 23,
+                        "color": "#ffc107"
                     }]
                 }
             }, {
@@ -71,13 +74,16 @@ OIOJS.mocks = {
                     "type": "CBOX",
                     "propositions": [{
                         "label": "Yes",
-                        "score": 89
+                        "score": 89,
+                        "color": "#28a745"
                     }, {
                         "label": "No",
-                        "score": 10
+                        "score": 10,
+                        "color": "#dc3545"
                     }, {
                         "label": "Not sure",
-                        "score": 0
+                        "score": 0,
+                        "color": "#ffc107"
                     }]
                 }
             }, {
@@ -93,13 +99,16 @@ OIOJS.mocks = {
                     "type": "CBOX",
                     "propositions": [{
                         "label": "Yes",
-                        "score": 89
+                        "score": 89,
+                        "color": "#28a745"
                     }, {
                         "label": "No",
-                        "score": 10
+                        "score": 10,
+                        "color": "#dc3545"
                     }, {
                         "label": "Not sure",
-                        "score": 0
+                        "score": 0,
+                        "color": "#ffc107"
                     }]
                 }
             }, {
@@ -115,13 +124,17 @@ OIOJS.mocks = {
                     "type": "CBOX",
                     "propositions": [{
                         "label": "Yes",
-                        "score": 89
+                        "score": 89,
+                        "color": "#28a745"
+
                     }, {
                         "label": "No",
-                        "score": 10
+                        "score": 10,
+                        "color": "#dc3545"
                     }, {
                         "label": "Not sure",
-                        "score": 0
+                        "score": 0,
+                        "color": "#ffc107"
                     }]
                 }
             }, {
@@ -137,19 +150,24 @@ OIOJS.mocks = {
                     "type": "CBOX",
                     "propositions": [{
                         "label": "Yes",
-                        "score": 89
+                        "score": 89,
+                        "color": "#28a745"
                     }, {
                         "label": "No",
-                        "score": 10
+                        "score": 10,
+                        "color": "#dc3545"
                     }, {
                         "label": "Not sure",
-                        "score": 5
+                        "score": 5,
+                        "color": "#ffc107"
                     }, {
                         "label": "I like her before",
-                        "score": 10
+                        "score": 10,
+                        "color": "#2196f3"
                     }, {
                         "label": "Only if she change her style",
-                        "score": 30
+                        "score": 30,
+                        "color": "#673ab7"
                     }]
                 }
             }, {
@@ -164,10 +182,12 @@ OIOJS.mocks = {
                     "type": "CBOX",
                     "propositions": [{
                         "label": "Yes, he is",
-                        "score": 50
+                        "score": 50,
+                        "color": "#28a745"
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "score": 45
+                        "score": 45,
+                        "color": "#dc3545"
                     }]
                 }
             },
@@ -183,10 +203,12 @@ OIOJS.mocks = {
                     "type": "CBOX",
                     "propositions": [{
                         "label": "Yes, he is",
-                        "score": 50
+                        "score": 50,
+                        "color": "#28a745"
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "score": 45
+                        "score": 45,
+                        "color": "#dc3545"
                     }]
                 }
             },
@@ -202,10 +224,12 @@ OIOJS.mocks = {
                     "type": "CBOX",
                     "propositions": [{
                         "label": "Yes, he is",
-                        "score": 50
+                        "score": 50,
+                        "color": "#28a745"
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "score": 45
+                        "score": 45,
+                        "color": "#dc3545"
                     }]
                 }
             },
@@ -221,10 +245,12 @@ OIOJS.mocks = {
                     "type": "CBOX",
                     "propositions": [{
                         "label": "Yes, he is",
-                        "score": 50
+                        "score": 50,
+                        "color": "#28a745"
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "score": 45
+                        "score": 45,
+                        "color": "#dc3545"
                     }]
                 }
             },
@@ -240,10 +266,12 @@ OIOJS.mocks = {
                     "type": "CBOX",
                     "propositions": [{
                         "label": "Yes, he is",
-                        "score": 50
+                        "score": 50,
+                        "color": "#28a745"
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "score": 45
+                        "score": 45,
+                        "color": "#dc3545"
                     }]
                 }
             },
@@ -259,10 +287,12 @@ OIOJS.mocks = {
                     "type": "CBOX",
                     "propositions": [{
                         "label": "Yes, he is",
-                        "score": 50
+                        "score": 50,
+                        "color": "#28a745"
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "score": 45
+                        "score": 45,
+                        "color": "#dc3545"
                     }]
                 }
             }]

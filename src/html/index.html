@@ -45,6 +45,7 @@
 			.proposition{
 				margin: 0 0 5px 0;
 				font-family: monospace;
+				height: 18px !important;
 			}
 			.proposition:hover{
 				background-color: lightgrey;
@@ -205,6 +206,7 @@
 				 /*border: 1px solid lightgrey;*/
 				margin: 0 !important;
 				padding: 0 !important;
+				margin: 5px 0 10px 0!important;
 			}
 			.pollResultOverViewChart img{
 				width:100%;
@@ -542,11 +544,11 @@ crossorigin="anonymous"></script>
   {{#each this}}
  		
  		<li class="question">
-			<div class="question-container border-bottom border-left"><div class="question-label"><p><i class="fa fa-bell"></i>&nbsp;{{description}}</p></div>
+			<div class="question-container border-bottom border-left"><div class="question-label"><i class="fa fa-bell"></i>&nbsp;{{description}}</div>
 
 				
 				<div class="pollResultOverViewChart">
-					<img src="{{{drawOverviewChart poll}}}" />
+					<img src="{{drawOverviewChart poll}}" />
 				</div>
 				
 		
