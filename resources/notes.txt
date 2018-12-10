@@ -12,3 +12,6 @@ TODO
 - Add My polls in Publishers section
 - Tags format does not accept space character
 - The Cancel button on the new poll form will clear the form. Only external click or click on the cross will close the modal without clearing the content
+-The details button in innactive on extend details view and ramains active from the search view. Details view url will have a poll ID
+- Display publisher logo in the extended details pannel
+- Add poll tags field in the poll creation form

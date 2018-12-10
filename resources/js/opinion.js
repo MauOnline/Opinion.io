@@ -59,6 +59,7 @@ OIOJS.pollFramework = {
 
     doHandleNoResult: function() {
         $('#result .questions').hide();
+        $('.noResult .noResultSearchTerm').text(OIOJS.pollFramework.searchTerm);
         $('.noResult').show();
         OIOJS.pollFramework.searchTerm = null;
     },
@@ -102,10 +103,15 @@ OIOJS.pollFramework = {
                     var name = isTag ? OIOJS.utils.formatTag(i) : OIOJS.utils.formatTag(i.name);
                     var code = isTag ? OIOJS.utils.formatTag(i) : i.code;
                     // console.log(isFollowedTags(code));
-                    var colorVal = isFollowedTags(code) ? "red" : "lightgrey";
-                    return "<i class='fa fa-bell' style='color:" + colorVal + " !Important'></i>" + name;
+                    var colorVal = isFollowedTags(code) ? "red !Important" : "lightgrey";
+                    var facetFavIcon = $('<i/>', {
+                        class: 'fa fa-bell',
+                        style: 'color:' + colorVal
+                    });
+
+                    return facetFavIcon[0].outerHTML + name;
                 },
-                "data-score": isTag ? i : i.code
+                "data-ref": isTag ? i : i.code
             }));
             //create columns of 8 items
             var itemsBuckets = []
@@ -219,7 +225,6 @@ OIOJS.pollFramework = {
         if (typeof searchFacetsParam === "string") {
             if (OIOJS.utils.includesCaseInsensitive(OIOJS.pollFramework.searchFacets, searchFacetsParam) === false) {
                 OIOJS.pollFramework.searchFacets.push(searchFacetsParam);
-
             }
         } else if (typeof searchTermParam === "array") {
             OIOJS.pollFramework.searchFacets = setSearchFacetsParam;
@@ -237,7 +242,7 @@ OIOJS.pollFramework = {
             e.preventDefault();
             e.stopPropagation();
             var _that = this;
-            OIOJS.pollFramework.setSearchFacets($(_that).data("score"));
+            OIOJS.pollFramework.setSearchFacets($(_that).data("ref"));
             // return false;
         });
 
@@ -491,8 +496,15 @@ OIOJS.utils = {
 
     registerTemplateHelpers: function() {
 
-        //Draw chart for result overview
+        var user = OIOJS.userFramework.getUser();
+
+        //========Draw chart for result overview ==========//
+        //=================================================//
         Handlebars.registerHelper('drawOverviewChart', function(poll) {
+
+            var chartContainer = $('<div/>', {
+                class: 'pollResultOverViewChart'
+            });
 
             var newCanvas = $('<canvas/>', {
                 class: "shadow mb-1",
@@ -516,18 +528,20 @@ OIOJS.utils = {
                 c.fillStyle = v.color;
                 c.fillRect(Math.floor(xOffset), yOffset, width, ch);
 
-                // c.font = '16px';
-                // c.fillStyle = "#fff";
-                // c.fillText("(99)999%", xOffset, yOffset+50);
                 xOffset += width;
             });
 
-            // console.log(newCanvas.toDataURL());
-            return newCanvas.toDataURL();
+            var img = $('<img/>', {
+                src: newCanvas.toDataURL()
+            })
+
+            chartContainer.append(img);
+            return chartContainer[0].outerHTML;
         });
 
 
-        //Evaluate score for each proposition
+        //========Evaluate score for each proposition =======//
+        //===================================================//
         Handlebars.registerHelper('renderScores', function(poll) {
 
             var totalScore = poll.propositions.reduce(((acc, v) => acc + v.score), 0);
@@ -551,8 +565,8 @@ OIOJS.utils = {
                 });
 
                 var badge = $('<span/>', {
-                    class: "score badge badge-pill badge-sm",
-                    style: "background-color:"+p.color,
+                    class: "score badge badge-pill",
+                    style: "background-color:" + p.color,
                     text: p.score + "(" + scorePercentageVal + "%)"
                 });
 
@@ -571,8 +585,29 @@ OIOJS.utils = {
         });
 
 
+        //============ Render Poll description ==============//
+        //===================================================//
+        Handlebars.registerHelper('renderDescription', function(description, id) {
 
+            var labelContainer = $('<div/>', {
+                class: "question-label"
+            });
 
+            var favIconColor = user != null && user.favorites.polls.includes(id) ? "red !Important" : "lightgrey";
+            var labelFavIcon = $('<i/>', {
+                class: "fa fa-bell",
+                style: "color:" + favIconColor
+            })
+
+            var labelText = OIOJS.pollFramework.doValidateSearchTerm() ?
+                description.replace(new RegExp(OIOJS.pollFramework.searchTerm, "gi"), '<i class="search">' + OIOJS.pollFramework.searchTerm + '</i>') :
+                description;
+
+            labelContainer.append(labelFavIcon);
+            labelContainer.append("&nbsp;" + labelText);
+
+            return labelContainer[0].outerHTML;
+        });
 
     }
 };
