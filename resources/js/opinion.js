@@ -65,150 +65,15 @@ OIOJS.pollFramework = {
 
     doRenderPolls: function(polls) {
         var user = OIOJS.userFramework.getUser();
+        var pollItemTemplateDef = document.getElementById("pollItemTemplate").innerHTML;
 
         if (polls.length > 0) {
-
-
-
-            // OIOJS.pollFramework.doCleanupView();
-            // $.each(polls, function(i, e) {
-
-            //     var poolElement = $('<li/>', {
-            //         class: "question"
-            //     });
-            //     var poolContainer = $('<div/>', {
-            //         class: "question-container border-bottom border-left"
-            //     });
-            //     var poolPhrase = $('<div/>', {
-            //         class: "question-label"
-            //     });
-
-            //     var poolPhraseP = $('<p/>', {
-            //         html: function() {
-            //             return OIOJS.pollFramework.doValidateSearchTerm() ?
-            //                 "&nbsp;" + e.description.replace(new RegExp(OIOJS.pollFramework.searchTerm, "gi"), '<i class="search">' + OIOJS.pollFramework.searchTerm + '</i>') :
-            //                 "&nbsp;" + e.description;
-            //         }
-            //     });
-
-            //     var isFollowedPoll = user != null && user.favorites.polls.includes(e.id);
-
-            //     var poolPhraseA = $('<i/>', {
-            //         class: "fa fa-bell",
-            //         style: isFollowedPoll ? "color:red !Important" : "color:lightgrey"
-            //     });
-            //     var poolShare = $('<div/>', {
-            //         class: "share",
-            //         html: ""
-            //     });
-            //     var poolInfo = $('<div/>', {
-            //         class: "info"
-            //     });
-
-            //     // poolPhrase.append(poolPhraseA);
-            //     poolPhraseP.prepend(poolPhraseA);
-            //     poolPhrase.append(poolPhraseP);
-            //     poolContainer.append(poolPhrase);
-
-
-            //     var progressBar = $('<div/>', {
-            //         class: "progress"
-            //     });
-            //     var choices = [];
-            //     var progressBarItems = [];
-            //     var progressBarColors = ["success", "danger", "warning", "info", "primary", "secondary"];
-
-            //     var totalScore = e.pool.values.reduce(((acc, v) => acc + v.value), 0);
-            //     $.each(e.pool.values, function(j, v) {
-
-            //         var poolChoice = $('<div/>', {
-            //             class: "choice",
-            //             "data-score": v.value
-            //         });
-
-            //         var poolChoiceVoteIcon = $('<i/>', {
-            //             class: "fa fa-thumbs-up fa-lg",
-            //             "aria-hidden": "true",
-            //             style: "color:lightgrey"
-            //         });
-
-            //         var poolChoiceVoteLabel = $('<span/>', {
-            //             class: "label",
-            //             html: "&nbsp;" + v.label
-            //         });
-
-            //         var poolChoiceVoteScore = $('<div/>', {
-            //             class: "score",
-            //             html: $('<span/>', {
-            //                 class: "badge badge-pill badge-" + progressBarColors[j]
-            //             })
-            //         });
-
-            //         // poolChoice.append(poolChoiceVoteIcon);
-            //         poolChoiceVoteLabel.prepend(poolChoiceVoteIcon);
-            //         poolChoice.append(poolChoiceVoteLabel);
-            //         poolChoice.append(poolChoiceVoteScore);
-            //         choices.push(poolChoice);
-
-            //         if (v.value > 0) {
-            //             var widthVal = ((v.value * 100) / totalScore).toFixed(2);
-            //             var progressBarItem = $('<div/>', {
-            //                 class: "progress-bar bg-" + progressBarColors[j],
-            //                 role: "progressbar",
-            //                 "aria-valuenow": "15",
-            //                 "aria-valuemin": "0",
-            //                 "aria-valuemax": "100",
-            //                 style: "width:" + widthVal + "%",
-            //                 html: $('<span/>', {
-            //                     class: "sr-only"
-            //                 })
-            //             });
-            //             progressBarItems.push(progressBarItem);
-            //         }
-            //     });
-
-            //     progressBar.append(progressBarItems);
-            //     poolContainer.append(progressBar);
-
-            //     poolContainer.append(choices);
-            //     // poolContainer.append(poolShare);
-            //     poolContainer.append(poolInfo);
-
-            //     poolElement.append(poolContainer);
-
-            //     $('ul.questions[class!="detailView"]').append(poolElement);
-            // });
-
-            // //update pool values
-            // var totalValuesUpdated = false;
-            // $('.question-container').each(function(i, e) {
-            //     var scoreTotal = function() {
-            //         var temp = 0;
-            //         $(e).children('.choice').each(function(i, c) {
-            //             temp += $(c).data('score')
-            //         });
-            //         return temp;
-            //     }
-
-            //     $(e).data('total', scoreTotal());
-            //     totalValuesUpdated = $('.question-container').length === i + 1;
-            // });
-
-            // if (totalValuesUpdated) {
-            //     $('.choice').each(function(i, e) {
-            //         OIOJS.pollFramework.doCalculateScore(e);
-            //     });
-            // }
-
+            OIOJS.pollFramework.doCleanupView();
 
             //Poll result template
-            console.log(polls);
-            var pollItemTemplateDef = document.getElementById("pollItemTemplate").innerHTML;
             var pollItemTemplateCompiled = Handlebars.compile(pollItemTemplateDef);
             var pollItemTemplateHTML = pollItemTemplateCompiled(polls);
             $('ul.questions').append(pollItemTemplateHTML);
-            // console.log(pollItemTemplateHTML);
-
             $('ul.questions').show();
         }
     },
@@ -240,7 +105,7 @@ OIOJS.pollFramework = {
                     var colorVal = isFollowedTags(code) ? "red" : "lightgrey";
                     return "<i class='fa fa-bell' style='color:" + colorVal + " !Important'></i>" + name;
                 },
-                "data-value": isTag ? i : i.code
+                "data-score": isTag ? i : i.code
             }));
             //create columns of 8 items
             var itemsBuckets = []
@@ -372,7 +237,7 @@ OIOJS.pollFramework = {
             e.preventDefault();
             e.stopPropagation();
             var _that = this;
-            OIOJS.pollFramework.setSearchFacets($(_that).data("value"));
+            OIOJS.pollFramework.setSearchFacets($(_that).data("score"));
             // return false;
         });
 
@@ -388,7 +253,7 @@ OIOJS.pollFramework = {
     },
 
     bindVote: function() {
-        $(document).on('click', '.choice', function() {
+        $(document).on('click', '.proposition', function() {
             //Update score and tolal
             var _that = this;
             var parent = $(_that).parent('.question-container');
@@ -403,13 +268,13 @@ OIOJS.pollFramework = {
                 $(e).data(target, oldVal + 1); //update
             })
 
-            $(parent).children('.choice').each(function(i, e) {
+            $(parent).children('.proposition').each(function(i, e) {
                 OIOJS.pollFramework.doCalculateScore(e);
             });
 
         });
 
-        $(document).on('mouseover', '.choice', function() {
+        $(document).on('mouseover', '.proposition', function() {
             var _that = this;
             if (typeof $(_that).find('.fa-thumbs-up').data("selected") === 'undefined') {
                 $(_that).find('.fa-thumbs-up').addClass("thumbsUpHover");
@@ -417,7 +282,7 @@ OIOJS.pollFramework = {
             }
         });
 
-        $(document).on('mouseout', '.choice', function() {
+        $(document).on('mouseout', '.proposition', function() {
             var _that = this;
             if (typeof $(_that).find('.fa-thumbs-up').data("selected") === 'undefined') {
                 $(_that).find('.fa-thumbs-up').removeClass("thumbsUpHover");
@@ -626,13 +491,13 @@ OIOJS.utils = {
 
     registerTemplateHelpers: function() {
 
-        Handlebars.registerHelper('drawOverviewChart', function(poll) {
+        var progressBarColors = ["#28a745", "#dc3545", "#ffc107", "blue", "grey", "yellow"];
 
-             var progressBarColors = ["#28a745", "#dc3545", "#ffc107", "blue", "grey", "yellow"];
+        //Draw chart for result overview
+        Handlebars.registerHelper('drawOverviewChart', function(poll) {
 
             var newCanvas = $('<canvas/>', {
                 class: "shadow mb-1",
-
             })[0];
             // console.log(options);
             var c = newCanvas.getContext('2d');
@@ -642,22 +507,73 @@ OIOJS.utils = {
             var cw = newCanvas.width;
             var ch = newCanvas.height;
             var width = 0;
-            var totalScore = poll.values.reduce(((acc, v) => acc + v.value), 0);
+            var totalScore = poll.propositions.reduce(((acc, v) => acc + v.score), 0);
 
             $(poll.values).each(function(i, v) {
 
-                width = Math.floor((((v.value * 100) / totalScore).toFixed(2))  * cw * .01);
+                width = Math.floor((((v.score * 100) / totalScore).toFixed(2)) * cw * .01);
                 // console.log(width);
                 c.fillStyle = progressBarColors[i];
                 c.fillRect(Math.floor(xOffset), yOffset, width, ch);
-                xOffset += width;
-                console.log(xOffset);
 
+                // c.font = '16px';
+                // c.fillStyle = "#fff";
+                // c.fillText("(99)999%", xOffset, yOffset+50);
+                xOffset += width;
             });
 
-            // console.log(newCanvas.outerHTML);
-            return newCanvas.toDataURL();
+            // console.log(newCanvas.toDataURL('image/png', 1.0));
+            return newCanvas.toDataURL('image/png', 1.0);
         });
+
+
+        //Evaluate score for each proposition
+        Handlebars.registerHelper('renderScores', function(poll) {
+
+            var totalScore = poll.propositions.reduce(((acc, v) => acc + v.score), 0);
+
+            var propositions = $('<div/>', {
+                class: 'propositions'
+            });
+
+            $.each(poll.propositions, function(i, p) {
+
+                var scorePercentageVal = ((p.score * 100) / totalScore).toFixed(2);
+
+                var propositionItem = $('<div/>', {
+                    class: "proposition",
+                    "data-score": p.score
+                });
+
+                var likeIcon = $('<i/>', {
+                    class: "fa fa-thumbs-up fa-lg",
+                    "aria-hidden": "true"
+                });
+
+                var badge = $('<span/>', {
+                    class: "score badge badge-pill",
+                    style: "background-color: red",
+                    text: p.score + "(" + scorePercentageVal + "%)"
+                });
+
+                var propositionText = $('<span/>', {
+                    class: 'propositionText',
+                    html: '&nbsp;' + p.label
+                });
+
+                propositionItem.append(likeIcon);
+                propositionItem.append(badge);
+                propositionItem.append(propositionText);
+                propositions.append(propositionItem);
+            });
+
+            return propositions[0].outerHTML;
+        });
+
+
+
+
+
     }
 };
 

@@ -24,7 +24,7 @@
 			.question{
 				margin: 0 0 20px 0;
 			}
-			.question-label, .choice{
+			.question-label, .proposition{
 				display: flex;
 				flex-direction: row;
 				flex-flow: nowrap;
@@ -42,11 +42,11 @@
 				background: #f8f9fa; /*rgb(0, 128, 255, .2);*/
 				padding: 5px;
 			}
-			.choice{
+			.proposition{
 				margin: 0 0 5px 0;
 				font-family: monospace;
 			}
-			.choice:hover{
+			.proposition:hover{
 				background-color: lightgrey;
 				cursor: pointer;
 			}
@@ -73,8 +73,8 @@
 			}
 			.footer{
 				position: fixed !important;
-			left: 0 !important;
-			bottom: 0 !important;
+				left: 0 !important;
+				bottom: 0 !important;
 				display: inline-flex;
 				flex-wrap: nowrap;
 				flex-direction: row;
@@ -542,52 +542,46 @@ crossorigin="anonymous"></script>
   {{#each this}}
  		
  		<li class="question">
-								<div class="question-container border-bottom border-left"><div class="question-label"><p><i class="fa fa-bell"></i>&nbsp;{{description}}</p></div>
+			<div class="question-container border-bottom border-left"><div class="question-label"><p><i class="fa fa-bell"></i>&nbsp;{{description}}</p></div>
 
-								<div class="pollResultOverViewChart">
-									<img src="{{{drawOverviewChart pool}}}"/>
-								</div>
-									
-							
-								{{#each pool.values}}
+				
+				<div class="pollResultOverViewChart">
+					<img src="{{{drawOverviewChart poll}}}" />
+				</div>
+				
+		
+				{{{renderScores poll}}}
 
-									<div class="choice" data-score="{{value}}">
-										<span class="label">
-											<i class="fa fa-thumbs-up fa-lg" aria-hidden="true" ></i>&nbsp;{{label}}</span>
-											<div class="score">
-											<span class="badge badge-pill badge-success">{{value}}(45.87%)</span></div></div>
-								{{/each}}
-								
-								
-								<div class="sources border-top border-left border-white">
-									<small id="sourcesLabel" class="text-muted">Sources:</small>
-									<a href="#">Link 1</a>
-									<a href="#">Link 2</a>
-									<a href="#">Media 1</a>
-									<a href="#">Youtube link</a>
-								</div>
-								<div class="share border-top border-left border-white">
-									<a class="btn btn-social-icon btn-facebook rounded-circle">
-										<span class="fa fa-facebook"></span>
-									</a>
-									<a class="btn btn-social-icon btn-twitter rounded-circle">
-										<span class="fa fa-twitter"></span>
-									</a>
-									
-									<a class="btn btn-social-icon btn-vk rounded-circle">
-										<span class="fa fa-vk"></span>
-									</a>
-									<button class="btn btn-secondary btn-sm rounded">Embeded</button>
-									<button class="btn btn-secondary btn-sm rounded ">Copy link</button>
-								</div>
-								
-								<div class="details border-top border-left border-white">
-									<div class=""><b>{{publisher.name}}</b></div>
-									<div class=""> -2j 5h 10min 001s</div>
-									<div class=""><button class="btn btn-secondary btn-sm">More</button></div>
-								</div>
-							</div>
-						</li>
+						
+			<div class="sources border-top border-left border-white">
+				<small id="sourcesLabel" class="text-muted">Sources:</small>
+				<a href="#">Link 1</a>
+				<a href="#">Link 2</a>
+				<a href="#">Media 1</a>
+				<a href="#">Youtube link</a>
+			</div>
+			<div class="share border-top border-left border-white">
+				<a class="btn btn-social-icon btn-facebook rounded-circle">
+					<span class="fa fa-facebook"></span>
+				</a>
+				<a class="btn btn-social-icon btn-twitter rounded-circle">
+					<span class="fa fa-twitter"></span>
+				</a>
+				
+				<a class="btn btn-social-icon btn-vk rounded-circle">
+					<span class="fa fa-vk"></span>
+				</a>
+				<button class="btn btn-secondary btn-sm rounded">Embeded</button>
+				<button class="btn btn-secondary btn-sm rounded ">Copy link</button>
+			</div>
+			
+			<div class="details border-top border-left border-white">
+				<div class=""><b>{{publisher.name}}</b></div>
+				<div class=""> -2j 5h 10min 001s</div>
+				<div class=""><button class="btn btn-secondary btn-sm">More</button></div>
+			</div>
+		</div>
+	</li>
 
 
   {{/each}}

@@ -45,17 +45,17 @@ OIOJS.mocks = {
                 "tags": "PeoplE,Music,Entertainment",
                 "lastUpdate": "17-11-2018",
                 "description": "Who is the best person to replace Ali Bongo?",
-                "pool": {
+                "poll": {
                     "type": "CBOX",
-                    "values": [{
+                    "propositions": [{
                         "label": "Yes",
-                        "value": 50
+                        "score": 50
                     }, {
                         "label": "No",
-                        "value": 36
+                        "score": 36
                     }, {
                         "label": "Not sure",
-                        "value": 23
+                        "score": 23
                     }]
                 }
             }, {
@@ -67,17 +67,17 @@ OIOJS.mocks = {
                 "tags": "Environment",
                 "lastUpdate": "17-11-2018",
                 "description": "Do you think 2019 will be a good year for global finance?",
-                "pool": {
+                "poll": {
                     "type": "CBOX",
-                    "values": [{
+                    "propositions": [{
                         "label": "Yes",
-                        "value": 89
+                        "score": 89
                     }, {
                         "label": "No",
-                        "value": 10
+                        "score": 10
                     }, {
                         "label": "Not sure",
-                        "value": 0
+                        "score": 0
                     }]
                 }
             }, {
@@ -89,17 +89,17 @@ OIOJS.mocks = {
                 "tags": "PeOple",
                 "lastUpdate": "17-11-2018",
                 "description": "What do you think of the new Freebox V7?",
-                "pool": {
+                "poll": {
                     "type": "CBOX",
-                    "values": [{
+                    "propositions": [{
                         "label": "Yes",
-                        "value": 89
+                        "score": 89
                     }, {
                         "label": "No",
-                        "value": 10
+                        "score": 10
                     }, {
                         "label": "Not sure",
-                        "value": 0
+                        "score": 0
                     }]
                 }
             }, {
@@ -111,17 +111,17 @@ OIOJS.mocks = {
                 "tags": "Politic",
                 "lastUpdate": "17-11-2018",
                 "description": "Do you like Beyoncée ?",
-                "pool": {
+                "poll": {
                     "type": "CBOX",
-                    "values": [{
+                    "propositions": [{
                         "label": "Yes",
-                        "value": 89
+                        "score": 89
                     }, {
                         "label": "No",
-                        "value": 10
+                        "score": 10
                     }, {
                         "label": "Not sure",
-                        "value": 0
+                        "score": 0
                     }]
                 }
             }, {
@@ -133,23 +133,23 @@ OIOJS.mocks = {
                 "tags": "Cinema",
                 "lastUpdate": "17-11-2018",
                 "description": "Do you like Beyoncée ?",
-                "pool": {
+                "poll": {
                     "type": "CBOX",
-                    "values": [{
+                    "propositions": [{
                         "label": "Yes",
-                        "value": 89
+                        "score": 89
                     }, {
                         "label": "No",
-                        "value": 10
+                        "score": 10
                     }, {
                         "label": "Not sure",
-                        "value": 5
+                        "score": 5
                     }, {
                         "label": "I like her before",
-                        "value": 10
+                        "score": 10
                     }, {
                         "label": "Only if she change her style",
-                        "value": 30
+                        "score": 30
                     }]
                 }
             }, {
@@ -160,14 +160,14 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "pool": {
+                "poll": {
                     "type": "CBOX",
-                    "values": [{
+                    "propositions": [{
                         "label": "Yes, he is",
-                        "value": 50
+                        "score": 50
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "value": 45
+                        "score": 45
                     }]
                 }
             },
@@ -179,14 +179,14 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "pool": {
+                "poll": {
                     "type": "CBOX",
-                    "values": [{
+                    "propositions": [{
                         "label": "Yes, he is",
-                        "value": 50
+                        "score": 50
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "value": 45
+                        "score": 45
                     }]
                 }
             },
@@ -198,14 +198,14 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "pool": {
+                "poll": {
                     "type": "CBOX",
-                    "values": [{
+                    "propositions": [{
                         "label": "Yes, he is",
-                        "value": 50
+                        "score": 50
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "value": 45
+                        "score": 45
                     }]
                 }
             },
@@ -217,14 +217,14 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "pool": {
+                "poll": {
                     "type": "CBOX",
-                    "values": [{
+                    "propositions": [{
                         "label": "Yes, he is",
-                        "value": 50
+                        "score": 50
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "value": 45
+                        "score": 45
                     }]
                 }
             },
@@ -236,14 +236,14 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "pool": {
+                "poll": {
                     "type": "CBOX",
-                    "values": [{
+                    "propositions": [{
                         "label": "Yes, he is",
-                        "value": 50
+                        "score": 50
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "value": 45
+                        "score": 45
                     }]
                 }
             },
@@ -255,14 +255,14 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "pool": {
+                "poll": {
                     "type": "CBOX",
-                    "values": [{
+                    "propositions": [{
                         "label": "Yes, he is",
-                        "value": 50
+                        "score": 50
                     }, {
                         "label": "No, I think many other men are more sexy",
-                        "value": 45
+                        "score": 45
                     }]
                 }
             }]

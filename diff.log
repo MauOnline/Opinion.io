@@ -1,0 +1,675 @@
+diff --git a/resources/js/opinion-test-data.js b/resources/js/opinion-test-data.js
+index f0b4e1c..7e2e64f 100644
+--- a/resources/js/opinion-test-data.js
++++ b/resources/js/opinion-test-data.js
+@@ -45,17 +45,17 @@ OIOJS.mocks = {
+                 "tags": "PeoplE,Music,Entertainment",
+                 "lastUpdate": "17-11-2018",
+                 "description": "Who is the best person to replace Ali Bongo?",
+-                "pool": {
++                "poll": {
+                     "type": "CBOX",
+-                    "values": [{
++                    "propositions": [{
+                         "label": "Yes",
+-                        "value": 50
++                        "score": 50
+                     }, {
+                         "label": "No",
+-                        "value": 36
++                        "score": 36
+                     }, {
+                         "label": "Not sure",
+-                        "value": 23
++                        "score": 23
+                     }]
+                 }
+             }, {
+@@ -67,17 +67,17 @@ OIOJS.mocks = {
+                 "tags": "Environment",
+                 "lastUpdate": "17-11-2018",
+                 "description": "Do you think 2019 will be a good year for global finance?",
+-                "pool": {
++                "poll": {
+                     "type": "CBOX",
+-                    "values": [{
++                    "propositions": [{
+                         "label": "Yes",
+-                        "value": 89
++                        "score": 89
+                     }, {
+                         "label": "No",
+-                        "value": 10
++                        "score": 10
+                     }, {
+                         "label": "Not sure",
+-                        "value": 0
++                        "score": 0
+                     }]
+                 }
+             }, {
+@@ -89,17 +89,17 @@ OIOJS.mocks = {
+                 "tags": "PeOple",
+                 "lastUpdate": "17-11-2018",
+                 "description": "What do you think of the new Freebox V7?",
+-                "pool": {
++                "poll": {
+                     "type": "CBOX",
+-                    "values": [{
++                    "propositions": [{
+                         "label": "Yes",
+-                        "value": 89
++                        "score": 89
+                     }, {
+                         "label": "No",
+-                        "value": 10
++                        "score": 10
+                     }, {
+                         "label": "Not sure",
+-                        "value": 0
++                        "score": 0
+                     }]
+                 }
+             }, {
+@@ -111,17 +111,17 @@ OIOJS.mocks = {
+                 "tags": "Politic",
+                 "lastUpdate": "17-11-2018",
+                 "description": "Do you like Beyoncée ?",
+-                "pool": {
++                "poll": {
+                     "type": "CBOX",
+-                    "values": [{
++                    "propositions": [{
+                         "label": "Yes",
+-                        "value": 89
++                        "score": 89
+                     }, {
+                         "label": "No",
+-                        "value": 10
++                        "score": 10
+                     }, {
+                         "label": "Not sure",
+-                        "value": 0
++                        "score": 0
+                     }]
+                 }
+             }, {
+@@ -133,23 +133,23 @@ OIOJS.mocks = {
+                 "tags": "Cinema",
+                 "lastUpdate": "17-11-2018",
+                 "description": "Do you like Beyoncée ?",
+-                "pool": {
++                "poll": {
+                     "type": "CBOX",
+-                    "values": [{
++                    "propositions": [{
+                         "label": "Yes",
+-                        "value": 89
++                        "score": 89
+                     }, {
+                         "label": "No",
+-                        "value": 10
++                        "score": 10
+                     }, {
+                         "label": "Not sure",
+-                        "value": 5
++                        "score": 5
+                     }, {
+                         "label": "I like her before",
+-                        "value": 10
++                        "score": 10
+                     }, {
+                         "label": "Only if she change her style",
+-                        "value": 30
++                        "score": 30
+                     }]
+                 }
+             }, {
+@@ -160,14 +160,14 @@ OIOJS.mocks = {
+                 },
+                 "tags": "cinema,People",
+                 "description": "Is Idriss Elba the sexiest man on Earth?",
+-                "pool": {
++                "poll": {
+                     "type": "CBOX",
+-                    "values": [{
++                    "propositions": [{
+                         "label": "Yes, he is",
+-                        "value": 50
++                        "score": 50
+                     }, {
+                         "label": "No, I think many other men are more sexy",
+-                        "value": 45
++                        "score": 45
+                     }]
+                 }
+             },
+@@ -179,14 +179,14 @@ OIOJS.mocks = {
+                 },
+                 "tags": "cinema,People",
+                 "description": "Is Idriss Elba the sexiest man on Earth?",
+-                "pool": {
++                "poll": {
+                     "type": "CBOX",
+-                    "values": [{
++                    "propositions": [{
+                         "label": "Yes, he is",
+-                        "value": 50
++                        "score": 50
+                     }, {
+                         "label": "No, I think many other men are more sexy",
+-                        "value": 45
++                        "score": 45
+                     }]
+                 }
+             },
+@@ -198,14 +198,14 @@ OIOJS.mocks = {
+                 },
+                 "tags": "cinema,People",
+                 "description": "Is Idriss Elba the sexiest man on Earth?",
+-                "pool": {
++                "poll": {
+                     "type": "CBOX",
+-                    "values": [{
++                    "propositions": [{
+                         "label": "Yes, he is",
+-                        "value": 50
++                        "score": 50
+                     }, {
+                         "label": "No, I think many other men are more sexy",
+-                        "value": 45
++                        "score": 45
+                     }]
+                 }
+             },
+@@ -217,14 +217,14 @@ OIOJS.mocks = {
+                 },
+                 "tags": "cinema,People",
+                 "description": "Is Idriss Elba the sexiest man on Earth?",
+-                "pool": {
++                "poll": {
+                     "type": "CBOX",
+-                    "values": [{
++                    "propositions": [{
+                         "label": "Yes, he is",
+-                        "value": 50
++                        "score": 50
+                     }, {
+                         "label": "No, I think many other men are more sexy",
+-                        "value": 45
++                        "score": 45
+                     }]
+                 }
+             },
+@@ -236,14 +236,14 @@ OIOJS.mocks = {
+                 },
+                 "tags": "cinema,People",
+                 "description": "Is Idriss Elba the sexiest man on Earth?",
+-                "pool": {
++                "poll": {
+                     "type": "CBOX",
+-                    "values": [{
++                    "propositions": [{
+                         "label": "Yes, he is",
+-                        "value": 50
++                        "score": 50
+                     }, {
+                         "label": "No, I think many other men are more sexy",
+-                        "value": 45
++                        "score": 45
+                     }]
+                 }
+             },
+@@ -255,14 +255,14 @@ OIOJS.mocks = {
+                 },
+                 "tags": "cinema,People",
+                 "description": "Is Idriss Elba the sexiest man on Earth?",
+-                "pool": {
++                "poll": {
+                     "type": "CBOX",
+-                    "values": [{
++                    "propositions": [{
+                         "label": "Yes, he is",
+-                        "value": 50
++                        "score": 50
+                     }, {
+                         "label": "No, I think many other men are more sexy",
+-                        "value": 45
++                        "score": 45
+                     }]
+                 }
+             }]
+diff --git a/resources/js/opinion.js b/resources/js/opinion.js
+index c73300a..b008e1b 100644
+--- a/resources/js/opinion.js
++++ b/resources/js/opinion.js
+@@ -65,150 +65,15 @@ OIOJS.pollFramework = {
+ 
+     doRenderPolls: function(polls) {
+         var user = OIOJS.userFramework.getUser();
++        var pollItemTemplateDef = document.getElementById("pollItemTemplate").innerHTML;
+ 
+         if (polls.length > 0) {
+-
+-
+-
+-            // OIOJS.pollFramework.doCleanupView();
+-            // $.each(polls, function(i, e) {
+-
+-            //     var poolElement = $('<li/>', {
+-            //         class: "question"
+-            //     });
+-            //     var poolContainer = $('<div/>', {
+-            //         class: "question-container border-bottom border-left"
+-            //     });
+-            //     var poolPhrase = $('<div/>', {
+-            //         class: "question-label"
+-            //     });
+-
+-            //     var poolPhraseP = $('<p/>', {
+-            //         html: function() {
+-            //             return OIOJS.pollFramework.doValidateSearchTerm() ?
+-            //                 "&nbsp;" + e.description.replace(new RegExp(OIOJS.pollFramework.searchTerm, "gi"), '<i class="search">' + OIOJS.pollFramework.searchTerm + '</i>') :
+-            //                 "&nbsp;" + e.description;
+-            //         }
+-            //     });
+-
+-            //     var isFollowedPoll = user != null && user.favorites.polls.includes(e.id);
+-
+-            //     var poolPhraseA = $('<i/>', {
+-            //         class: "fa fa-bell",
+-            //         style: isFollowedPoll ? "color:red !Important" : "color:lightgrey"
+-            //     });
+-            //     var poolShare = $('<div/>', {
+-            //         class: "share",
+-            //         html: ""
+-            //     });
+-            //     var poolInfo = $('<div/>', {
+-            //         class: "info"
+-            //     });
+-
+-            //     // poolPhrase.append(poolPhraseA);
+-            //     poolPhraseP.prepend(poolPhraseA);
+-            //     poolPhrase.append(poolPhraseP);
+-            //     poolContainer.append(poolPhrase);
+-
+-
+-            //     var progressBar = $('<div/>', {
+-            //         class: "progress"
+-            //     });
+-            //     var choices = [];
+-            //     var progressBarItems = [];
+-            //     var progressBarColors = ["success", "danger", "warning", "info", "primary", "secondary"];
+-
+-            //     var totalScore = e.pool.values.reduce(((acc, v) => acc + v.value), 0);
+-            //     $.each(e.pool.values, function(j, v) {
+-
+-            //         var poolChoice = $('<div/>', {
+-            //             class: "choice",
+-            //             "data-score": v.value
+-            //         });
+-
+-            //         var poolChoiceVoteIcon = $('<i/>', {
+-            //             class: "fa fa-thumbs-up fa-lg",
+-            //             "aria-hidden": "true",
+-            //             style: "color:lightgrey"
+-            //         });
+-
+-            //         var poolChoiceVoteLabel = $('<span/>', {
+-            //             class: "label",
+-            //             html: "&nbsp;" + v.label
+-            //         });
+-
+-            //         var poolChoiceVoteScore = $('<div/>', {
+-            //             class: "score",
+-            //             html: $('<span/>', {
+-            //                 class: "badge badge-pill badge-" + progressBarColors[j]
+-            //             })
+-            //         });
+-
+-            //         // poolChoice.append(poolChoiceVoteIcon);
+-            //         poolChoiceVoteLabel.prepend(poolChoiceVoteIcon);
+-            //         poolChoice.append(poolChoiceVoteLabel);
+-            //         poolChoice.append(poolChoiceVoteScore);
+-            //         choices.push(poolChoice);
+-
+-            //         if (v.value > 0) {
+-            //             var widthVal = ((v.value * 100) / totalScore).toFixed(2);
+-            //             var progressBarItem = $('<div/>', {
+-            //                 class: "progress-bar bg-" + progressBarColors[j],
+-            //                 role: "progressbar",
+-            //                 "aria-valuenow": "15",
+-            //                 "aria-valuemin": "0",
+-            //                 "aria-valuemax": "100",
+-            //                 style: "width:" + widthVal + "%",
+-            //                 html: $('<span/>', {
+-            //                     class: "sr-only"
+-            //                 })
+-            //             });
+-            //             progressBarItems.push(progressBarItem);
+-            //         }
+-            //     });
+-
+-            //     progressBar.append(progressBarItems);
+-            //     poolContainer.append(progressBar);
+-
+-            //     poolContainer.append(choices);
+-            //     // poolContainer.append(poolShare);
+-            //     poolContainer.append(poolInfo);
+-
+-            //     poolElement.append(poolContainer);
+-
+-            //     $('ul.questions[class!="detailView"]').append(poolElement);
+-            // });
+-
+-            // //update pool values
+-            // var totalValuesUpdated = false;
+-            // $('.question-container').each(function(i, e) {
+-            //     var scoreTotal = function() {
+-            //         var temp = 0;
+-            //         $(e).children('.choice').each(function(i, c) {
+-            //             temp += $(c).data('score')
+-            //         });
+-            //         return temp;
+-            //     }
+-
+-            //     $(e).data('total', scoreTotal());
+-            //     totalValuesUpdated = $('.question-container').length === i + 1;
+-            // });
+-
+-            // if (totalValuesUpdated) {
+-            //     $('.choice').each(function(i, e) {
+-            //         OIOJS.pollFramework.doCalculateScore(e);
+-            //     });
+-            // }
+-
++            OIOJS.pollFramework.doCleanupView();
+ 
+             //Poll result template
+-            console.log(polls);
+-            var pollItemTemplateDef = document.getElementById("pollItemTemplate").innerHTML;
+             var pollItemTemplateCompiled = Handlebars.compile(pollItemTemplateDef);
+             var pollItemTemplateHTML = pollItemTemplateCompiled(polls);
+             $('ul.questions').append(pollItemTemplateHTML);
+-            // console.log(pollItemTemplateHTML);
+-
+             $('ul.questions').show();
+         }
+     },
+@@ -240,7 +105,7 @@ OIOJS.pollFramework = {
+                     var colorVal = isFollowedTags(code) ? "red" : "lightgrey";
+                     return "<i class='fa fa-bell' style='color:" + colorVal + " !Important'></i>" + name;
+                 },
+-                "data-value": isTag ? i : i.code
++                "data-score": isTag ? i : i.code
+             }));
+             //create columns of 8 items
+             var itemsBuckets = []
+@@ -372,7 +237,7 @@ OIOJS.pollFramework = {
+             e.preventDefault();
+             e.stopPropagation();
+             var _that = this;
+-            OIOJS.pollFramework.setSearchFacets($(_that).data("value"));
++            OIOJS.pollFramework.setSearchFacets($(_that).data("score"));
+             // return false;
+         });
+ 
+@@ -388,7 +253,7 @@ OIOJS.pollFramework = {
+     },
+ 
+     bindVote: function() {
+-        $(document).on('click', '.choice', function() {
++        $(document).on('click', '.proposition', function() {
+             //Update score and tolal
+             var _that = this;
+             var parent = $(_that).parent('.question-container');
+@@ -403,13 +268,13 @@ OIOJS.pollFramework = {
+                 $(e).data(target, oldVal + 1); //update
+             })
+ 
+-            $(parent).children('.choice').each(function(i, e) {
++            $(parent).children('.proposition').each(function(i, e) {
+                 OIOJS.pollFramework.doCalculateScore(e);
+             });
+ 
+         });
+ 
+-        $(document).on('mouseover', '.choice', function() {
++        $(document).on('mouseover', '.proposition', function() {
+             var _that = this;
+             if (typeof $(_that).find('.fa-thumbs-up').data("selected") === 'undefined') {
+                 $(_that).find('.fa-thumbs-up').addClass("thumbsUpHover");
+@@ -417,7 +282,7 @@ OIOJS.pollFramework = {
+             }
+         });
+ 
+-        $(document).on('mouseout', '.choice', function() {
++        $(document).on('mouseout', '.proposition', function() {
+             var _that = this;
+             if (typeof $(_that).find('.fa-thumbs-up').data("selected") === 'undefined') {
+                 $(_that).find('.fa-thumbs-up').removeClass("thumbsUpHover");
+@@ -626,13 +491,13 @@ OIOJS.utils = {
+ 
+     registerTemplateHelpers: function() {
+ 
+-        Handlebars.registerHelper('drawOverviewChart', function(poll) {
++        var progressBarColors = ["#28a745", "#dc3545", "#ffc107", "blue", "grey", "yellow"];
+ 
+-             var progressBarColors = ["#28a745", "#dc3545", "#ffc107", "blue", "grey", "yellow"];
++        //Draw chart for result overview
++        Handlebars.registerHelper('drawOverviewChart', function(poll) {
+ 
+             var newCanvas = $('<canvas/>', {
+                 class: "shadow mb-1",
+-
+             })[0];
+             // console.log(options);
+             var c = newCanvas.getContext('2d');
+@@ -642,22 +507,73 @@ OIOJS.utils = {
+             var cw = newCanvas.width;
+             var ch = newCanvas.height;
+             var width = 0;
+-            var totalScore = poll.values.reduce(((acc, v) => acc + v.value), 0);
++            var totalScore = poll.propositions.reduce(((acc, v) => acc + v.score), 0);
+ 
+             $(poll.values).each(function(i, v) {
+ 
+-                width = Math.floor((((v.value * 100) / totalScore).toFixed(2))  * cw * .01);
++                width = Math.floor((((v.score * 100) / totalScore).toFixed(2)) * cw * .01);
+                 // console.log(width);
+                 c.fillStyle = progressBarColors[i];
+                 c.fillRect(Math.floor(xOffset), yOffset, width, ch);
++
++                // c.font = '16px';
++                // c.fillStyle = "#fff";
++                // c.fillText("(99)999%", xOffset, yOffset+50);
+                 xOffset += width;
+-                console.log(xOffset);
++            });
++
++            // console.log(newCanvas.toDataURL('image/png', 1.0));
++            return newCanvas.toDataURL('image/png', 1.0);
++        });
++
++
++        //Evaluate score for each proposition
++        Handlebars.registerHelper('renderScores', function(poll) {
++
++            var totalScore = poll.propositions.reduce(((acc, v) => acc + v.score), 0);
++
++            var propositions = $('<div/>', {
++                class: 'propositions'
++            });
++
++            $.each(poll.propositions, function(i, p) {
++
++                var scorePercentageVal = ((p.score * 100) / totalScore).toFixed(2);
++
++                var propositionItem = $('<div/>', {
++                    class: "proposition",
++                    "data-score": p.score
++                });
++
++                var likeIcon = $('<i/>', {
++                    class: "fa fa-thumbs-up fa-lg",
++                    "aria-hidden": "true"
++                });
++
++                var badge = $('<span/>', {
++                    class: "score badge badge-pill",
++                    style: "background-color: red",
++                    text: p.score + "(" + scorePercentageVal + "%)"
++                });
++
++                var propositionText = $('<span/>', {
++                    class: 'propositionText',
++                    html: '&nbsp;' + p.label
++                });
+ 
++                propositionItem.append(likeIcon);
++                propositionItem.append(badge);
++                propositionItem.append(propositionText);
++                propositions.append(propositionItem);
+             });
+ 
+-            // console.log(newCanvas.outerHTML);
+-            return newCanvas.toDataURL();
++            return propositions[0].outerHTML;
+         });
++
++
++
++
++
+     }
+ };
+ 
+diff --git a/src/html/index.html b/src/html/index.html
+index e73cde0..9375734 100644
+--- a/src/html/index.html
++++ b/src/html/index.html
+@@ -24,7 +24,7 @@
+ 			.question{
+ 				margin: 0 0 20px 0;
+ 			}
+-			.question-label, .choice{
++			.question-label, .proposition{
+ 				display: flex;
+ 				flex-direction: row;
+ 				flex-flow: nowrap;
+@@ -42,11 +42,11 @@
+ 				background: #f8f9fa; /*rgb(0, 128, 255, .2);*/
+ 				padding: 5px;
+ 			}
+-			.choice{
++			.proposition{
+ 				margin: 0 0 5px 0;
+ 				font-family: monospace;
+ 			}
+-			.choice:hover{
++			.proposition:hover{
+ 				background-color: lightgrey;
+ 				cursor: pointer;
+ 			}
+@@ -73,8 +73,8 @@
+ 			}
+ 			.footer{
+ 				position: fixed !important;
+-			left: 0 !important;
+-			bottom: 0 !important;
++				left: 0 !important;
++				bottom: 0 !important;
+ 				display: inline-flex;
+ 				flex-wrap: nowrap;
+ 				flex-direction: row;
+@@ -542,52 +542,46 @@ crossorigin="anonymous"></script>
+   {{#each this}}
+  		
+  		<li class="question">
+-								<div class="question-container border-bottom border-left"><div class="question-label"><p><i class="fa fa-bell"></i>&nbsp;{{description}}</p></div>
++			<div class="question-container border-bottom border-left"><div class="question-label"><p><i class="fa fa-bell"></i>&nbsp;{{description}}</p></div>
+ 
+-								<div class="pollResultOverViewChart">
+-									<img src="{{{drawOverviewChart pool}}}"/>
+-								</div>
+-									
+-							
+-								{{#each pool.values}}
++				
++				<div class="pollResultOverViewChart">
++					<img src="{{{drawOverviewChart poll}}}" />
++				</div>
++				
++		
++				{{{renderScores poll}}}
+ 
+-									<div class="choice" data-score="{{value}}">
+-										<span class="label">
+-											<i class="fa fa-thumbs-up fa-lg" aria-hidden="true" ></i>&nbsp;{{label}}</span>
+-											<div class="score">
+-											<span class="badge badge-pill badge-success">{{value}}(45.87%)</span></div></div>
+-								{{/each}}
+-								
+-								
+-								<div class="sources border-top border-left border-white">
+-									<small id="sourcesLabel" class="text-muted">Sources:</small>
+-									<a href="#">Link 1</a>
+-									<a href="#">Link 2</a>
+-									<a href="#">Media 1</a>
+-									<a href="#">Youtube link</a>
+-								</div>
+-								<div class="share border-top border-left border-white">
+-									<a class="btn btn-social-icon btn-facebook rounded-circle">
+-										<span class="fa fa-facebook"></span>
+-									</a>
+-									<a class="btn btn-social-icon btn-twitter rounded-circle">
+-										<span class="fa fa-twitter"></span>
+-									</a>
+-									
+-									<a class="btn btn-social-icon btn-vk rounded-circle">
+-										<span class="fa fa-vk"></span>
+-									</a>
+-									<button class="btn btn-secondary btn-sm rounded">Embeded</button>
+-									<button class="btn btn-secondary btn-sm rounded ">Copy link</button>
+-								</div>
+-								
+-								<div class="details border-top border-left border-white">
+-									<div class=""><b>{{publisher.name}}</b></div>
+-									<div class=""> -2j 5h 10min 001s</div>
+-									<div class=""><button class="btn btn-secondary btn-sm">More</button></div>
+-								</div>
+-							</div>
+-						</li>
++						
++			<div class="sources border-top border-left border-white">
++				<small id="sourcesLabel" class="text-muted">Sources:</small>
++				<a href="#">Link 1</a>
++				<a href="#">Link 2</a>
++				<a href="#">Media 1</a>
++				<a href="#">Youtube link</a>
++			</div>
++			<div class="share border-top border-left border-white">
++				<a class="btn btn-social-icon btn-facebook rounded-circle">
++					<span class="fa fa-facebook"></span>
++				</a>
++				<a class="btn btn-social-icon btn-twitter rounded-circle">
++					<span class="fa fa-twitter"></span>
++				</a>
++				
++				<a class="btn btn-social-icon btn-vk rounded-circle">
++					<span class="fa fa-vk"></span>
++				</a>
++				<button class="btn btn-secondary btn-sm rounded">Embeded</button>
++				<button class="btn btn-secondary btn-sm rounded ">Copy link</button>
++			</div>
++			
++			<div class="details border-top border-left border-white">
++				<div class=""><b>{{publisher.name}}</b></div>
++				<div class=""> -2j 5h 10min 001s</div>
++				<div class=""><button class="btn btn-secondary btn-sm">More</button></div>
++			</div>
++		</div>
++	</li>
+ 
+ 
+   {{/each}}
