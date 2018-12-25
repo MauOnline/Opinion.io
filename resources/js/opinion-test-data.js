@@ -4,7 +4,7 @@ var OIOJS = OIOJS || {};
 
 OIOJS.mocks = {
 
-    doLogin: function() {
+    "doLogin": function() {
         return {
             "metadata": {
                 "location": null,
@@ -29,10 +29,9 @@ OIOJS.mocks = {
             "polls": ["0123459", "0123456"],
             "votes": []
         };
-
     },
 
-    getPolls: function() {
+    "getPolls": function() {
         return {
             "info": {},
             "error": {},
@@ -45,9 +44,8 @@ OIOJS.mocks = {
                 "tags": "PeoplE,Music,Entertainment",
                 "lastUpdate": "17-11-2018",
                 "description": "Who is the best person to replace Ali Bongo?",
-                "poll": {
-                    "type": "CBOX",
-                    "propositions": [{
+                "type": "PROP",
+                "propositions": [{
                         "label": "Yes",
                         "score": 50,
                         "color": "#28a745"
@@ -60,7 +58,6 @@ OIOJS.mocks = {
                         "score": 23,
                         "color": "#ffc107"
                     }]
-                }
             }, {
                 "id": "0123457",
                 "publisher": {
@@ -70,9 +67,8 @@ OIOJS.mocks = {
                 "tags": "Environment",
                 "lastUpdate": "17-11-2018",
                 "description": "Do you think 2019 will be a good year for global finance?",
-                "poll": {
-                    "type": "CBOX",
-                    "propositions": [{
+                "type": "PROP",
+                "propositions":  [{
                         "label": "Yes",
                         "score": 89,
                         "color": "#28a745"
@@ -85,7 +81,6 @@ OIOJS.mocks = {
                         "score": 0,
                         "color": "#ffc107"
                     }]
-                }
             }, {
                 "id": "01234578",
                 "publisher": {
@@ -95,9 +90,8 @@ OIOJS.mocks = {
                 "tags": "PeOple",
                 "lastUpdate": "17-11-2018",
                 "description": "What do you think of the new Freebox V7?",
-                "poll": {
-                    "type": "CBOX",
-                    "propositions": [{
+                "type": "PROP",
+                "propositions":  [{
                         "label": "Yes",
                         "score": 89,
                         "color": "#28a745"
@@ -110,7 +104,6 @@ OIOJS.mocks = {
                         "score": 0,
                         "color": "#ffc107"
                     }]
-                }
             }, {
                 "id": "0123459",
                 "publisher": {
@@ -120,9 +113,8 @@ OIOJS.mocks = {
                 "tags": "Politic",
                 "lastUpdate": "17-11-2018",
                 "description": "Do you like Beyoncée ?",
-                "poll": {
-                    "type": "CBOX",
-                    "propositions": [{
+                "type": "PROP",
+                "propositions":  [{
                         "label": "Yes",
                         "score": 89,
                         "color": "#28a745"
@@ -136,7 +128,6 @@ OIOJS.mocks = {
                         "score": 0,
                         "color": "#ffc107"
                     }]
-                }
             }, {
                 "id": "0123450",
                 "publisher": {
@@ -146,9 +137,8 @@ OIOJS.mocks = {
                 "tags": "Cinema",
                 "lastUpdate": "17-11-2018",
                 "description": "Do you like Beyoncée ?",
-                "poll": {
-                    "type": "CBOX",
-                    "propositions": [{
+                "type": "PROP",
+                "propositions":  [{
                         "label": "Yes",
                         "score": 89,
                         "color": "#28a745"
@@ -169,7 +159,6 @@ OIOJS.mocks = {
                         "score": 30,
                         "color": "#673ab7"
                     }]
-                }
             }, {
                 "id": "012345",
                 "publisher": {
@@ -178,9 +167,8 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "poll": {
-                    "type": "CBOX",
-                    "propositions": [{
+                "type": "PROP",
+                "propositions": [{
                         "label": "Yes, he is",
                         "score": 50,
                         "color": "#28a745"
@@ -189,7 +177,6 @@ OIOJS.mocks = {
                         "score": 45,
                         "color": "#dc3545"
                     }]
-                }
             },
             {
                 "id": "012345",
@@ -199,9 +186,8 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "poll": {
-                    "type": "CBOX",
-                    "propositions": [{
+                "type": "PROP",
+                "propositions":[{
                         "label": "Yes, he is",
                         "score": 50,
                         "color": "#28a745"
@@ -210,7 +196,6 @@ OIOJS.mocks = {
                         "score": 45,
                         "color": "#dc3545"
                     }]
-                }
             },
             {
                 "id": "012345",
@@ -220,9 +205,8 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "poll": {
-                    "type": "CBOX",
-                    "propositions": [{
+                "type": "PROP",
+                "propositions":  [{
                         "label": "Yes, he is",
                         "score": 50,
                         "color": "#28a745"
@@ -231,7 +215,6 @@ OIOJS.mocks = {
                         "score": 45,
                         "color": "#dc3545"
                     }]
-                }
             },
             {
                 "id": "012345",
@@ -241,9 +224,8 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "poll": {
-                    "type": "CBOX",
-                    "propositions": [{
+                "type": "PROP",
+                "propositions": [{
                         "label": "Yes, he is",
                         "score": 50,
                         "color": "#28a745"
@@ -252,7 +234,6 @@ OIOJS.mocks = {
                         "score": 45,
                         "color": "#dc3545"
                     }]
-                }
             },
             {
                 "id": "012345",
@@ -262,9 +243,8 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "poll": {
-                    "type": "CBOX",
-                    "propositions": [{
+                "type": "PROP",
+                "propositions": [{
                         "label": "Yes, he is",
                         "score": 50,
                         "color": "#28a745"
@@ -273,7 +253,6 @@ OIOJS.mocks = {
                         "score": 45,
                         "color": "#dc3545"
                     }]
-                }
             },
             {
                 "id": "012345",
@@ -283,9 +262,8 @@ OIOJS.mocks = {
                 },
                 "tags": "cinema,People",
                 "description": "Is Idriss Elba the sexiest man on Earth?",
-                "poll": {
-                    "type": "CBOX",
-                    "propositions": [{
+                "type": "PROP",
+                "propositions":  [{
                         "label": "Yes, he is",
                         "score": 50,
                         "color": "#28a745"
@@ -294,7 +272,6 @@ OIOJS.mocks = {
                         "score": 45,
                         "color": "#dc3545"
                     }]
-                }
             }]
         };
     }

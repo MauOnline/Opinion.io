@@ -500,7 +500,7 @@ OIOJS.utils = {
 
         //========Draw chart for result overview ==========//
         //=================================================//
-        Handlebars.registerHelper('drawOverviewChart', function(poll) {
+        Handlebars.registerHelper('drawOverviewChart', function(propositions) {
 
             var chartContainer = $('<div/>', {
                 class: 'pollResultOverViewChart'
@@ -517,10 +517,10 @@ OIOJS.utils = {
             var cw = newCanvas.width;
             var ch = newCanvas.height;
             var width = 0;
-            var totalScore = poll.propositions.reduce(((acc, v) => acc + v.score), 0);
+            var totalScore = propositions.reduce(((acc, v) => acc + v.score), 0);
 
 
-            $(poll.propositions).each(function(i, v) {
+            $(propositions).each(function(i, v) {
 
                 width = Math.floor((((v.score * 100) / totalScore).toFixed(2)) * cw * .01);
                 // console.log(width);
@@ -542,15 +542,15 @@ OIOJS.utils = {
 
         //========Evaluate score for each proposition =======//
         //===================================================//
-        Handlebars.registerHelper('renderScores', function(poll) {
+        Handlebars.registerHelper('renderScores', function(propositions) {
 
-            var totalScore = poll.propositions.reduce(((acc, v) => acc + v.score), 0);
+            var totalScore = propositions.reduce(((acc, v) => acc + v.score), 0);
 
             var propositions = $('<div/>', {
                 class: 'propositions'
             });
 
-            $.each(poll.propositions, function(i, p) {
+            $.each(propositions, function(i, p) {
 
                 var scorePercentageVal = ((p.score * 100) / totalScore).toFixed(2);
 
