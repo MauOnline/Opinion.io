@@ -542,15 +542,15 @@ OIOJS.utils = {
 
         //========Evaluate score for each proposition =======//
         //===================================================//
-        Handlebars.registerHelper('renderScores', function(propositions) {
+        Handlebars.registerHelper('renderScores', function(propositionVals) {
 
-            var totalScore = propositions.reduce(((acc, v) => acc + v.score), 0);
+            var totalScore = propositionVals.reduce(((acc, v) => acc + v.score), 0);
 
             var propositions = $('<div/>', {
                 class: 'propositions'
             });
 
-            $.each(propositions, function(i, p) {
+            $.each(propositionVals, function(i, p) {
 
                 var scorePercentageVal = ((p.score * 100) / totalScore).toFixed(2);
 
