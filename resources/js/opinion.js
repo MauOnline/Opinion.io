@@ -6,11 +6,17 @@ const FILTER_COLS_TRESHOLD = 7;
 OIOJS.pollFramework = {
     //Manage the vote engine and search engine
 
+    favorites: {
+        tags: [],
+        publishers: [],
+        polls: []
+    },
     pollsPayload: null,
     searchTerm: null,
     searchFacets: null,
     tagFacets: null,
     publisherFacets: null,
+    toggleModalRefs: [],
     init: function () {
         this.doDataInit();
         this.bindVote();
@@ -35,7 +41,6 @@ OIOJS.pollFramework = {
         var filteredPolls = []
         if (OIOJS.pollFramework.pollsPayload != null && OIOJS.pollFramework.pollsPayload !== "undefined") {
             if (OIOJS.pollFramework.isFacetSearch()) {
-
                 //Facets search
                 filteredPolls = OIOJS.pollFramework.pollsPayload.result.filter(function (e) {
                     return OIOJS.utils.arrayIntersection(e.tags.split(","), OIOJS.pollFramework.searchFacets).length > 0 ||
@@ -44,12 +49,10 @@ OIOJS.pollFramework = {
                 });
 
             } else {
-
                 //Searchterm
                 filteredPolls = OIOJS.pollFramework.pollsPayload.result.filter(p => p.description.match(new RegExp(OIOJS.pollFramework.searchTerm, "gi")));
             };
         };
-
         // console.log(filteredPolls);
         //Rendering
         filteredPolls.length > 0 ?
@@ -65,10 +68,11 @@ OIOJS.pollFramework = {
     },
 
     doRenderPolls: function (polls) {
-        var user = OIOJS.userFramework.getUser();
+        // console.log(polls)
+        // var user = OIOJS.userFramework.getUser();
         var pollItemTemplateDef = document.getElementById("pollItemTemplate").innerHTML;
 
-        if (polls.length > 0) {
+        if (polls && polls.length > 0) {
             OIOJS.pollFramework.doCleanupView();
 
             //Poll result template
@@ -81,40 +85,47 @@ OIOJS.pollFramework = {
 
     doRenderFacets: function () {
 
-        var isFollowedTags = function (item) {
-            var user = OIOJS.userFramework.getUser();
-            // console.log(item);
-            if (user !== null && user.favorites.tags !== null && user.favorites.publishers !== null) {
-                return OIOJS.utils.includesCaseInsensitive(user.favorites.tags, item) ||
-                    OIOJS.utils.includesCaseInsensitive(user.favorites.publishers, item);
-            }
-            return false;
-        };
-
         var generateColumnItems = function (itemList, domTarget, isTag) {
-
             //Emptying the container
             domTarget.empty();
             // create items
-            var items = itemList.map(i => $('<a/>', {
+            var items = itemList.map(i => $('<div/>', {
                 class: 'dropdown-item',
-                href: '#',
+                "data-ref": isTag ? i : i.code,
+                "data-tag": isTag,
                 html: function () {
                     var name = isTag ? OIOJS.utils.formatTag(i) : OIOJS.utils.formatTag(i.name);
                     var code = isTag ? OIOJS.utils.formatTag(i) : i.code;
                     // console.log(isFollowedTags(code));
-                    var colorVal = isFollowedTags(code) ? "red !Important" : "lightgrey";
-                    var facetFavIcon = $('<i/>', {
-                        class: 'fa fa-bell',
-                        style: 'color:' + colorVal
+                    var isPoll = !isTag && typeof i.name === 'undefined';
+                    var colorVal = OIOJS.utils.isFavorite(code, isPoll) ? "red !Important" : "lightgrey";
+
+                    //link to add filter to favorite fot the authenticated user
+                    var favoriteButton = $('<a/>', {
+                        class: 'favoriteBtn',
+                        href: 'javascript:void(0)',
+                        html: function () {
+                            var facetFavIcon = $('<i/>', {
+                                class: 'fa fa-thumb-tack',
+                                style: 'color:' + colorVal
+                            });
+                            return facetFavIcon[0].outerHTML;
+                        }
                     });
 
-                    return facetFavIcon[0].outerHTML + name;
-                },
-                "data-ref": isTag ? i : i.code
+                    //Link to appy filter on polls view
+                    var filterButton = $('<a/>', {
+                        class: 'filterBtn',
+                        href: 'javascript:void(0)',
+                        text: name
+                    });
+                    // console.log(favoriteButton[0].outerHTML + filterButton[0].outerHTML);
+                    return favoriteButton[0].outerHTML + filterButton[0].outerHTML;
+                }
             }));
+
             //create columns of 8 items
-            var itemsBuckets = []
+            var itemsBuckets = [];
             var startPos = 0;
             for (var i = 0; i < items.length; i++) {
                 if (i > 0 && i % FILTER_COLS_TRESHOLD == 0) {
@@ -126,7 +137,6 @@ OIOJS.pollFramework = {
             }
 
             $.each(itemsBuckets, function (i, bucket) {
-
                 var col = $('<div/>', {
                     class: 'col'
                 });
@@ -134,7 +144,7 @@ OIOJS.pollFramework = {
                     class: 'dropdown-divider',
                     role: 'separator'
                 }));
-                if ($(col).children('a').length > 0) {
+                if ($(col).children('div').length > 0) {
                     domTarget.append(col);
                 }
             });
@@ -153,20 +163,29 @@ OIOJS.pollFramework = {
     },
 
     doExtractPublishers: function () {
-        OIOJS.pollFramework.publisherFacets = OIOJS.pollFramework.pollsPayload.result.map(p => p.publisher);
+        OIOJS.pollFramework.publisherFacets = [];
+        var temp = [] //Include a publisher only once based on publisher code
+        $.each(OIOJS.pollFramework.pollsPayload.result, function (i, e) {
+            if (e.publisher != null && temp.indexOf(e.publisher.code) < 0) {
+                OIOJS.pollFramework.publisherFacets.push(e.publisher);
+                temp.push(e.publisher.code);
+            }
+        });
+
         return OIOJS.pollFramework.publisherFacets.length > 0;
     },
 
     doExtractTags: function () {
-        var temp = OIOJS.pollFramework.pollsPayload.result.filter(e => e.tags != null || typeof e.tags === 'undefined').reduce(function (acc, e) {
-            e.tags.split(",").forEach(function (i) {
-                // console.log(i);
-                if (OIOJS.utils.includesCaseInsensitive(acc, i) === false) {
-                    acc.push(i)
-                };
-            });
-            return acc;
-        }, []);
+        var temp = OIOJS.pollFramework.pollsPayload.result.filter(e => e.tags != null
+            || typeof e.tags === 'undefined').reduce(function (acc, e) {
+                e.tags.split(",").forEach(function (i) {
+                    // console.log(i);
+                    if (OIOJS.utils.includesCaseInsensitive(acc, i) === false) {
+                        acc.push(i)
+                    };
+                });
+                return acc;
+            }, []);
 
         temp.sort();
         // console.log(temp);
@@ -183,13 +202,9 @@ OIOJS.pollFramework = {
         var _that = this;
         //Init polls
         // this.pollsPayload = OIOJS.mocks.getPolls();
-        $.ajax({
-            url: "http://opncore.local/api/v1/polls",
-            method: 'GET',
-            dataType: 'json'
 
-        }).done(function (response) {
-            _that.pollsPayload = response.data;
+        OIOJS.utils.fnSendRequest('GET', 'http://opncore.local/api/v1/polls?page=1', null, function (resp) {
+            _that.pollsPayload = resp.data;
             var polls = _that.pollsPayload.result;
 
             $("#debug-display").append("<i> Polls displayed" + polls.length + "</i>"); //TODO: remove on production
@@ -202,19 +217,31 @@ OIOJS.pollFramework = {
 
             //render facets
             _that.doRenderFacets();
-
-        }).fail(function (xhr, err) {
-            console.log("Error: " + xhr.status + " : " + xhr.responseText + " : " + err);
-        });
+        }, false)
     },
 
     doCalculateScore: function (q) {
         if (q !== 'undefined') {
-            var parent = $(q).parent('.question-container');
-            var scoreTotalVal = $(parent).data('total');
-            var scoreVal = $(q).data('score');
-            var scorePercentageVal = (scoreVal * 100) / scoreTotalVal;
-            $(q).find('.score .badge').text(scoreVal + '(' + scorePercentageVal.toFixed(2) + '%)');
+
+            //TODO: refresh the scores and the glance score view .
+
+            // var parent = $(q).parent('.question-container');
+            // var scoreTotalVal = $(parent).data('total');
+            // console.log(q);
+            var propositions = $(q).children('.question-container .proposition');
+
+            var scoreTotalVal = 0;
+            $.each(propositions, function (i, p) {
+                scoreTotalVal += $(p).data('score');
+            });
+            console.log(scoreTotalVal);
+
+            $.each(propositions, function (i, p) {
+
+                var scoreVal = $(P).data('score');
+                var scorePercentageVal = (scoreVal * 100) / scoreTotalVal;
+                $(q).find('.score .badge').text(scoreVal + '(' + scorePercentageVal.toFixed(2) + '%)');
+            });
         }
     },
 
@@ -247,10 +274,11 @@ OIOJS.pollFramework = {
     },
 
     bindSearch: function () {
+        // alert("done")
         //Capture Facets search
-        $('.searchEngine .dropdown-menu, .searchEngine .dropdown-item').on('keyup click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
+        $(document).on('click', '.dropdown-item .filterBtn', function (e) {
+            alert("Filter !");
+
             var _that = this;
             OIOJS.pollFramework.setSearchFacets($(_that).data("ref"));
             // return false;
@@ -269,24 +297,29 @@ OIOJS.pollFramework = {
 
     bindVote: function () {
         $(document).on('click', '.proposition', function () {
-            //Update score and tolal
+            var user = OIOJS.userFramework.getUser();
+
             var _that = this;
-            var parent = $(_that).parent('.question-container');
+            var parent = $(_that).parents('li.question');
 
-            $.each([
-                _that,
-                parent
-            ], function (i, e) {
+            var reqObj = {
+                "poll_id": $(parent).data('id'),
+                "proposition_code": $(_that).data('code')
+            };
 
-                var target = i == 0 ? 'score' : 'total';
-                var oldVal = $(e).data(target);
-                $(e).data(target, oldVal + 1); //update
-            })
+            OIOJS.utils.fnSendRequest('POST', 'http://opncore.local/api/v1/vote', reqObj, function (resp) {
+                // console.log(pollResponse);
+                var pollItem = $('li[data-id="' + reqObj.poll_id + '"]');
 
-            $(parent).children('.proposition').each(function (i, e) {
-                OIOJS.pollFramework.doCalculateScore(e);
-            });
+                var prevOvervChart = pollItem.find('div[class*="pollResultOverViewChart"]');
+                var newOvervChart = OIOJS.utils.fnRenderOverviewChart(resp.propositions);
+                prevOvervChart.replaceWith(newOvervChart);
 
+                var prevPropositions = pollItem.find('div[class*="propositions"]');
+                var newPropositions = OIOJS.utils.fnRenderScores(resp.propositions);
+                prevPropositions.replaceWith(newPropositions);
+
+            }, true, parent);
         });
 
         $(document).on('mouseover', '.proposition', function () {
@@ -324,7 +357,7 @@ OIOJS.pollFramework = {
         $('[data-toggle="tooltip"]:disabled').tooltip();
 
         //Select poll's end date
-        $('#endDate').datetimepicker();
+        $('#newPollTimer').datetimepicker();
 
         //Select proposition's color
         $('input.picker').colorPicker({
@@ -340,25 +373,103 @@ OIOJS.pollFramework = {
         });
 
         //Timer check
-        $(document).on('change', 'input#timerCheck', function () {
-            $('input#endDate').prop('disabled', !$(this).prop("checked"));
+        $(document).on('change', 'input#isPollTimer', function () {
+            $('input#newPollTimer').prop('disabled', !$(this).prop("checked"));
         });
 
         //Select poll type
-        $(document).on('change', '#pollTypeSelect', function () {
+        $(document).on('change', '#newPollType', function () {
             var _that = $(this);
             switch (_that.val()) {
-                case "PR0":
-                    $('[class="form-group"][id="propositions"]').fadeIn();
+                case "PROP":
+                    $('[class="form-group"][id="newPollPropositions"]').fadeIn();
                     break;
-                case "EM0":
-                    $('[class="form-group"][id="propositions"]').fadeOut();
+                case "EMTC":
+                    $('[class="form-group"][id="newPollPropositions"]').fadeOut();
                     break;
                 default:
                     return false;
             }
 
         });
+
+
+        //Initiate Add tag
+        $('#newPollTags').tagsInput({
+            // 'autocomplete_url': url_to_autocomplete_api,
+            // 'autocomplete': { option: value, option: value},
+            'height': '100px',
+            'width': '400px',
+            'interactive': true,
+            'defaultText': 'New tag',
+            // 'onAddTag':callback_function,
+            // 'onRemoveTag':callback_function,
+            // 'onChange' : callback_function,
+            'delimiter': ',',   // Or a string with a single delimiter. Ex: ';'
+            'removeWithBackspace': false,
+            'minChars': 3,
+            'maxChars': 15, // if not provided there is no limit
+            'placeholderColor': '#666666'
+        });
+
+
+        $(document).on('click', 'button#newPollCreate', function (e) {
+            //Create new Poll for authenticated user
+            var _that = this;
+            var newPollModal = $('#newPollModal'); //Model can be used to trigger event dynamicaly
+            OIOJS.pollFramework.toggleModalRefs.push('#newPollModal');//Store modal ID for herror management
+            var newPollForm = $(newPollModal).find('#newPollForm');
+            var newPollQuestion = $(newPollForm).find('#newPollQuestion').val();
+            var newPollTimer = $(newPollForm).find("#newPollTimer").val();
+            var newPollTags = $(newPollForm).find('input#newPollTags').val();
+            var newPollType = $(newPollForm).find('#newPollType').val();
+
+            var newPollPropositions = [];
+            $(newPollForm).find('#newPollPropositions .proposition').each(function (i, e) {
+                newPollPropositions.push({
+                    "value": $(e).find('input.value').val(),
+                    "color": $(e).find('input.picker').data('color')
+                })
+                // console.log($(e).find('.value').val());
+                // console.log($(e).find('.picker').data('color'));
+            });
+
+            var newPollSources = [];
+            $(newPollForm).find('#newPollSources .source').each(function (i, e) {
+
+                var link = $(e).find('input').val();
+                if (link.length > 0) {
+
+                    var isWeblink = $(e).find('input').hasClass('link');
+                    var isVideo = $(e).find('input').hasClass('vid-link');
+                    // var isPicture = $(e).find('input').hasClass('pic-link');
+                    var sourceType = isWeblink ? 'link' : isVideo ? 'video' : 'image';
+
+                    newPollSources.push({
+                        "type": sourceType,
+                        "link": link
+                    });
+                }
+            });
+
+            var reqObj = {
+                "description": newPollQuestion,
+                "timer": newPollTimer,
+                "tags": newPollTags,
+                "type": newPollType,
+                "propositions": newPollPropositions,
+                "sources": newPollSources
+            }
+
+            OIOJS.utils.fnSendRequest("POST", "http://opncore.local/api/v1/poll", reqObj,
+                function (response) {
+                    //Close modal
+                    $('#newPollModal').modal('hide');
+                    //TODO: Redirect to Poll details view
+                    // window.location.reload();
+                }, true, $('#newPollModal .modal-dialog'));
+        });
+
     }
 };
 
@@ -394,9 +505,24 @@ OIOJS.userFramework = {
         };
     },
     doSignIn: function () {
-        sessionStorage.setItem("user", JSON.stringify(OIOJS.mocks.doLogin()));
-        OIOJS.userFramework.doRenderUserDetails();
-        window.location.reload();
+        var reqObj = {
+            "email": $('#emailInput').val(),
+            "password": $('#passwdInput').val()
+        };
+
+        OIOJS.utils.fnSendRequest('POST', 'http://opncore.local/api/v1/login', reqObj, function (resp) {
+
+            //Store user details
+            sessionStorage.setItem("user", JSON.stringify(resp));
+
+            //Store user preferences
+            OIOJS.pollFramework.favorites.tags = resp.favorites.tags;
+            OIOJS.pollFramework.favorites.publishers = resp.favorites.publishers;
+            OIOJS.pollFramework.favorites.polls = resp.favorites.polls;
+            sessionStorage.setItem("favorites", JSON.stringify(OIOJS.pollFramework.favorites));
+
+            window.location.reload();
+        }, false, null);
     },
 
     doSignUp: function () {
@@ -404,47 +530,45 @@ OIOJS.userFramework = {
     },
 
     doSignOut: function () {
+
+        //Clean session
         sessionStorage.removeItem("user");
+        sessionStorage.removeItem("favorites");
+
         OIOJS.userFramework.doRenderUserDetails();
         window.location.reload();
     },
 
-    doAddFavorite: function (favoriteItem, type) {
-        //@favoriteItem: The item being added as favortie
-        //@type: the Item type. Possible values are: tg[tag], pbs[Publisher] or pl[poll]
-        if (typeof favoriteItem !== 'undefined' && typeof type !== 'undefined') {
+    bindAddFavorite: function (e) {
+        $(document).on('click', '.dropdown-item .favoriteBtn, .question-label .favoriteBtn', function (event) {
 
-            switch (type) {
-                case "tg":
-                    break;
-                case "pbs":
-                    break;
-                case "pl":
-                    break;
-                default:
-                    // console.log("Unknown type "+type);
-                    throw new Error("Unknown type " + type)
+            var isPoll = $(this).parent('div').hasClass('question-label');
 
+            var parent = isPoll ? $(this).parent('.question-label') : $(this).parent('.dropdown-item');
+            var type = $(parent).data('tag') === true ? 'tag' : isPoll ? 'poll' : 'publisher';
+            var item_ref = $(parent).data('ref');
+
+            var reqObj = {
+                "favorites": [
+                    {
+                        "item_ref": item_ref,
+                        "type": type
+                    }
+                ]
             }
-        }
-    },
 
-    bindAddFavorite: function () {
-
-        $(document).on('.unfetched', 'click', function (e) {
-            e.preventDefault();
-            var _that = this;
-            OIOJS.userFramework.doAddFavorite(_that, '');
-
+            OIOJS.utils.fnSendRequest('POST', 'http://opncore.local/api/v1/favorites', reqObj, function (response) {
+                // console.log(response);
+                // OIOJS.pollFramework.tagFacets.push(response.tags)
+                OIOJS.pollFramework.favorites.tags = response.tags;
+                OIOJS.pollFramework.favorites.publishers = response.publishers;
+                OIOJS.pollFramework.favorites.polls = response.polls;
+                // console.log(OIOJS.pollFramework.favorites);
+                sessionStorage.setItem("favorites", JSON.stringify(OIOJS.pollFramework.favorites));
+                OIOJS.pollFramework.doRenderFacets();
+                OIOJS.pollFramework.doRenderPolls(OIOJS.pollFramework.pollsPayload.result);
+            }, true, null);
         });
-
-        $(document).on('.fa-bell', 'click', function () {
-            e.preventDefault();
-            var _that = this;
-            console.log("Follow poll");
-            OIOJS.userFramework.doAddFavorite(_that, '');
-        });
-
     },
 
     bindSignIn: function () {
@@ -453,8 +577,6 @@ OIOJS.userFramework = {
             // console.log("done !");
             $('#signInModal').modal('hide');
             OIOJS.userFramework.doSignIn();
-
-
         });
     },
 
@@ -465,8 +587,6 @@ OIOJS.userFramework = {
             OIOJS.userFramework.doSignOut();
 
         });
-
-
     },
 
     bindSignUp: function () {
@@ -480,13 +600,74 @@ OIOJS.userFramework = {
             $('#signInModal .signUpForm').hide();
             $('#signInModal .signInForm').show();
         });
-
     }
 
 };
 
 
 OIOJS.utils = {
+
+    isFavorite: function (item, isPoll) {
+        // var user = OIOJS.userFramework.getUser();
+        var favorites = JSON.parse(sessionStorage.getItem("favorites"));
+        // console.log(favorites);
+
+        if (favorites == null) {
+            return false;
+        }
+
+        if (isPoll) {
+            //Check favorite poll
+            return OIOJS.utils.includesCaseInsensitive(favorites.polls, item);
+        } else {
+            // console.log(favorites.tags);
+            // console.log(item);
+            //check favorite facet (tags or publisher)
+            return OIOJS.utils.includesCaseInsensitive(favorites.publishers, item)
+                || OIOJS.utils.includesCaseInsensitive(favorites.tags, item);
+        }
+    },
+
+    startLoader: function (domElement) {
+        OIOJS.utils.fnHandleLoader(domElement, true);
+    },
+
+    stopLoader: function (domElement) {
+        OIOJS.utils.fnHandleLoader(domElement, false);
+    },
+
+    fnHandleLoader: function (domElement, isStartFlag) {
+        // console.log(domElement)
+        // if (typeof domElement === 'undefined' || $(domElement).length == 0) {
+        //     return false;
+        // }
+        var isStart = isStartFlag && domElement !== null && $(domElement).length > 0;
+        if (!isStart) {
+            $('.loader-container').remove();
+        } else {
+            //Get dom element offset/position
+            var pos = $(domElement).offset();
+            //Get dom element width and height
+            var width = $(domElement).width();
+            var height = $(domElement).height();
+            // console.log(width);
+            // console.log(height);
+            //Create loader box
+            var loaderContainer = $('<div/>', {
+                class: "loader-container",
+                html: $('<i/>', {
+                    class: "fa fa-refresh fa-spin",
+                    'aria-hidden': "true",
+                    style: "font-size:40px;"
+                })
+            }).appendTo($('body'));
+
+            loaderContainer.offset(pos);
+            loaderContainer.width(width);
+            loaderContainer.height(height);
+            // loaderContainer.show();
+        }
+    },
 
     capitalizeFirstLetter: function (inputString) {
         return inputString.charAt(0).toUpperCase() + inputString.slice(1);
@@ -501,125 +682,215 @@ OIOJS.utils = {
     },
 
     includesCaseInsensitive: function (myArray, myString) {
+        if (myArray == null || myArray.length == 0) {
+            return false;
+        }
         return myArray.map(e => e.toLowerCase()).includes(myString.toLowerCase());
     },
 
     registerTemplateHelpers: function () {
 
-        var user = OIOJS.userFramework.getUser();
-
         //========Draw chart for result overview ==========//
         //=================================================//
-        Handlebars.registerHelper('drawOverviewChart', function (propositions) {
-
-            var chartContainer = $('<div/>', {
-                class: 'pollResultOverViewChart'
-            });
-
-            var newCanvas = $('<canvas/>', {
-                class: "shadow mb-1",
-            })[0];
-            // console.log(options);
-            var c = newCanvas.getContext('2d');
-
-            var xOffset = 0;
-            var yOffset = 0;
-            var cw = newCanvas.width;
-            var ch = newCanvas.height;
-            var width = 0;
-            var totalScore = propositions.reduce(((acc, v) => acc + v.score), 0);
-
-
-            $(propositions).each(function (i, v) {
-
-                width = Math.floor((((v.score * 100) / totalScore).toFixed(2)) * cw * .01);
-                // console.log(width);
-                // console.log(xOffset);
-                c.fillStyle = v.color;
-                c.fillRect(Math.floor(xOffset), yOffset, width, ch);
-
-                xOffset += width;
-            });
-
-            var img = $('<img/>', {
-                src: newCanvas.toDataURL()
-            })
-
-            chartContainer.append(img);
-            return chartContainer[0].outerHTML;
+        Handlebars.registerHelper('renderOverviewChart', function (propositions) {
+            return OIOJS.utils.fnRenderOverviewChart(propositions);
         });
-
 
         //========Evaluate score for each proposition =======//
         //===================================================//
-        Handlebars.registerHelper('renderScores', function (propositionVals) {
-
-            var totalScore = propositionVals.reduce(((acc, v) => acc + v.score), 0);
-
-            var propositions = $('<div/>', {
-                class: 'propositions'
-            });
-
-            $.each(propositionVals, function (i, p) {
-
-                var scorePercentageVal = ((p.score * 100) / totalScore).toFixed(2);
-
-                var propositionItem = $('<div/>', {
-                    class: "proposition",
-                    "data-score": p.score
-                });
-
-                var likeIcon = $('<i/>', {
-                    class: "fa fa-thumbs-up fa-lg",
-                    "aria-hidden": "true"
-                });
-
-                var badge = $('<span/>', {
-                    class: "score badge badge-pill",
-                    style: "background-color:" + p.color,
-                    text: p.score + "(" + scorePercentageVal + "%)"
-                });
-
-                var propositionText = $('<span/>', {
-                    class: 'propositionText',
-                    html: '&nbsp;' + p.label
-                });
-
-                propositionItem.append(likeIcon);
-                propositionItem.append(badge);
-                propositionItem.append(propositionText);
-                propositions.append(propositionItem);
-            });
-
-            return propositions[0].outerHTML;
+        Handlebars.registerHelper('renderScores', function (propositions) {
+            return OIOJS.utils.fnRenderScores(propositions);
         });
-
 
         //============ Render Poll description ==============//
         //===================================================//
         Handlebars.registerHelper('renderDescription', function (description, id) {
+            return OIOJS.utils.fnRenderDescription(description, id);
+        });
+    },
 
-            var labelContainer = $('<div/>', {
-                class: "question-label"
-            });
 
-            var favIconColor = user != null && user.favorites.polls.includes(id) ? "red !Important" : "lightgrey";
-            var labelFavIcon = $('<i/>', {
-                class: "fa fa-bell",
-                style: "color:" + favIconColor
-            })
+    fnRenderDescription: function (description, id) {
 
-            var labelText = OIOJS.pollFramework.doValidateSearchTerm() ?
-                description.replace(new RegExp(OIOJS.pollFramework.searchTerm, "gi"), '<i class="search">' + OIOJS.pollFramework.searchTerm + '</i>') :
-                description;
+        var favorites = JSON.parse(sessionStorage.getItem("favorites"));
 
-            labelContainer.append(labelFavIcon);
-            labelContainer.append("&nbsp;" + labelText);
-
-            return labelContainer[0].outerHTML;
+        var labelContainer = $('<div/>', {
+            class: "question-label",
+            "data-ref": id,
+            "data-tag": false
         });
 
+        var favoriteBtn = $('<a/>', {
+            class: "favoriteBtn",
+            href: "javascript:void(0)"
+        });
+
+        var favIconColor = favorites && favorites.polls.includes(id.toString()) ? "red !Important" : "lightgrey";
+        var labelFavIcon = $('<i/>', {
+            class: "fa fa-thumb-tack",
+            style: "color:" + favIconColor
+        })
+
+        var labelText = OIOJS.pollFramework.doValidateSearchTerm() ?
+            description.replace(new RegExp(OIOJS.pollFramework.searchTerm, "gi"),
+                '<i class="search">' + OIOJS.pollFramework.searchTerm + '</i>') : description;
+
+        favoriteBtn.append(labelFavIcon);
+        labelContainer.append(favoriteBtn);
+        labelContainer.append("&nbsp;" + labelText);
+
+        return labelContainer[0].outerHTML;
+    },
+
+    fnRenderScores: function (propositions) {
+
+        console.log(propositions);
+
+        var totalScore = propositions.reduce(((acc, v) => acc + v.score), 0);
+        var propositionsContainer = $('<div/>', {
+            class: 'propositions'
+        });
+
+        $.each(propositions, function (i, p) {
+            var scorePercentageVal = ((p.score * 100) / totalScore).toFixed(2);
+            var scorePercentageStr = !isNaN(scorePercentageVal) ? p.score + "(" + scorePercentageVal + "%)" : p.score;
+            var propositionItem = $('<div/>', {
+                class: "proposition",
+                "data-code": p.code,
+                "data-score": p.score
+            });
+
+
+            var highlightColor = p.highlight === true ? "blue !important" : "lightgray"
+
+            var likeIcon = $('<i/>', {
+                class: "fa fa-thumbs-up fa-lg",
+                "aria-hidden": "true",
+                style: "color: " + highlightColor
+            });
+
+            var badge = $('<span/>', {
+                class: "score badge badge-pill",
+                style: "background-color:" + p.color,
+                text: scorePercentageStr
+            });
+
+            var propositionText = $('<span/>', {
+                class: 'propositionText',
+                html: '&nbsp;' + p.label
+            });
+
+            propositionItem.append(likeIcon);
+            propositionItem.append(badge);
+            propositionItem.append(propositionText);
+            propositionsContainer.append(propositionItem);
+        });
+        return propositionsContainer[0].outerHTML;
+    },
+
+    fnRenderOverviewChart: function (propositions) {
+        var chartContainer = $('<div/>', {
+            class: 'pollResultOverViewChart'
+        });
+
+        var newCanvas = $('<canvas/>', {
+            class: "shadow mb-1",
+        })[0];
+        // console.log(options);
+        var c = newCanvas.getContext('2d');
+
+        var xOffset = 0;
+        var yOffset = 0;
+        var cw = newCanvas.width;
+        var ch = newCanvas.height;
+        var width = 0;
+        var totalScore = propositions.reduce(((acc, v) => acc + v.score), 0);
+
+        $(propositions).each(function (i, v) {
+            width = Math.floor((((v.score * 100) / totalScore).toFixed(2)) * cw * .01);
+            // console.log(width);
+            // console.log(xOffset);
+            c.fillStyle = v.color;
+            c.fillRect(Math.floor(xOffset), yOffset, width, ch);
+            xOffset += width;
+        });
+
+        var img = $('<img/>', {
+            src: newCanvas.toDataURL()
+        })
+
+        chartContainer.append(img);
+        return chartContainer[0].outerHTML;
+    },
+
+    fnSendRequest: function (method, url, reqObj, successCallBack, isSecured, loaderTarget) {
+
+        //Retrieve authenticated used from application session
+        var user = OIOJS.userFramework.getUser();
+        var access_token = null;
+        if (typeof user !== 'undefined' && user != null) {
+            access_token = user.metadata.access_token;
+        };
+
+        //Evaluate content type based on request method
+        var contentTypeVal = null;
+        if (method !== 'GET') {
+            contentTypeVal = 'application/json';
+            reqObj = JSON.stringify(reqObj)
+        }
+
+        //Common Modal handler.
+        var modalHandler = function () {
+            $.each(OIOJS.pollFramework.toggleModalRefs, function (i, e) {
+                $(e).modal('hide'); //close modal
+                OIOJS.pollFramework.toggleModalRefs.splice(i, 1); //remove modals reference
+                // console.log(OIOJS.pollFramework.toggleModalRefs);
+            });
+        }
+        // console.log(reqObj);
+        return $.ajax({
+            url: url,
+            method: method,
+            contentType: contentTypeVal,
+            dataType: 'json',
+            data: reqObj,
+            beforeSend: function (request, settings) {
+                //Start loader if a loaderTarget is provided
+                if (loaderTarget !== null && typeof loaderTarget !== 'undefined') {
+                    OIOJS.utils.startLoader(loaderTarget);
+                }
+
+                //Check secured API call
+                if (isSecured) {
+                    request.setRequestHeader("Authorization", 'Bearer ' + access_token);
+                }
+            },
+            statusCode: {
+                401: function () {
+                    // alert("Unauthorized");
+                    OIOJS.utils.stopLoader(null);//If any error message loader is being removed anyway
+                    $('#signInModal').modal('toggle');
+                    modalHandler();
+                },
+                422: function () {
+                    OIOJS.utils.stopLoader(null);//If any error message loader is being removed anyway
+                    modalHandler();
+                }
+            }
+        }).done(function (response, textStatus, jqXHR) {
+            successCallBack(response);
+
+            //Modal are closed on success response
+            OIOJS.utils.stopLoader(null);
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            //On failure
+            // console.log("xhr: " + jqXHR.responseXML);
+            OIOJS.utils.stopLoader(null);
+            console.log("Error:" + errorThrown + "\ntextStatus:" + textStatus + "\nresponse text:" + jqXHR.responseText + "\nstatus:" + jqXHR.status);
+        });
     }
+
 };
 
 $(function () {

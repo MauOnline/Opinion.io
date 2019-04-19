@@ -4,7 +4,7 @@ TODO
 - Allow the publisher to pick a color when creating a poll
 - Provide defaut color for each poll
 - Do not store sensible information in browser's localStorage
-- Discriminate users with publish credentials and other users (?)
+- Discriminate users with "publish" credentials and other users (?)
 - Limit publisher name (username) characters (how many?)
 - Username can not have special characters, only alpha numaric values
 - Check the quick result bar is displaying the right proportions
